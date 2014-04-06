@@ -1,0 +1,815 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: imath <mathchristo@yahoo.fr>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: includes/rendez-vous-activity.php:26
+msgid "Record a public activity for all members"
+msgstr "Enregistrer une activité publique pour tous les membres"
+
+#: includes/rendez-vous-activity.php:52
+msgid "New rendez-vous"
+msgstr "Nouveau rendez-vous"
+
+#: includes/rendez-vous-activity.php:59
+msgid "Updated rendez-vous"
+msgstr "Rendez-vous mis à jour"
+
+#: includes/rendez-vous-activity.php:97 includes/rendez-vous-activity.php:148
+msgid "scheduled a new"
+msgstr "a planifié un nouveau"
+
+#: includes/rendez-vous-activity.php:100 includes/rendez-vous-activity.php:201
+msgid "updated a"
+msgstr "a mis à jour un"
+
+#: includes/rendez-vous-activity.php:103 includes/rendez-vous-activity.php:150
+#: includes/rendez-vous-activity.php:203
+msgid "%1$s %2$s rendez-vous, %3$s"
+msgstr "%1$s %2$s rendez-vous, %3$s"
+
+#: includes/rendez-vous-ajax.php:76
+msgid "You cannot create a rendez-vous."
+msgstr "Vous ne pouvez pas créer de rendez-vous"
+
+#: includes/rendez-vous-ajax.php:92
+msgid "No users were selected."
+msgstr "Aucun utilisateur sélectionné"
+
+#: includes/rendez-vous-ajax.php:101
+msgid "Please describe your rendez-vous using the What tab."
+msgstr "Merci de décrire votre rendez-vous en utilisant l’onglet Quoi."
+
+#: includes/rendez-vous-ajax.php:118
+msgid "Please define dates for your rendez-vous using the When tab."
+msgstr ""
+"Merci de définir des dates pour votre rendez-vous en utilisant l’onglet "
+"Quand."
+
+#: includes/rendez-vous-ajax.php:161
+msgid "Please make sure to respect the format HH:MM when defining time."
+msgstr "Merci de respecter le format HH:MM pour les heures."
+
+#: includes/rendez-vous-ajax.php:169
+msgid "The rendez-vous was not created due to an error."
+msgstr "Le rendez-vous n’a pas été créé en raison d’une erreur."
+
+#: includes/rendez-vous-classes.php:37
+msgid "New Rendez-vous"
+msgstr "Nouveau Rendez-vous"
+
+#: includes/rendez-vous-editor.php:80
+msgid "URL"
+msgstr "URL"
+
+#: includes/rendez-vous-editor.php:81
+msgid "Add Media"
+msgstr "Ajouter un media"
+
+#: includes/rendez-vous-editor.php:82 includes/rendez-vous-editor.php:134
+msgid "Search"
+msgstr "Rechercher"
+
+#: includes/rendez-vous-editor.php:83
+msgid "Select"
+msgstr "Sélectionner"
+
+#: includes/rendez-vous-editor.php:84
+msgid "Cancel"
+msgstr "Annuler"
+
+#. translators: This is a would-be plural string used in the media manager.
+#. If there is not a word you can use in your language to avoid issues
+#. with the
+#. lack of plural support here, turn it into "selected: %d" then translate
+#. it.
+#: includes/rendez-vous-editor.php:89
+msgid "%d selected"
+msgstr "%d sélection(s)"
+
+#: includes/rendez-vous-editor.php:90
+msgid "Drag and drop to reorder images."
+msgstr "Glissez/déposez pour réorganiser les images."
+
+#: includes/rendez-vous-editor.php:93
+msgid "Upload Files"
+msgstr "Envoyer des fichiers"
+
+#: includes/rendez-vous-editor.php:94
+msgid "Upload Images"
+msgstr "Envoyer des images"
+
+#: includes/rendez-vous-editor.php:97
+msgid "Media Library"
+msgstr "Bibliothèque de médias"
+
+#: includes/rendez-vous-editor.php:98
+msgid "Insert Media"
+msgstr "Insérer un média"
+
+#: includes/rendez-vous-editor.php:99
+msgid "Create a new gallery"
+msgstr "Créer une nouvelle galerie"
+
+#: includes/rendez-vous-editor.php:100
+msgid "&#8592; Return to library"
+msgstr "&#8592; Revenir à la bibliothèque"
+
+#: includes/rendez-vous-editor.php:101
+msgid "All media items"
+msgstr "Tous les éléments média"
+
+#: includes/rendez-vous-editor.php:102
+msgid "No items found."
+msgstr "Aucun élément trouvé."
+
+#: includes/rendez-vous-editor.php:103
+msgid "Insert into page"
+msgstr "Insérer dans la page"
+
+#: includes/rendez-vous-editor.php:103
+msgid "Insert into post"
+msgstr "Insérer dans l&rsquo;article"
+
+#: includes/rendez-vous-editor.php:104
+msgid "Uploaded to this page"
+msgstr "Mis en ligne sur cette page"
+
+#: includes/rendez-vous-editor.php:104
+msgid "Uploaded to this post"
+msgstr "Mis en ligne sur cet article"
+
+#: includes/rendez-vous-editor.php:105
+msgid ""
+"You are about to permanently delete this item.\n"
+"  'Cancel' to stop, 'OK' to delete."
+msgstr ""
+"Vous êtes sur le point de supprimer définitivement cet élément.\n"
+"  « Annuler » pour abandonner, « OK » pour le supprimer."
+
+#: includes/rendez-vous-editor.php:108
+msgid "Insert from URL"
+msgstr "Insérer à partir d&rsquo;une adresse web"
+
+#: includes/rendez-vous-editor.php:111
+msgid "Set Featured Image"
+msgstr "Mettre une image à la Une"
+
+#: includes/rendez-vous-editor.php:112
+msgid "Set featured image"
+msgstr "Utiliser comme image à la Une"
+
+#: includes/rendez-vous-editor.php:115
+msgid "Create Gallery"
+msgstr "Créer une galerie"
+
+#: includes/rendez-vous-editor.php:116
+msgid "Edit Gallery"
+msgstr "Modifier une galerie"
+
+#: includes/rendez-vous-editor.php:117
+msgid "&#8592; Cancel Gallery"
+msgstr "&#8592; Annuler la galerie"
+
+#: includes/rendez-vous-editor.php:118
+msgid "Insert gallery"
+msgstr "Insérer la galerie"
+
+#: includes/rendez-vous-editor.php:119
+msgid "Update gallery"
+msgstr "Mettre à jour la galerie"
+
+#: includes/rendez-vous-editor.php:120
+msgid "Add to gallery"
+msgstr "Ajouter à la galerie"
+
+#: includes/rendez-vous-editor.php:121
+msgid "Add to Gallery"
+msgstr "Ajouter à la Galerie"
+
+#: includes/rendez-vous-editor.php:122
+msgid "Reverse order"
+msgstr "Inverser l&rsquo;ordre"
+
+#: includes/rendez-vous-editor.php:127
+msgctxt "RendezVous editor main title"
+msgid "Rendez-vous"
+msgstr "Rendez-vous"
+
+#: includes/rendez-vous-editor.php:128
+msgctxt "RendezVous editor tab what name"
+msgid "What?"
+msgstr "Quoi?"
+
+#: includes/rendez-vous-editor.php:129
+msgctxt "RendezVous editor tab when name"
+msgid "When?"
+msgstr "Quand?"
+
+#: includes/rendez-vous-editor.php:130
+msgctxt "RendezVous editor tab who name"
+msgid "Who?"
+msgstr "Qui?"
+
+#: includes/rendez-vous-editor.php:131
+msgid "Add to invites"
+msgstr "Ajouter aux invités"
+
+#: includes/rendez-vous-editor.php:132
+msgid "Next"
+msgstr "Suiv"
+
+#: includes/rendez-vous-editor.php:133
+msgid "Prev"
+msgstr "Préc"
+
+#: includes/rendez-vous-editor.php:135
+msgid "%d to invite"
+msgstr "%d à inviter"
+
+#: includes/rendez-vous-editor.php:136
+msgid "Remove Invite"
+msgstr "Supprimer invitation"
+
+#: includes/rendez-vous-editor.php:137
+msgid "Save Rendez-Vous"
+msgstr "Enregistrer Rendez-Vous"
+
+#: includes/rendez-vous-editor.php:145
+msgid "What is this about ?"
+msgstr "De quoi s’agit-il ?"
+
+#: includes/rendez-vous-editor.php:146 includes/rendez-vous-parts.php:209
+msgid "Title"
+msgstr "Titre"
+
+#: includes/rendez-vous-editor.php:154
+msgid "Where ?"
+msgstr "Où ?"
+
+#: includes/rendez-vous-editor.php:155 includes/rendez-vous-parts.php:217
+#: includes/rendez-vous-parts.php:302
+msgid "Venue"
+msgstr "Lieu"
+
+#: includes/rendez-vous-editor.php:163
+msgid "Some details about this rendez-vous ?"
+msgstr "Quelques détails à propos de ce rendez-vous ?"
+
+#: includes/rendez-vous-editor.php:164 includes/rendez-vous-parts.php:213
+#: includes/rendez-vous-parts.php:299
+msgid "Description"
+msgstr "Description"
+
+#: includes/rendez-vous-editor.php:173 includes/rendez-vous-parts.php:221
+msgid "Duration"
+msgstr "Durée"
+
+#: includes/rendez-vous-editor.php:181
+msgid "Make this rendez-vous private"
+msgstr "Partager en privé"
+
+#: includes/rendez-vous-editor.php:182
+msgid "Privacy"
+msgstr "Visibilité"
+
+#: includes/rendez-vous-editor.php:201
+msgid "Sunday"
+msgstr "Dimanche"
+
+#: includes/rendez-vous-editor.php:202
+msgid "Monday"
+msgstr "Lundi"
+
+#: includes/rendez-vous-editor.php:203
+msgid "Tuesday"
+msgstr "Mardi"
+
+#: includes/rendez-vous-editor.php:204
+msgid "Wednesday"
+msgstr "Mercredi"
+
+#: includes/rendez-vous-editor.php:205
+msgid "Thursday"
+msgstr "Jeudi"
+
+#: includes/rendez-vous-editor.php:206
+msgid "Friday"
+msgstr "Vendredi"
+
+#: includes/rendez-vous-editor.php:207
+msgid "Saturday"
+msgstr "Samedi"
+
+#: includes/rendez-vous-editor.php:210
+msgid "Su"
+msgstr "Di"
+
+#: includes/rendez-vous-editor.php:211
+msgid "Mo"
+msgstr "Lu"
+
+#: includes/rendez-vous-editor.php:212
+msgid "Tu"
+msgstr "Ma"
+
+#: includes/rendez-vous-editor.php:213
+msgid "We"
+msgstr "Me"
+
+#: includes/rendez-vous-editor.php:214
+msgid "Th"
+msgstr "Je"
+
+#: includes/rendez-vous-editor.php:215
+msgid "Fr"
+msgstr "Ve"
+
+#: includes/rendez-vous-editor.php:216
+msgid "Sa"
+msgstr "Sa"
+
+#: includes/rendez-vous-editor.php:219
+msgid "January"
+msgstr "Janvier"
+
+#: includes/rendez-vous-editor.php:220
+msgid "February"
+msgstr "Février"
+
+#: includes/rendez-vous-editor.php:221
+msgid "March"
+msgstr "Mars"
+
+#: includes/rendez-vous-editor.php:222
+msgid "April"
+msgstr "Avril"
+
+#: includes/rendez-vous-editor.php:223
+msgid "May"
+msgstr "Mai"
+
+#: includes/rendez-vous-editor.php:224
+msgid "June"
+msgstr "Juin"
+
+#: includes/rendez-vous-editor.php:225
+msgid "July"
+msgstr "Juillet"
+
+#: includes/rendez-vous-editor.php:226
+msgid "August"
+msgstr "Août"
+
+#: includes/rendez-vous-editor.php:227
+msgid "September"
+msgstr "Septembre"
+
+#: includes/rendez-vous-editor.php:228
+msgid "October"
+msgstr "Octobre"
+
+#: includes/rendez-vous-editor.php:229
+msgid "November"
+msgstr "Novembre"
+
+#: includes/rendez-vous-editor.php:230
+msgid "December"
+msgstr "Decembre"
+
+#: includes/rendez-vous-editor.php:232
+msgctxt "rendez-vous date format"
+msgid "mm/dd/yy"
+msgstr "dd/mm/yy"
+
+#: includes/rendez-vous-editor.php:233
+msgid "You allready selected this date"
+msgstr "Date déjà choisie."
+
+#: includes/rendez-vous-editor.php:334
+msgid "Use the calendar in the right sidebar to add dates"
+msgstr ""
+"Utiliser le calendrier disponible dans la barre latérale pour ajouter des "
+"dates."
+
+#: includes/rendez-vous-editor.php:342
+msgid "Define 1 to 3 hours for this day, please respect the format HH:MM"
+msgstr ""
+"Merci de définir 1 à 3 horaires pour ce jour, et de respecter le format HH:MM"
+
+#: includes/rendez-vous-editor.php:353
+msgid "No users found"
+msgstr "Aucun utilisateur trouvé"
+
+#: includes/rendez-vous-editor.php:365
+msgid "Deselect"
+msgstr "Désélectionner"
+
+#: includes/rendez-vous-editor.php:373
+msgid "Clear"
+msgstr "Effacer"
+
+#: includes/rendez-vous-loader.php:37 includes/rendez-vous-loader.php:120
+#: includes/rendez-vous-loader.php:187 includes/rendez-vous-loader.php:223
+msgid "Rendez-vous"
+msgstr "Rendez-vous"
+
+#: includes/rendez-vous-loader.php:102
+msgid "Search Rendez-vous..."
+msgstr "Rechercher des Rendez-vous..."
+
+#: includes/rendez-vous-loader.php:144 includes/rendez-vous-loader.php:195
+msgid "Schedule"
+msgstr "Planifier"
+
+#: includes/rendez-vous-loader.php:154 includes/rendez-vous-loader.php:203
+msgid "Attend"
+msgstr "Participer"
+
+#: includes/rendez-vous-loader.php:224
+msgctxt "rendez-vous singular"
+msgid "Rendez-vous"
+msgstr "Rendez-vous"
+
+#: includes/rendez-vous-loader.php:225
+msgctxt "rendez-vous menu name"
+msgid "Rendez-vous"
+msgstr "Rendez-vous"
+
+#: includes/rendez-vous-loader.php:226
+msgctxt "rendez-vous all items"
+msgid "All Rendez-vous"
+msgstr "Tous les Rendez-vous"
+
+#: includes/rendez-vous-loader.php:227
+msgctxt "rendez-vous singular name"
+msgid "Rendez-vous"
+msgstr "Rendez-vous"
+
+#: includes/rendez-vous-loader.php:228
+msgctxt "rendez-vous add new"
+msgid "Add New Rendez-vous"
+msgstr "Ajouter un nouveau Rendez-vous"
+
+#: includes/rendez-vous-loader.php:229
+msgctxt "rendez-vous edit item"
+msgid "Edit Rendez-vous"
+msgstr "Modifier le Rendez-vous"
+
+#: includes/rendez-vous-loader.php:230
+msgctxt "rendez-vous new item"
+msgid "New Rendez-vous"
+msgstr "Nouveau Rendez-vous"
+
+#: includes/rendez-vous-loader.php:231
+msgctxt "rendez-vous view item"
+msgid "View Rendez-vous"
+msgstr "Afficher le Rendez-vous"
+
+#: includes/rendez-vous-loader.php:232
+msgctxt "rendez-vous search items"
+msgid "Search Rendez-vous"
+msgstr "Rechercher un Rendez-vous"
+
+#: includes/rendez-vous-loader.php:233
+msgctxt "rendez-vous not found"
+msgid "No Rendez-vous Found"
+msgstr "Aucun Rendez-vous trouvé"
+
+#: includes/rendez-vous-loader.php:234
+msgctxt "rendez-vous not found in trash"
+msgid "No Rendez-vous Found in Trash"
+msgstr "Aucun Rendez-vous trouvé dans la corbeille"
+
+#: includes/rendez-vous-loader.php:238
+msgctxt "rendez-vous label"
+msgid "Rendez-vous"
+msgstr "Rendez-vous"
+
+#: includes/rendez-vous-notifications.php:26
+msgid "Notify attendees of changes about this rendez-vous"
+msgstr "Notifier les participants des changements de ce rendez-vous"
+
+#: includes/rendez-vous-notifications.php:58
+msgid "Rendez-Vous"
+msgstr "Rendez-Vous"
+
+#: includes/rendez-vous-notifications.php:59
+msgid "Yes"
+msgstr "Oui"
+
+#: includes/rendez-vous-notifications.php:60
+msgid "No"
+msgstr "Non"
+
+#: includes/rendez-vous-notifications.php:67
+msgid "An attendee replyed about a rendez-vous you scheduled"
+msgstr ""
+"Un participant a répondu à propos d’un rendez-vous que vous avez planifié"
+
+#: includes/rendez-vous-notifications.php:73
+msgid "You are invited to participate to a rendez-vous"
+msgstr "Vous êtes invité à participer à un rendez-vous"
+
+#: includes/rendez-vous-notifications.php:126
+msgid "%s invited you to a new rendez-vous"
+msgstr "%s vous a invité à un nouveau rendez-vous"
+
+#: includes/rendez-vous-notifications.php:162
+#: includes/rendez-vous-notifications.php:310
+#: includes/rendez-vous-notifications.php:382
+msgid "To disable these notifications please log in and go to: %s"
+msgstr "Pour désactiver ces notifications merci de vous connecter sur : %s"
+
+#: includes/rendez-vous-notifications.php:245
+msgid "Date fixed to %1$s at %2$s"
+msgstr "Date fixée au %1$s à %2$s"
+
+#: includes/rendez-vous-notifications.php:250
+msgid "Date fixed to %s"
+msgstr "Date fixée au %s"
+
+#: includes/rendez-vous-notifications.php:254
+msgid "fixed the date"
+msgstr "a fixé la date"
+
+#: includes/rendez-vous-notifications.php:257
+msgid "created the report"
+msgstr "a créé un compte-rendu"
+
+#: includes/rendez-vous-notifications.php:274
+msgid "%s updated a rendez-vous"
+msgstr "%s a mis à jour un rendez-vous"
+
+#: includes/rendez-vous-notifications.php:374
+msgid "%s selected dat(e)s for a rendez-vous"
+msgstr "%s a fait un choix de date(s) pour un rendez-vous"
+
+#: includes/rendez-vous-notifications.php:486
+msgid "rendez-vous preferences updated"
+msgstr "Préférences mises à jour"
+
+#: includes/rendez-vous-notifications.php:487
+msgid "%d rendez-vous preferences updated"
+msgstr "%d préférences de rendez-vous mises à jour"
+
+#: includes/rendez-vous-notifications.php:495
+#: includes/rendez-vous-notifications.php:518
+#: includes/rendez-vous-notifications.php:541
+#: includes/rendez-vous-notifications.php:564
+msgid "View the rendez-vous"
+msgstr "Voir le rendez-vous"
+
+#: includes/rendez-vous-notifications.php:496
+msgid "%s set his preferences about a rendez-vous"
+msgstr "%s a défini ses preferences à propos d’un rendez-vous"
+
+#: includes/rendez-vous-notifications.php:509
+msgid "rendez-vous sheduled"
+msgstr "rendez-vous publié"
+
+#: includes/rendez-vous-notifications.php:510
+msgid "%d rendez-vous sheduled"
+msgstr "%d rendez-vous publiés"
+
+#: includes/rendez-vous-notifications.php:519
+msgid "%s scheduled a rendez-vous"
+msgstr "%s a publié un rendez-vous"
+
+#: includes/rendez-vous-notifications.php:532
+msgid "rendez-vous fixed"
+msgstr "rendez-vous fixé"
+
+#: includes/rendez-vous-notifications.php:533
+msgid "%d rendez-vous fixed"
+msgstr "%d rendez-vous fixés"
+
+#: includes/rendez-vous-notifications.php:542
+msgid "%s fixed a rendez-vous"
+msgstr "%s a fixé un rendez-vous"
+
+#: includes/rendez-vous-notifications.php:555
+msgid "rendez-vous report created"
+msgstr "compte-rendu de rendez-vous créé"
+
+#: includes/rendez-vous-notifications.php:556
+msgid "%d rendez-vous reports created"
+msgstr "%d compte-rendus de rendez-vous créés"
+
+#: includes/rendez-vous-notifications.php:565
+msgid "%s created a report for a rendez-vous"
+msgstr "%s a créé un compte-rendu pour un rendez-vous"
+
+#: includes/rendez-vous-parts.php:158
+msgid "There were no rendez-vous found."
+msgstr "Aucun rendez-vous trouvé."
+
+#: includes/rendez-vous-parts.php:178
+msgid "Editing: "
+msgstr "Edition de :"
+
+#: includes/rendez-vous-parts.php:191 includes/rendez-vous-parts.php:192
+msgid "View"
+msgstr "Afficher"
+
+#: includes/rendez-vous-parts.php:225
+msgid "Set as private"
+msgstr "Définir comme privé"
+
+#: includes/rendez-vous-parts.php:234 includes/rendez-vous-parts.php:317
+msgid "Attendees"
+msgstr "Participants"
+
+#: includes/rendez-vous-parts.php:243
+msgid "Notes / Report"
+msgstr "Notes / Compte-rendu"
+
+#: includes/rendez-vous-parts.php:281 includes/rendez-vous-parts.php:282
+msgid "Edit"
+msgstr "Modifier"
+
+#: includes/rendez-vous-parts.php:307
+msgid "Fixed to:"
+msgstr "Fixé au:"
+
+#: includes/rendez-vous-parts.php:312
+msgid "Duration (hours)"
+msgstr "Durée (en heures)"
+
+#: includes/rendez-vous-parts.php:325
+msgid "Notes/Report"
+msgstr "Notes/Compte-rendu"
+
+#: includes/rendez-vous-screens.php:235 includes/rendez-vous-screens.php:381
+msgid "Rendez-vous could not be found"
+msgstr "Le rendez-vous est introuvable"
+
+#: includes/rendez-vous-screens.php:240
+msgid "Your rendez-vous is in draft mode, check informations and publish!"
+msgstr ""
+"Votre rendez-vous est en mode brouillon, vérifiez les informations et "
+"publier le !"
+
+#: includes/rendez-vous-screens.php:265 includes/rendez-vous-screens.php:344
+msgid "You do not have access to this rendez-vous"
+msgstr "Vous n’avez pas accès à ce rendez-vous"
+
+#: includes/rendez-vous-screens.php:284
+msgid "Editing this rendez-vous is not allowed."
+msgstr "Modifier ce rendez-vous n’est pas autorisé."
+
+#: includes/rendez-vous-screens.php:313
+msgid "Editing this rendez-vous failed."
+msgstr "La modification du rendez-vous a échoué"
+
+#: includes/rendez-vous-screens.php:315
+msgid "Rendez-vous successfully edited."
+msgstr "Rendez-vous modifié avec succès"
+
+#: includes/rendez-vous-screens.php:359
+msgid "Saving your preferences failed."
+msgstr "La mise à jour de vos préférences a échouée"
+
+#: includes/rendez-vous-screens.php:361
+msgid "Preferences successfully saved."
+msgstr "Préférences mises à jour avec succès"
+
+#: includes/rendez-vous-screens.php:388
+msgid "Rendez-vous successfully cancelled."
+msgstr "Rendez-vous annulé avec succès."
+
+#: includes/rendez-vous-screens.php:390
+msgid "Rendez-vous could not be cancelled"
+msgstr "L’annulation du rendez-vous a échoué"
+
+#: includes/rendez-vous-template.php:231
+msgctxt "rendez-vous pagination previous text"
+msgid "&larr;"
+msgstr "&larr;"
+
+#: includes/rendez-vous-template.php:232
+msgctxt "rendez-vous pagination next text"
+msgid "&rarr;"
+msgstr "&rarr;"
+
+#: includes/rendez-vous-template.php:420
+msgid "Viewing %1$s to %2$s (of %3$s rendez-vous)"
+msgid_plural "Viewing %1$s to %2$s (of %3$s rendez-vous)"
+msgstr[0] "Affichage de %1$s à %2$s (sur %3$s rendez-vous)"
+msgstr[1] "Affichage de %1$s à %2$s (sur %3$s rendez-vous)"
+
+#: includes/rendez-vous-template.php:580
+msgid "Modified %s"
+msgstr "Modifié %s"
+
+#: includes/rendez-vous-template.php:639
+msgid "Public"
+msgstr "Public"
+
+#: includes/rendez-vous-template.php:642
+msgid "Private"
+msgstr "Privé"
+
+#: includes/rendez-vous-template.php:644
+msgid "Draft"
+msgstr "Brouillon"
+
+#: includes/rendez-vous-template.php:679
+msgctxt "rendez-vous view link"
+msgid "View"
+msgstr "Afficher"
+
+#: includes/rendez-vous-template.php:685
+msgctxt "rendez-vous edit link"
+msgid "Edit"
+msgstr "Modifier"
+
+#: includes/rendez-vous-template.php:903
+msgid "None"
+msgstr "Aucune"
+
+#: includes/rendez-vous-template.php:945
+msgid "Total"
+msgstr "Total"
+
+#: includes/rendez-vous-template.php:961
+msgid "Set date"
+msgstr "Fixer la date"
+
+#: includes/rendez-vous-template.php:1111
+msgid "%s at %s"
+msgstr "%s à %s"
+
+#: includes/rendez-vous-template.php:1149
+msgid "Publish Rendez-vous"
+msgstr "Publier le rendez-vous"
+
+#: includes/rendez-vous-template.php:1149
+msgid "Edit Rendez-vous"
+msgstr "Modifier le rendez-vous"
+
+#: includes/rendez-vous-template.php:1156
+msgid "Cancel Rendez-vous"
+msgstr "Annuler le rendez-vous"
+
+#: includes/rendez-vous-template.php:1167
+msgid "Save preferences"
+msgstr "Mettre à jour ses préférences."
+
+#: rendez-vous.php:196
+msgid "Rendez Vous requires at least version %s of BuddyPress."
+msgstr "Rendez-vous requiert à minima la version %s de BuddyPress"
+
+#: rendez-vous.php:206
+msgid ""
+"Rendez Vous requires to be activated on the blog where BuddyPress is "
+"activated."
+msgstr ""
+"Rendez Vous a besoin d’être activé sur le blog où est activé BuddyPress"
+
+#: rendez-vous.php:210
+msgid ""
+"Rendez Vous and BuddyPress need to share the same network configuration."
+msgstr ""
+"Rendez Vous a besoin de partager la même configuration réseau que BuddyPress."
+
+#: rendez-vous.php:249
+msgid "Are you sure you want to cancel this rendez-vous ?"
+msgstr "Etes vous certain de vouloir annuler ce rendez-vous ?"
+
+#: rendez-vous.php:250
+msgid "This rendez-vous is private and you have not been invited to it."
+msgstr ""
+"Ce rendez-vous est privé, vous n’avez pas été invité par son organisateur"
+
+#. Plugin Name of the plugin/theme
+msgid "Rendez Vous"
+msgstr "Rendez Vous"
+
+#. Plugin URI of the plugin/theme
+msgid "http://imathi.eu/tag/rendez-vous"
+msgstr "http://imathi.eu/tag/rendez-vous"
+
+#. Description of the plugin/theme
+msgid ""
+"Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies"
+msgstr ""
+"Rendez Vous est un plugin BuddyPress pour planifier des rendez-vous avec vos "
+"buddies"
+
+#. Author of the plugin/theme
+msgid "imath"
+msgstr "imath"
+
+#. Author URI of the plugin/theme
+msgid "http://imathi.eu"
+msgstr "http://imathi.eu"
