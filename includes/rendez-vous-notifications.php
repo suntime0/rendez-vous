@@ -149,7 +149,7 @@ To help him fix the date, please log in and visit: %3$s
 			continue;
 
 		$user_settings = false;
-		$user_fullname = $attendee->fullname;
+		$user_fullname = ! empty( $attendee->fullname ) ? $attendee->fullname : $attendee->display_name;
 		$user_profile = bp_core_get_user_domain( $attendee->ID, $attendee->user_nicename, $attendee->user_login );
 		$user_email = $attendee->user_email;
 
@@ -297,7 +297,7 @@ To view details, log in and visit: %4$s
 			continue;
 
 		$user_settings = false;
-		$user_fullname = $attendee->fullname;
+		$user_fullname = ! empty( $attendee->fullname ) ? $attendee->fullname : $attendee->display_name;
 		$user_profile = bp_core_get_user_domain( $attendee->ID, $attendee->user_nicename, $attendee->user_login );
 		$user_email = $attendee->user_email;
 

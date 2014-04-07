@@ -290,3 +290,37 @@ function rendez_vous_maybe_upgrade() {
 		}
 	}
 }
+
+// oops forgot this would be introduced in BuddyPress 2.0
+if ( ! function_exists( 'bp_parse_args' ) ) :
+
+function bp_parse_args( $args, $defaults = array(), $filter_key = '' ) {
+	// Setup a temporary array from $args
+	if ( is_object( $args ) ) {
+		$r = get_object_vars( $args );
+	} elseif ( is_array( $args ) ) {
+		$r =& $args;
+	} else {
+		wp_parse_str( $args, $r );
+	}
+
+	// Passively filter the args before the parse
+	if ( !empty( $filter_key ) ) {
+		$r = apply_filters( 'bp_before_' . $filter_key . '_parse_args', $r );
+	}
+
+	// Parse
+	if ( is_array( $defaults ) && !empty( $defaults ) ) {
+		$r = array_merge( $defaults, $r );
+	}
+
+	// Aggressively filter the args after the parse
+	if ( !empty( $filter_key ) ) {
+		$r = apply_filters( 'bp_after_' . $filter_key . '_parse_args', $r );
+	}
+
+	// Return the parsed results
+	return $r;
+}
+
+endif;
