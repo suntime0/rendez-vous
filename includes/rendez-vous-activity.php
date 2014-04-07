@@ -166,7 +166,7 @@ function rendez_vous_published_activity( $id = 0 , $args = array(), $notify = fa
 	) );
 
 	if ( ! empty( $activity_id ) )
-		bp_activity_add_meta( $activity_id, 'rendez_vous_title', $rendez_vous->title );
+		bp_activity_update_meta( $activity_id, 'rendez_vous_title', $rendez_vous->title );
 
 	return true;
 }
@@ -213,7 +213,7 @@ function rendez_vous_updated_activity( $id = 0 , $args = array(), $notify = fals
 	) );
 
 	if ( ! empty( $activity_id ) )
-		bp_activity_add_meta( $activity_id, 'rendez_vous_title', $rendez_vous->title );
+		bp_activity_update_meta( $activity_id, 'rendez_vous_title', $rendez_vous->title );
 
 	return true;
 }
