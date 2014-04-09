@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rendez Vous 1.0.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2014-04-06 16:14:55+00:00\n"
+"POT-Creation-Date: 2014-04-09 17:56:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -513,125 +513,119 @@ msgstr ""
 msgid "You are invited to participate to a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:116
+#: includes/rendez-vous-notifications.php:117
 msgid ""
-"%1$s is scheduling a new rendez-vous:\n"
-"\n"
-"\"%2$s\"\n"
-"\n"
-"To help him fix the date, please log in and visit: %3$s\n"
-"\n"
-"---------------------\n"
+"%s is scheduling a new rendez-vous: %s\n"
+"\n"
+"To help him fix the date, please log in and visit: %s\n"
+"\n"
+"---------------------\n"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:126
+#: includes/rendez-vous-notifications.php:123
 msgid "%s invited you to a new rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:162
-#: includes/rendez-vous-notifications.php:310
-#: includes/rendez-vous-notifications.php:382
+#: includes/rendez-vous-notifications.php:159
+#: includes/rendez-vous-notifications.php:305
+#: includes/rendez-vous-notifications.php:374
 msgid "To disable these notifications please log in and go to: %s"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:245
+#: includes/rendez-vous-notifications.php:242
 msgid "Date fixed to %1$s at %2$s"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:250
+#: includes/rendez-vous-notifications.php:247
 msgid "Date fixed to %s"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:254
+#: includes/rendez-vous-notifications.php:251
 msgid "fixed the date"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:257
+#: includes/rendez-vous-notifications.php:254
 msgid "created the report"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:264
+#: includes/rendez-vous-notifications.php:262
 msgid ""
-"%1$s %2$s for the rendez-vous:\n"
-"\n"
-"%3$s\n"
-"\n"
-"To view details, log in and visit: %4$s\n"
-"\n"
-"---------------------\n"
+"%s %s for the rendez-vous: %s\n"
+"\n"
+"To view details, log in and visit: %s\n"
+"\n"
+"---------------------\n"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:274
+#: includes/rendez-vous-notifications.php:269
 msgid "%s updated a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:364
+#: includes/rendez-vous-notifications.php:360
 msgid ""
-"%1$s set their preferences for the rendez-vous:\n"
-"\n"
-"\"%2$s\"\n"
-"\n"
-"To view details, log in and visit: %3$s\n"
-"\n"
-"---------------------\n"
+"%s set their preferences for the rendez-vous: %s\n"
+"\n"
+"To view details, log in and visit: %s\n"
+"\n"
+"---------------------\n"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:374
+#: includes/rendez-vous-notifications.php:366
 msgid "%s selected dat(e)s for a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:486
+#: includes/rendez-vous-notifications.php:478
 msgid "rendez-vous preferences updated"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:487
+#: includes/rendez-vous-notifications.php:479
 msgid "%d rendez-vous preferences updated"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:495
-#: includes/rendez-vous-notifications.php:518
-#: includes/rendez-vous-notifications.php:541
-#: includes/rendez-vous-notifications.php:564
+#: includes/rendez-vous-notifications.php:487
+#: includes/rendez-vous-notifications.php:510
+#: includes/rendez-vous-notifications.php:533
+#: includes/rendez-vous-notifications.php:556
 msgid "View the rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:496
+#: includes/rendez-vous-notifications.php:488
 msgid "%s set his preferences about a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:509
+#: includes/rendez-vous-notifications.php:501
 msgid "rendez-vous sheduled"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:510
+#: includes/rendez-vous-notifications.php:502
 msgid "%d rendez-vous sheduled"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:519
+#: includes/rendez-vous-notifications.php:511
 msgid "%s scheduled a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:532
+#: includes/rendez-vous-notifications.php:524
 msgid "rendez-vous fixed"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:533
+#: includes/rendez-vous-notifications.php:525
 msgid "%d rendez-vous fixed"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:542
+#: includes/rendez-vous-notifications.php:534
 msgid "%s fixed a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:555
+#: includes/rendez-vous-notifications.php:547
 msgid "rendez-vous report created"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:556
+#: includes/rendez-vous-notifications.php:548
 msgid "%d rendez-vous reports created"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:565
+#: includes/rendez-vous-notifications.php:557
 msgid "%s created a report for a rendez-vous"
 msgstr ""
 

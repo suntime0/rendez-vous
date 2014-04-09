@@ -113,15 +113,12 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 	$organizer_name = stripslashes( $organizer_name );
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
-$message = sprintf( __(
-'%1$s is scheduling a new rendez-vous:
-
-"%2$s"
-
-To help him fix the date, please log in and visit: %3$s
-
----------------------
-', 'rendez-vous' ), $organizer_name, $rendez_vous_content, $rendez_vous_link );
+	$message = sprintf( 
+		__( "%s is scheduling a new rendez-vous: %s\n\nTo help him fix the date, please log in and visit: %s\n\n---------------------\n", 'rendez-vous' ), 
+		$organizer_name, 
+		$rendez_vous_content, 
+		$rendez_vous_link 
+	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s invited you to a new rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
 
@@ -261,15 +258,13 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 	$organizer_name = stripslashes( $organizer_name );
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
-$message = sprintf( __(
-'%1$s %2$s for the rendez-vous:
-
-%3$s
-
-To view details, log in and visit: %4$s
-
----------------------
-', 'rendez-vous' ), $organizer_name, $rdv_updated_action, $rendez_vous_content, $rendez_vous_link );
+	$message = sprintf( 
+		__( "%s %s for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ), 
+		$organizer_name, 
+		$rdv_updated_action, 
+		$rendez_vous_content, 
+		$rendez_vous_link 
+	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s updated a rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
 
@@ -361,15 +356,12 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	$organizer_profile = bp_core_get_user_domain( $rendez_vous->organizer );
 	$organizer_email = bp_core_get_user_email( $rendez_vous->organizer );
 
-$message = sprintf( __(
-'%1$s set their preferences for the rendez-vous:
-
-"%2$s"
-
-To view details, log in and visit: %3$s
-
----------------------
-', 'rendez-vous' ), $attendee_name, $rendez_vous_content, $rendez_vous_link );
+	$message = sprintf( 
+		__( "%s set their preferences for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ), 
+		$attendee_name, 
+		$rendez_vous_content, 
+		$rendez_vous_link 
+	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected dat(e)s for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
 	
