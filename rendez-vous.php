@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        http://imathi.eu/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            imath
  * Author URI:        http://imathi.eu
  * Text Domain:       rendez-vous
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.0.0';
+		$this->version       = '1.0.1';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
@@ -240,10 +240,22 @@ class Rendez_Vous {
 		wp_register_script( 'rendez-vous-media-views', includes_url( "js/media-views$suffix.js" ), array( 'utils', 'media-models', 'rendez-vous-plupload', 'jquery-ui-sortable' ), $this->version, 1 );
 		wp_register_script( 'rendez-vous-media-editor', includes_url( "js/media-editor$suffix.js" ), array( 'shortcode', 'rendez-vous-media-views' ), $this->version, 1 );
 		wp_register_script( 'rendez-vous-modal', $this->plugin_js . "rendez-vous-backbone$suffix.js", array( 'rendez-vous-media-editor', 'jquery-ui-datepicker' ), $this->version, 1 );
-		wp_register_style ( 'rendez-vous-modal-style', $this->plugin_css . "rendezvous-editor$suffix.css", array( 'media-views' ), $this->version );
 
-		// global script and style
-		wp_enqueue_style  ( 'rendez-vous-style', $this->plugin_css . "rendezvous$suffix.css", array( 'dashicons' ), $this->version );
+		// Allow themes to override modal style
+		$modal_style = apply_filters( 'rendez_vous_modal_css', $this->plugin_css . "rendezvous-editor$suffix.css", $suffix );
+		wp_register_style ( 'rendez-vous-modal-style', $modal_style, array( 'media-views' ), $this->version );
+
+		// Allow themes to override global style
+		$global_style = apply_filters( 
+			'rendez_vous_global_css', 
+			array( 
+				'style' => $this->plugin_css . "rendezvous$suffix.css",
+				'deps'  =>  array( 'dashicons' ),
+			),
+			$suffix 
+		);
+		
+		wp_enqueue_style  ( 'rendez-vous-style', $global_style['style'], (array) $global_style['deps'], $this->version );
 		wp_enqueue_script ( 'rendez-vous-script', $this->plugin_js . "rendezvous$suffix.js", array( 'jquery' ), $this->version, 1 );
 		wp_localize_script( 'rendez-vous-script', 'rendez_vous_vars', array(
 			'confirm'  => esc_html__( 'Are you sure you want to cancel this rendez-vous ?', 'rendez-vous' ),

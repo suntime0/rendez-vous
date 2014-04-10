@@ -873,7 +873,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 
 		// Then remove current_user as we want him to be in last position
 		if ( 'edit' != $view ) {
-			if( ! rendez_vous_single_date_set() )
+			if( ! rendez_vous_single_date_set() && bp_loggedin_user_id() )
 				$attendees = array_diff( $all_attendees, array( bp_loggedin_user_id() ) );
 			else
 				$attendees = $all_attendees;
@@ -912,7 +912,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 		//rows
 		foreach ( $attendees as $attendee ) {
 			$user_link = trailingslashit( bp_core_get_user_domain( $attendee ) );
-			$user_name = bp_core_get_username( $attendee );
+			$user_name = bp_core_get_user_displayname( $attendee );
 			$tr_class = $attendee == bp_loggedin_user_id() ? 'edited' : false;
 
 			$output .= '<tr class="'. $tr_class .'"><td>';
@@ -955,7 +955,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 					'width'   => 20,
 					'height'  => 20
 				)
-			) . ' ' . bp_get_loggedin_user_username() . '</a></td>';
+			) . ' ' . bp_get_loggedin_user_fullname() . '</a></td>';
 		// Set definitive date	
 		} else {
 			$ending_rows['editable_row'] = '<td>' . esc_html__( 'Set date', 'rendez-vous' ) . '</td>';
@@ -1009,6 +1009,10 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 		
 		$output .= '</tbody>';
 		$output .= '</table>';
+
+		if ( ! is_user_logged_in() && 'publish' == rendez_vous()->item->status && ! rendez_vous_single_date_set() ) {
+			$output .= '<div id="message" class="info"><p>' . __( 'If you want to set your preferences about this rendez-vous, please log in.', 'rendez-vous' ) . '</p></div>';
+		}
 
 		return apply_filters( 'rendez_vous_single_get_the_dates', $output, $view );
 	}

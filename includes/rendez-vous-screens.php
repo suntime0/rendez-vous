@@ -256,9 +256,10 @@ class Rendez_Vous_Screens {
 
 			$rendez_vous = rendez_vous_get_item( $rendez_vous_id );
 
-			$has_access = is_user_logged_in();
+			// Public rendez-vous can be seen by anybody
+			$has_access = true;
 
-			if ( ! empty( $has_access ) && 'private' == $rendez_vous->status )
+			if ( 'private' == $rendez_vous->status )
 				$has_access = current_user_can( 'read_private_rendez_vouss', $rendez_vous_id );
 
 			if ( empty( $rendez_vous ) || empty( $has_access ) || 'draft' == $rendez_vous->status ) {
@@ -328,7 +329,7 @@ class Rendez_Vous_Screens {
 
 			check_admin_referer( 'rendez_vous_prefs' );
 
-			$redirect = wp_get_referer();
+			$redirect = remove_query_arg( array( 'n', 'action' ), wp_get_referer() );
 
 			$rendez_vous_id = absint( $_POST['_rendez_vous_prefs']['id'] );
 			$rendez_vous = rendez_vous_get_item( $rendez_vous_id );

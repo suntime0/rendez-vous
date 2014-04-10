@@ -230,6 +230,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			esc_html__( 'December', 'rendez-vous' ),
 		),
 		'format'      => _x( 'mm/dd/yy', 'rendez-vous date format', 'rendez-vous' ),
+		'firstday'    => intval( bp_get_option( 'start_of_week', 0 ) ),
 		'alert'       => esc_html__( 'You allready selected this date', 'rendez-vous' )
 	);
 

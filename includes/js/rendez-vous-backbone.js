@@ -261,6 +261,7 @@ var rdv = rdv || {};
 				monthNames:media.RdvSettings.datestrings.monthnames,
 				dayNamesMin:media.RdvSettings.datestrings.daynamesmin,
 				dateFormat:media.RdvSettings.datestrings.format,
+				firstDay:media.RdvSettings.datestrings.firstday,
 				onSelect: function(dateText, inst)
                 {
                	   var date = new Date( inst.selectedYear, inst.selectedMonth, inst.selectedDay, 0, 0, 0, 0 );
