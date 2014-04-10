@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2014-04-09 17:56:12+00:00\n"
+"POT-Creation-Date: 2014-04-10 19:13:07+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
@@ -391,30 +391,30 @@ msgctxt "rendez-vous date format"
 msgid "mm/dd/yy"
 msgstr "dd/mm/yy"
 
-#: includes/rendez-vous-editor.php:233
+#: includes/rendez-vous-editor.php:234
 msgid "You allready selected this date"
 msgstr "Date déjà choisie."
 
-#: includes/rendez-vous-editor.php:334
+#: includes/rendez-vous-editor.php:335
 msgid "Use the calendar in the right sidebar to add dates"
 msgstr ""
 "Utiliser le calendrier disponible dans la barre latérale pour ajouter des "
 "dates."
 
-#: includes/rendez-vous-editor.php:342
+#: includes/rendez-vous-editor.php:343
 msgid "Define 1 to 3 hours for this day, please respect the format HH:MM"
 msgstr ""
 "Merci de définir 1 à 3 horaires pour ce jour, et de respecter le format HH:MM"
 
-#: includes/rendez-vous-editor.php:353
+#: includes/rendez-vous-editor.php:354
 msgid "No users found"
 msgstr "Aucun utilisateur trouvé"
 
-#: includes/rendez-vous-editor.php:365
+#: includes/rendez-vous-editor.php:366
 msgid "Deselect"
 msgstr "Désélectionner"
 
-#: includes/rendez-vous-editor.php:373
+#: includes/rendez-vous-editor.php:374
 msgid "Clear"
 msgstr "Effacer"
 
@@ -691,7 +691,7 @@ msgstr "Durée (en heures)"
 msgid "Notes/Report"
 msgstr "Notes/Compte-rendu"
 
-#: includes/rendez-vous-screens.php:235 includes/rendez-vous-screens.php:381
+#: includes/rendez-vous-screens.php:235 includes/rendez-vous-screens.php:382
 msgid "Rendez-vous could not be found"
 msgstr "Le rendez-vous est introuvable"
 
@@ -701,35 +701,35 @@ msgstr ""
 "Votre rendez-vous est en mode brouillon, vérifiez les informations et "
 "publier le !"
 
-#: includes/rendez-vous-screens.php:265 includes/rendez-vous-screens.php:344
+#: includes/rendez-vous-screens.php:266 includes/rendez-vous-screens.php:345
 msgid "You do not have access to this rendez-vous"
 msgstr "Vous n’avez pas accès à ce rendez-vous"
 
-#: includes/rendez-vous-screens.php:284
+#: includes/rendez-vous-screens.php:285
 msgid "Editing this rendez-vous is not allowed."
 msgstr "Modifier ce rendez-vous n’est pas autorisé."
 
-#: includes/rendez-vous-screens.php:313
+#: includes/rendez-vous-screens.php:314
 msgid "Editing this rendez-vous failed."
 msgstr "La modification du rendez-vous a échoué"
 
-#: includes/rendez-vous-screens.php:315
+#: includes/rendez-vous-screens.php:316
 msgid "Rendez-vous successfully edited."
 msgstr "Rendez-vous modifié avec succès"
 
-#: includes/rendez-vous-screens.php:359
+#: includes/rendez-vous-screens.php:360
 msgid "Saving your preferences failed."
 msgstr "La mise à jour de vos préférences a échouée"
 
-#: includes/rendez-vous-screens.php:361
+#: includes/rendez-vous-screens.php:362
 msgid "Preferences successfully saved."
 msgstr "Préférences mises à jour avec succès"
 
-#: includes/rendez-vous-screens.php:388
+#: includes/rendez-vous-screens.php:389
 msgid "Rendez-vous successfully cancelled."
 msgstr "Rendez-vous annulé avec succès."
 
-#: includes/rendez-vous-screens.php:390
+#: includes/rendez-vous-screens.php:391
 msgid "Rendez-vous could not be cancelled"
 msgstr "L’annulation du rendez-vous a échoué"
 
@@ -787,23 +787,30 @@ msgstr "Total"
 msgid "Set date"
 msgstr "Fixer la date"
 
-#: includes/rendez-vous-template.php:1111
+#: includes/rendez-vous-template.php:1014
+msgid ""
+"If you want to set your preferences about this rendez-vous, please log in."
+msgstr ""
+"Si vous souhaitez indiquer vos preferences quant à ce rendez-vous, merci de "
+"vous connecter."
+
+#: includes/rendez-vous-template.php:1115
 msgid "%s at %s"
 msgstr "%s à %s"
 
-#: includes/rendez-vous-template.php:1149
+#: includes/rendez-vous-template.php:1153
 msgid "Publish Rendez-vous"
 msgstr "Publier le rendez-vous"
 
-#: includes/rendez-vous-template.php:1149
+#: includes/rendez-vous-template.php:1153
 msgid "Edit Rendez-vous"
 msgstr "Modifier le rendez-vous"
 
-#: includes/rendez-vous-template.php:1156
+#: includes/rendez-vous-template.php:1160
 msgid "Cancel Rendez-vous"
 msgstr "Annuler le rendez-vous"
 
-#: includes/rendez-vous-template.php:1167
+#: includes/rendez-vous-template.php:1171
 msgid "Save preferences"
 msgstr "Mettre à jour ses préférences."
 
@@ -824,11 +831,11 @@ msgid ""
 msgstr ""
 "Rendez Vous a besoin de partager la même configuration réseau que BuddyPress."
 
-#: rendez-vous.php:249
+#: rendez-vous.php:261
 msgid "Are you sure you want to cancel this rendez-vous ?"
 msgstr "Etes vous certain de vouloir annuler ce rendez-vous ?"
 
-#: rendez-vous.php:250
+#: rendez-vous.php:262
 msgid "This rendez-vous is private and you have not been invited to it."
 msgstr ""
 "Ce rendez-vous est privé, vous n’avez pas été invité par son organisateur"

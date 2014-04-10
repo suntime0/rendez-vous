@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Rendez Vous package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rendez Vous 1.0.0\n"
+"Project-Id-Version: Rendez Vous 1.0.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2014-04-09 17:56:12+00:00\n"
+"POT-Creation-Date: 2014-04-10 19:13:07+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -388,27 +388,27 @@ msgctxt "rendez-vous date format"
 msgid "mm/dd/yy"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:233
+#: includes/rendez-vous-editor.php:234
 msgid "You allready selected this date"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:334
+#: includes/rendez-vous-editor.php:335
 msgid "Use the calendar in the right sidebar to add dates"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:342
+#: includes/rendez-vous-editor.php:343
 msgid "Define 1 to 3 hours for this day, please respect the format HH:MM"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:353
+#: includes/rendez-vous-editor.php:354
 msgid "No users found"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:365
+#: includes/rendez-vous-editor.php:366
 msgid "Deselect"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:373
+#: includes/rendez-vous-editor.php:374
 msgid "Clear"
 msgstr ""
 
@@ -669,7 +669,7 @@ msgstr ""
 msgid "Notes/Report"
 msgstr ""
 
-#: includes/rendez-vous-screens.php:235 includes/rendez-vous-screens.php:381
+#: includes/rendez-vous-screens.php:235 includes/rendez-vous-screens.php:382
 msgid "Rendez-vous could not be found"
 msgstr ""
 
@@ -677,35 +677,35 @@ msgstr ""
 msgid "Your rendez-vous is in draft mode, check informations and publish!"
 msgstr ""
 
-#: includes/rendez-vous-screens.php:265 includes/rendez-vous-screens.php:344
+#: includes/rendez-vous-screens.php:266 includes/rendez-vous-screens.php:345
 msgid "You do not have access to this rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-screens.php:284
+#: includes/rendez-vous-screens.php:285
 msgid "Editing this rendez-vous is not allowed."
 msgstr ""
 
-#: includes/rendez-vous-screens.php:313
+#: includes/rendez-vous-screens.php:314
 msgid "Editing this rendez-vous failed."
 msgstr ""
 
-#: includes/rendez-vous-screens.php:315
+#: includes/rendez-vous-screens.php:316
 msgid "Rendez-vous successfully edited."
 msgstr ""
 
-#: includes/rendez-vous-screens.php:359
+#: includes/rendez-vous-screens.php:360
 msgid "Saving your preferences failed."
 msgstr ""
 
-#: includes/rendez-vous-screens.php:361
+#: includes/rendez-vous-screens.php:362
 msgid "Preferences successfully saved."
 msgstr ""
 
-#: includes/rendez-vous-screens.php:388
+#: includes/rendez-vous-screens.php:389
 msgid "Rendez-vous successfully cancelled."
 msgstr ""
 
-#: includes/rendez-vous-screens.php:390
+#: includes/rendez-vous-screens.php:391
 msgid "Rendez-vous could not be cancelled"
 msgstr ""
 
@@ -763,23 +763,27 @@ msgstr ""
 msgid "Set date"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1111
+#: includes/rendez-vous-template.php:1014
+msgid "If you want to set your preferences about this rendez-vous, please log in."
+msgstr ""
+
+#: includes/rendez-vous-template.php:1115
 msgid "%s at %s"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1149
+#: includes/rendez-vous-template.php:1153
 msgid "Publish Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1149
+#: includes/rendez-vous-template.php:1153
 msgid "Edit Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1156
+#: includes/rendez-vous-template.php:1160
 msgid "Cancel Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1167
+#: includes/rendez-vous-template.php:1171
 msgid "Save preferences"
 msgstr ""
 
@@ -795,11 +799,11 @@ msgstr ""
 msgid "Rendez Vous and BuddyPress need to share the same network configuration."
 msgstr ""
 
-#: rendez-vous.php:249
+#: rendez-vous.php:261
 msgid "Are you sure you want to cancel this rendez-vous ?"
 msgstr ""
 
-#: rendez-vous.php:250
+#: rendez-vous.php:262
 msgid "This rendez-vous is private and you have not been invited to it."
 msgstr ""
 #. Plugin Name of the plugin/theme
