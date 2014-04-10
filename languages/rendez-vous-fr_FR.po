@@ -791,7 +791,7 @@ msgstr "Fixer la date"
 msgid ""
 "If you want to set your preferences about this rendez-vous, please log in."
 msgstr ""
-"Si vous souhaitez indiquer vos preferences quant à ce rendez-vous, merci de "
+"Si vous souhaitez indiquer vos préférences quant à ce rendez-vous, merci de "
 "vous connecter."
 
 #: includes/rendez-vous-template.php:1115
