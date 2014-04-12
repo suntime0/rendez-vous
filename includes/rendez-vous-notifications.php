@@ -363,7 +363,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 		$rendez_vous_link 
 	);
 
-	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected dat(e)s for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
+	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected date(s) for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
 	
 	// Set up and send the message
 	$to = $organizer_email;

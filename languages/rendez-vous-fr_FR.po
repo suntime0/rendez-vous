@@ -1,16 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Rendez-Vous\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2014-04-10 19:13:07+00:00\n"
+"POT-Creation-Date: 2014-04-12 06:56:41+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: includes/rendez-vous-activity.php:26
 msgid "Record a public activity for all members"
@@ -392,8 +393,8 @@ msgid "mm/dd/yy"
 msgstr "dd/mm/yy"
 
 #: includes/rendez-vous-editor.php:234
-msgid "You allready selected this date"
-msgstr "Date déjà choisie."
+msgid "You already selected this date"
+msgstr "Date déjà choisie"
 
 #: includes/rendez-vous-editor.php:335
 msgid "Use the calendar in the right sidebar to add dates"
@@ -593,7 +594,7 @@ msgstr ""
 "---------------------\n"
 
 #: includes/rendez-vous-notifications.php:366
-msgid "%s selected dat(e)s for a rendez-vous"
+msgid "%s selected date(s) for a rendez-vous"
 msgstr "%s a fait un choix de date(s) pour un rendez-vous"
 
 #: includes/rendez-vous-notifications.php:478

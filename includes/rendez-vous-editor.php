@@ -231,7 +231,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		),
 		'format'      => _x( 'mm/dd/yy', 'rendez-vous date format', 'rendez-vous' ),
 		'firstday'    => intval( bp_get_option( 'start_of_week', 0 ) ),
-		'alert'       => esc_html__( 'You allready selected this date', 'rendez-vous' )
+		'alert'       => esc_html__( 'You already selected this date', 'rendez-vous' )
 	);
 
 	$settings = apply_filters( 'media_view_settings', $settings, $post );
