@@ -3,8 +3,8 @@ Contributors: imath
 Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
 Requires at least: 3.8.1
-Tested up to: 3.9-beta3
-Stable tag: 1.0.0
+Tested up to: 3.9
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,8 @@ It's a "doodle" like feature plugin where the organizer defines some dates and h
 The organizer can then define the definitive date and once this date is past, he will also be able to add some notes or a report to inform about what happened during this meeting.
 
 Available in french and english. 
+
+http://vimeo.com/91172041
 
 == Installation ==
 
@@ -31,14 +33,27 @@ Not for now, maybe soon :)
 
 == Screenshots ==
 
-1. TBD
+1. User choices about the rendez-vous
+2. Rendez-vous Editor
+3. Member's schedule page
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+nothing particular
 
 = 1.0.0 =
 nothing particular
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Use WordPress start of the week setting to customize calendar's first day (props @schwarzaufweiss)
+* Add 2 filters so that themes can override the modal and global css (props @schwarzaufweiss)
+* Allow non logged in user to access public rendez-vous (props @pollyplummer)
+* Use Display Names in user's rendez-vous preferences
+* remove "n" query args before redirecting once the user set his preferences
 
 = 1.0.0 =
 initial version
