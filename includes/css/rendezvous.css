@@ -68,6 +68,11 @@ body.rendez-vous  #buddypress .standard-form label.normal {
 	font-weight: normal;
 }
 
+body.rendez-vous .standard-form input.rdv-duree,
+body.rendez-vous #buddypress .standard-form input.rdv-duree {
+	width:50px;
+}
+
 /* =TinyMCE in themes
 -------------------------------------------------------------- */
 body.rendez-vous div.rendez-vous-report-wrapper {

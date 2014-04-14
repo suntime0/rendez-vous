@@ -219,7 +219,7 @@ function rendez_vous_edit_content() {
 		</p>
 		<p>
 			<label for="rendez-vous-edit-duration"><?php esc_html_e( 'Duration', 'rendez-vous' ); ?></label>
-			<input type="time" placeholder="00:00" name="_rendez_vous_edit[duration]" id="rendez-vous-edit-duration" value="<?php rendez_vous_single_the_duration() ;?>"/>
+			<input type="text" placeholder="00:00" name="_rendez_vous_edit[duration]" id="rendez-vous-edit-duration" value="<?php rendez_vous_single_the_duration() ;?>" class="rdv-duree"/>
 		</p>
 		<p>
 			<label for="rendez-vous-edit-status"><?php esc_html_e( 'Set as private', 'rendez-vous' ); ?>
