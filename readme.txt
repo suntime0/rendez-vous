@@ -4,7 +4,7 @@ Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
 Requires at least: 3.8.1
 Tested up to: 3.9
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ Not for now, maybe soon :)
 
 == Upgrade Notice ==
 
+= 1.0.2 =
+nothing particular
+
 = 1.0.1 =
 nothing particular
 
@@ -46,6 +49,13 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.0.2 =
+
+* Fixes a bug while checking BuddyPress config on multisite (props Nat0n)
+* Fixes a bug on specific browser for the duration field (props @vegaskev)
+* Get rid of some console.log in BackBone js file (pros Nicolas Juen)
+* Fixes some english mistakes (props @schwarzaufweiss)
 
 = 1.0.1 =
 

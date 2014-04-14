@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rendez-Vous\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2014-04-12 06:56:41+00:00\n"
+"POT-Creation-Date: 2014-04-14 06:25:16+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
@@ -396,26 +396,26 @@ msgstr "dd/mm/yy"
 msgid "You already selected this date"
 msgstr "Date déjà choisie"
 
-#: includes/rendez-vous-editor.php:335
+#: includes/rendez-vous-editor.php:340
 msgid "Use the calendar in the right sidebar to add dates"
 msgstr ""
 "Utiliser le calendrier disponible dans la barre latérale pour ajouter des "
 "dates."
 
-#: includes/rendez-vous-editor.php:343
+#: includes/rendez-vous-editor.php:348
 msgid "Define 1 to 3 hours for this day, please respect the format HH:MM"
 msgstr ""
 "Merci de définir 1 à 3 horaires pour ce jour, et de respecter le format HH:MM"
 
-#: includes/rendez-vous-editor.php:354
+#: includes/rendez-vous-editor.php:359
 msgid "No users found"
 msgstr "Aucun utilisateur trouvé"
 
-#: includes/rendez-vous-editor.php:366
+#: includes/rendez-vous-editor.php:371
 msgid "Deselect"
 msgstr "Désélectionner"
 
-#: includes/rendez-vous-editor.php:374
+#: includes/rendez-vous-editor.php:379
 msgid "Clear"
 msgstr "Effacer"
 

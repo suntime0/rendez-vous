@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Rendez Vous package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rendez Vous 1.0.1\n"
+"Project-Id-Version: Rendez Vous 1.0.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2014-04-12 06:56:41+00:00\n"
+"POT-Creation-Date: 2014-04-14 06:25:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -392,23 +392,23 @@ msgstr ""
 msgid "You already selected this date"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:335
+#: includes/rendez-vous-editor.php:340
 msgid "Use the calendar in the right sidebar to add dates"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:343
+#: includes/rendez-vous-editor.php:348
 msgid "Define 1 to 3 hours for this day, please respect the format HH:MM"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:354
+#: includes/rendez-vous-editor.php:359
 msgid "No users found"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:366
+#: includes/rendez-vous-editor.php:371
 msgid "Deselect"
 msgstr ""
 
-#: includes/rendez-vous-editor.php:374
+#: includes/rendez-vous-editor.php:379
 msgid "Clear"
 msgstr ""
 
