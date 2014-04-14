@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        http://imathi.eu/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            imath
  * Author URI:        http://imathi.eu
  * Text Domain:       rendez-vous
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.0.1';
+		$this->version       = '1.0.2';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
@@ -309,8 +309,10 @@ class Rendez_Vous {
 		if ( empty( $network_plugins ) )
 			return self::$bp_config;
 
+		$rendez_vous_basename = plugin_basename( __FILE__ );
+
 		// Looking for BuddyPress and your plugin
-		$check = array( buddypress()->basename, $this->basename );
+		$check = array( buddypress()->basename, $rendez_vous_basename );
 
 		// Are they active on the network ?
 		$network_active = array_diff( $check, array_keys( $network_plugins ) );
@@ -322,7 +324,7 @@ class Rendez_Vous {
 		
 		// We need to know if the plugin is network activated to choose the right
 		// notice ( admin or network_admin ) to display the warning message.
-		self::$bp_config['network_active'] = isset( $network_plugins[ $this->basename ] );
+		self::$bp_config['network_active'] = isset( $network_plugins[ $rendez_vous_basename ] );
 
 		return self::$bp_config;
 	}
