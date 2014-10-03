@@ -17,6 +17,7 @@
 
 .list-rdv-fields li {
 	padding:0.5em 0;
+	list-style: none;
 }
 
 .list-rdv-fields li label,
@@ -225,12 +226,10 @@
 	padding:10px;
 	left: 0;
 	bottom: 0;
-	overflow: auto;
+	overflow: hidden;
+	width:95%;
 }
 
-.details.rendez-vous-users {
-	box-shadow: 0 0 0 1px #fff,0 0 0 5px #2ea2cc;
-}
 .thumbnail img {
 	width:50px;
 	height:50px;
@@ -245,12 +244,20 @@
 	float:left;
 }
 .rendez-vous-users .user .displayname {
-	margin-left:60px;
-	line-height:50px;
+	margin-left:55px;
+	margin-right:5px;
+	height:50px;
+	text-align: left;
 	
 }
 .rendez-vous-users .user .displayname strong{
 	font-weight:bold;
+	display:inline-block;
+	height:100%;
+	line-height:45px;
+	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
 }
 
 .user-selection {
@@ -312,6 +319,7 @@
 	width: 38px;
 	float:left;
 	box-shadow: 0 0 0 1px #fff, 0 0 0 2px #1e8cbe;
+	list-style: none;
 }
 
 .user-selection .selection-view ul li img {
@@ -320,6 +328,21 @@
 
 .user-selection.empty {
 	display: none;
+}
+
+#rendez-vous-error {
+	margin: 0 0 15px;
+}
+
+#rendez-vous-error p{
+	font-weight:bold;
+	font-size: 90%;
+	display: block;
+	padding: 10px 15px;
+	background-color: #fdc;
+	border: 1px solid #a00;
+	clear: left;
+	color: #800;
 }
 
 /**
@@ -333,6 +356,10 @@
 
 .no-sidebar .media-sidebar {
 	display: none;
+}
+
+.media-modal span.screen-reader-text {
+	display:none;
 }
 
 .smaller {
