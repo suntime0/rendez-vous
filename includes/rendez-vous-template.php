@@ -364,7 +364,6 @@ function rendez_vous_has_rendez_vouss( $args = array() ) {
 		'orderby' 	=> 'modified',
 		'order'     => 'DESC',
 		'page_arg'  => 'rpage',
-		'group_id'  => false,
 	), 'rendez_vouss_has_args' );
 
 	// Get the Rendez Vous

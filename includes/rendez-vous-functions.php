@@ -46,6 +46,7 @@ function rendez_vous_get_items( $args = array() ) {
 		'exclude'		  => false,   // comma separated list or array of rendez vous ids.
 		'orderby' 		  => 'modified',
 		'order'           => 'DESC',
+		'group_id'        => false,
 	);
 
 	$r = bp_parse_args( $args, $defaults, 'rendez_vous_get_items_args' );
@@ -62,6 +63,7 @@ function rendez_vous_get_items( $args = array() ) {
 			'exclude'		  => $r['exclude'],
 			'orderby' 		  => $r['orderby'],
 			'order'           => $r['order'],
+			'group_id'        => $r['group_id'],
 		) );
 
 		wp_cache_set( 'rendez_vous_rendez_vouss', $rendez_vouss, 'bp' );

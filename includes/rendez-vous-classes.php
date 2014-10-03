@@ -384,7 +384,7 @@ class Rendez_Vous_Item {
 			'order'          => $r['order'],
 		);
 
-		if ( ! empty( $organizer ) ) {
+		if ( ! empty( $r['organizer'] ) ) {
 			$query_args['author'] = $r['organizer'];
 		}
 

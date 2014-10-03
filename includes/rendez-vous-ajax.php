@@ -36,6 +36,9 @@ function rendez_vous_ajax_get_users() {
 	);
 
 	if ( ! empty( $args['group_id'] ) ) {
+		// Get all type of group users
+		$args['group_role'] = array( 'admin', 'mod', 'member' );
+
 		$query = new BP_Group_Member_Query( $args );
 	} else {
 		$query = new BP_User_Query( $args );

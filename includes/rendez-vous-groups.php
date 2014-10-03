@@ -324,6 +324,8 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		?>
 		<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => bp_get_current_group_id() ) ); ?></h1>
 		<?php
+		rendez_vous_loop();
+		//var_dump( bp_action_variables() );
 	}
 
 	/**
@@ -383,11 +385,42 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $retval;
 	}
 
+	public function map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
+		if ( ! bp_is_group() ) {
+			return $caps;
+		}
+
+		$group = groups_get_current_group();
+
+		switch ( $cap ) {
+			case 'publish_rendez_vouss' :
+					if ( ! empty( $group->id ) && groups_is_user_member( $user_id, $group->id ) ) {
+						$caps = array( 'exist' );
+					}
+				break;
+		}
+
+		return $caps;
+	}
+
+	public function append_group_id( $args = array() ) {
+		if ( ! bp_is_group() ) {
+			return $args;
+		}
+
+		$args['group_id'] = bp_get_current_group_id();
+
+		return $args;
+	}
+
 	public function setup_filters() {
 		add_filter( 'rendez_vous_load_scripts', array( $this, 'is_rendez_vous' ), 10, 1 );
 		add_filter( 'rendez_vous_load_editor',  array( $this, 'is_rendez_vous' ), 10, 1 );
+		add_filter( 'rendez_vous_map_meta_caps', array( $this, 'map_meta_caps' ), 10, 4 );
+		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ), 10, 1 );
 		//'rendez_vous_get_edit_link'
 		// 'rendez_vous_has_rendez_vouss' pour enlever les drafts si author != current user
+		// 'rendez_vous_map_meta_caps'
 	}
 }
 
