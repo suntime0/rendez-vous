@@ -1,0 +1,399 @@
+<?php
+/**
+ * Rendez Vous Groups
+ *
+ * Groups component
+ *
+ * @package Rendez Vous
+ * @subpackage Groups
+ */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+if ( ! class_exists( 'Rendez_Vous_Group' ) && class_exists( 'BP_Group_Extension' ) ) :
+/**
+ * Rendez Vous group class
+ *
+ * @package Rendez Vous
+ * @subpackage Groups
+ *
+ * @since  1.1
+ */
+class Rendez_Vous_Group extends BP_Group_Extension {
+
+	public static $post_type        = null;
+	public static $post_type_object = null;
+
+	/**
+	 * Constructor
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 */
+	public function __construct() {
+		/**
+		 * Init the Group Extension vars
+		 */
+		$this->init_vars();
+
+		/**
+		 * Add actions and filters to extend Rendez-vous
+		 * and manage activities
+		 */
+		//$this->setup_actions();
+		$this->setup_filters();
+	}
+
+	/** Group extension methods ***************************************************/
+
+	/**
+	 * Registers the Rendez-vous group extension and sets some globals
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @uses buddypress() to get the BuddyPress instance
+	 * @uses Rendez_Vous_Group->enable_nav_item() to display or not the Rendez-vous nav item for the group
+	 * @uses BP_Group_Extension::init()
+	 */
+	public function init_vars() {
+		$bp = buddypress();
+
+		$args = array(
+			'slug'              => $bp->rendez_vous->slug,
+			'name'              => $bp->rendez_vous->name,
+			'visibility'        => 'public',
+			'nav_item_position' => 80,
+			'enable_nav_item'   => $this->enable_nav_item(),
+			'screens'           => array(
+				'admin' => array(
+					'enabled'          => true,
+					'metabox_context'  => 'side',
+					'metabox_priority' => 'core'
+				),
+				'create' => array(
+					'position' => 80,
+					'enabled'  => true,
+				),
+				'edit' => array(
+					'position' => 80,
+					'enabled'  => true,
+				),
+			)
+		);
+
+        parent::init( $args );
+	}
+
+	/**
+	 * Loads Rendez-vous navigation if the group activated the extension
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @uses   bp_get_current_group_id() to get the group id
+	 * @uses   Rendez_Vous_Group::group_get_option() to check if extension is active for the group.
+	 * @return bool true if the extension is active for the group, false otherwise
+	 */
+	public function enable_nav_item() {
+		$group_id = bp_get_current_group_id();
+
+		if ( empty( $group_id ) ){
+			return false;
+		}
+
+		return (bool) self::group_get_option( $group_id, '_rendez_vous_group_activate', false );
+	}
+
+	/**
+	 * The create screen method
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param  int $group_id the group ID
+	 * @uses   bp_is_group_creation_step() to make sure it's the extension create step
+	 * @uses   bp_get_new_group_id() to get the just created group ID
+	 * @uses   Rendez_Vous_Group->edit_screen() to display the group extension settings form
+	 */
+	public function create_screen( $group_id = null ) {
+		// Bail if not looking at this screen
+		if ( ! bp_is_group_creation_step( $this->slug ) ) {
+			return false;
+		}
+
+		// Check for possibly empty group_id
+		if ( empty( $group_id ) ) {
+			$group_id = bp_get_new_group_id();
+		}
+
+		return $this->edit_screen( $group_id );
+	}
+
+	/**
+	 * The create screen save method
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param  int $group_id the group ID
+	 * @uses   bp_get_new_group_id() to get the just created group ID
+	 * @uses   Rendez_Vous_Group->edit_screen_save() to save the group extension settings
+	 */
+	public function create_screen_save( $group_id = null ) {
+		// Check for possibly empty group_id
+		if ( empty( $group_id ) ) {
+			$group_id = bp_get_new_group_id();
+		}
+
+		return $this->edit_screen_save( $group_id );
+	}
+
+	/**
+	 * Group extension settings form
+	 *
+	 * Used in Group Administration, Edit and Create screens
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param  int $group_id the group ID
+	 * @uses   is_admin() to check if we're in WP Administration
+	 * @uses   checked() to add a checked attribute to checkbox if needed
+	 * @uses   Rendez_Vous_Group::group_get_option() to get the needed group metas.
+	 * @uses   bp_is_group_admin_page() to check if the group edit screen is displayed
+	 * @uses   wp_nonce_field() to add a security token to check upon once submitted
+	 * @return string html output
+	 */
+	public function edit_screen( $group_id = null ) {
+		if ( empty( $group_id ) ) {
+			$group_id = bp_get_current_group_id();
+		}
+
+		$is_admin = is_admin();
+
+		if ( ! $is_admin ) : ?>
+
+			<h4><?php printf( esc_html__( '%s group settings', 'rendez-vous' ), $this->name ); ?></h4>
+
+		<?php endif; ?>
+
+		<fieldset>
+
+			<?php if ( $is_admin ) : ?>
+
+				<legend class="screen-reader-text"><?php printf( esc_html__( '%s group settings', 'rendez-vous' ), $this->name ); ?></legend>
+
+			<?php endif; ?>
+
+			<div class="field-group">
+				<div class="checkbox">
+					<label>
+						<label for="_rendez_vous_group_activate">
+							<input type="checkbox" id="_rendez_vous_group_activate" name="_rendez_vous_group_activate" value="1" <?php checked( self::group_get_option( $group_id, '_rendez_vous_group_activate', false ) )?>>
+								<?php printf( __( 'Activate %s.', 'rendez-vous' ), $this->name );?>
+							</input>
+						</label>
+				</div>
+			</div>
+
+			<?php if ( bp_is_group_admin_page() ) : ?>
+				<input type="submit" name="save" value="<?php _e( 'Save', 'rendez-vous' );?>" />
+			<?php endif; ?>
+
+		</fieldset>
+
+		<?php
+		wp_nonce_field( 'groups_settings_save_' . $this->slug, 'rendez_vous_group_admin' );
+	}
+
+
+	/**
+	 * Save the settings for the current the group
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param int $group_id the group id we save settings for
+	 * @uses  check_admin_referer() to check the request was made on the site
+	 * @uses  bp_get_current_group_id() to get the group id
+	 * @uses  wp_parse_args() to merge args with defaults
+	 * @uses  groups_update_groupmeta() to set the extension option
+	 * @uses  bp_is_group_admin_page() to check the group edit screen is displayed
+	 * @uses  bp_core_add_message() to give a feedback to the user
+	 * @uses  bp_core_redirect() to safely redirect the user
+	 * @uses  bp_get_group_permalink() to build the group permalink
+	 */
+	public function edit_screen_save( $group_id = null ) {
+
+		if ( 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			return false;
+		}
+
+		check_admin_referer( 'groups_settings_save_' . $this->slug, 'rendez_vous_group_admin' );
+
+		if ( empty( $group_id ) ) {
+			$group_id = bp_get_current_group_id();
+		}
+
+		/* Insert your edit screen save code here */
+		$settings = array(
+			'_rendez_vous_group_activate' => 0,
+		);
+
+		if ( ! empty( $_POST['_rendez_vous_group_activate'] ) ) {
+			$s = wp_parse_args( $_POST, $settings );
+
+			$settings = array_intersect_key(
+				array_map( 'absint', $s ),
+				$settings
+			);
+		}
+
+		// Save group settings
+		foreach ( $settings as $meta_key => $meta_value ) {
+			groups_update_groupmeta( $group_id, $meta_key, $meta_value );
+		}
+
+		if ( bp_is_group_admin_page() || is_admin() ) {
+
+			// Only redirect on Manage screen
+			if ( bp_is_group_admin_page() ) {
+				bp_core_add_message( __( 'Settings saved successfully', 'wp-idea-stream' ) );
+				bp_core_redirect( bp_get_group_permalink( buddypress()->groups->current_group ) . 'admin/' . $this->slug );
+			}
+		}
+	}
+
+	/**
+	 * Adds a Meta Box in Group's Administration screen
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param  int $group_id  the group id
+	 * @uses   Rendez_Vous_Group->edit_screen() to display the group extension settings form
+	 */
+	public function admin_screen( $group_id = null ) {
+		$this->edit_screen( $group_id );
+	}
+
+	/**
+	 * Saves the group settings (set in the Meta Box of the Group's Administration screen)
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param  int $group_id  the group id
+	 * @uses   Rendez_Vous_Group->edit_screen_save() to save the group extension settings
+	 */
+	public function admin_screen_save( $group_id = null ) {
+		$this->edit_screen_save( $group_id );
+	}
+
+	/**
+	 * Loads needed Rendez-vous template parts
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @return string html output
+	 */
+	public function display() {
+		?>
+		<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => bp_get_current_group_id() ) ); ?></h1>
+		<?php
+	}
+
+	/**
+	 * We do not use group widgets
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @return boolean false
+	 */
+	public function widget_display() {
+		return false;
+	}
+
+	/** Static Methods ************************************************************/
+
+	/**
+	 * Gets the group meta, use default if meta value is not set
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since  1.1
+	 *
+	 * @param  int     $group_id the group ID
+	 * @param  string  $option   meta key
+	 * @param  mixed   $default  the default value to fallback with
+	 * @uses   groups_get_groupmeta() to get the meta value
+	 * @uses   apply_filters() call "rendez_vous_groups_option{$option}" to override the group meta value
+	 * @return mixed             the meta value
+	 */
+	public static function group_get_option( $group_id = 0, $option = '', $default = '' ) {
+		if ( empty( $group_id ) || empty( $option ) ) {
+			return false;
+		}
+
+		$group_option = groups_get_groupmeta( $group_id, $option );
+
+		if ( '' === $group_option ) {
+			$group_option = $default;
+		}
+
+		/**
+		 * @param   mixed $group_option the meta value
+		 * @param   int   $group_id     the group ID
+		 */
+		return apply_filters( "rendez_vous_groups_option{$option}", $group_option, $group_id );
+	}
+
+	public function is_rendez_vous( $retval = false ) {
+		if ( bp_is_group() && bp_is_current_action( $this->slug ) ) {
+			$retval = true;
+		}
+
+		return $retval;
+	}
+
+	public function setup_filters() {
+		add_filter( 'rendez_vous_load_scripts', array( $this, 'is_rendez_vous' ), 10, 1 );
+		add_filter( 'rendez_vous_load_editor',  array( $this, 'is_rendez_vous' ), 10, 1 );
+		//'rendez_vous_get_edit_link'
+		// 'rendez_vous_has_rendez_vouss' pour enlever les drafts si author != current user
+	}
+}
+
+endif ;
+
+function rendez_vous_register_group_extension() {
+	bp_register_group_extension( 'Rendez_Vous_Group' );
+}
+add_action( 'bp_init', 'rendez_vous_register_group_extension' );

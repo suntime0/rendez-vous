@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Enqueues the Rendez Vous editor scripts, css, settings and strings
- * 
+ *
  * Inspired by wp_enqueue_media()
- * 
+ *
  * @package Rendez Vous
  * @subpackage Editor
  * @since Rendez Vous (1.0.0)
@@ -27,9 +27,10 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		return;
 
 	$defaults = array(
-		'post' => null,
-		'user_id' => bp_loggedin_user_id(),
+		'post'     => null,
+		'user_id'  => bp_loggedin_user_id(),
 		'callback' => null,
+		'group_id' => null,
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -70,10 +71,12 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 	);
 
 	$post = $hier = null;
-	$settings['user'] = intval( $args['user_id'] );
+	$settings['user']     = intval( $args['user_id'] );
+	$settings['group_id'] = intval( $args['group_id'] );
 
-	if ( ! empty( $args['callback'] ) )
+	if ( ! empty( $args['callback'] ) ) {
 		$settings['callback'] = esc_url( $args['callback'] );
+	}
 
 	$strings = array(
 		// Generic
@@ -137,8 +140,8 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		'saveButton'        => __( 'Save Rendez-Vous', 'rendez-vous' ),
 	) );
 
-	$rendez_vous_fields = array( 
-		'what' => array( 
+	$rendez_vous_fields = array(
+		'what' => array(
 			array(
 				'id'          => 'title',
 				'type'        => 'text',
@@ -197,7 +200,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 	);
 
 	$rendez_vous_date_strings = array(
-		'daynames'    => array( 
+		'daynames'    => array(
 			esc_html__( 'Sunday', 'rendez-vous' ),
 			esc_html__( 'Monday', 'rendez-vous' ),
 			esc_html__( 'Tuesday', 'rendez-vous' ),
@@ -206,7 +209,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			esc_html__( 'Friday', 'rendez-vous' ),
 			esc_html__( 'Saturday', 'rendez-vous' ),
 		),
-		'daynamesmin' => array( 
+		'daynamesmin' => array(
 			esc_html__( 'Su', 'rendez-vous' ),
 			esc_html__( 'Mo', 'rendez-vous' ),
 			esc_html__( 'Tu', 'rendez-vous' ),
@@ -236,8 +239,8 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 
 	$settings = apply_filters( 'media_view_settings', $settings, $post );
 	$strings  = apply_filters( 'media_view_strings',  $strings,  $post );
-	$strings = array_merge( $strings, array( 
-		'rendez_vous_strings'      => $rendez_vous_strings, 
+	$strings = array_merge( $strings, array(
+		'rendez_vous_strings'      => $rendez_vous_strings,
 		'rendez_vous_fields'       => $rendez_vous_fields,
 		'rendez_vous_date_strings' => $rendez_vous_date_strings
 	) );
@@ -259,11 +262,11 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 
 /**
  * Trick to make the media-views works without plupload loaded
- * 
+ *
  * @package Rendez Vous
  * @subpackage Editor
  * @since Rendez Vous (1.0.0)
- * 
+ *
  * @global $wp_scripts
  */
 function rendez_vous_plupload_settings() {
@@ -294,7 +297,7 @@ function rendez_vous_plupload_settings() {
 
 /**
  * The template needed for the Rendez Vous editor
- * 
+ *
  * @package Rendez Vous
  * @subpackage Editor
  * @since Rendez Vous (1.0.0)
@@ -333,7 +336,7 @@ function rendezvous_media_templates() {
 			<strong>Oops</strong>
 		<# } #>
 	</script>
-	
+
 	<script type="text/html" id="tmpl-when">
 			<# if ( 1 === data.intro  ) { #>
 				<div class="use-calendar">

@@ -44,7 +44,7 @@ function rendez_vous_get_items( $args = array() ) {
 		'page'		      => 1,
 		'search'          => false,
 		'exclude'		  => false,   // comma separated list or array of rendez vous ids.
-		'orderby' 		  => 'modified', 
+		'orderby' 		  => 'modified',
 		'order'           => 'DESC',
 	);
 
@@ -54,13 +54,13 @@ function rendez_vous_get_items( $args = array() ) {
 
 	if ( empty( $rendez_vouss ) ) {
 		$rendez_vouss = Rendez_Vous_Item::get( array(
-			'attendees'       => (array) $r['attendees'], 
+			'attendees'       => (array) $r['attendees'],
 			'organizer'	      => (int) $r['organizer'],
 			'per_page'	      => $r['per_page'],
 			'page'		      => $r['page'],
 			'search'          => $r['search'],
 			'exclude'		  => $r['exclude'],
-			'orderby' 		  => $r['orderby'], 
+			'orderby' 		  => $r['orderby'],
 			'order'           => $r['order'],
 		) );
 
@@ -95,13 +95,13 @@ function rendez_vous_prepare_user_for_js( $users ) {
 	$response = array(
 		'id'           => intval( $users->ID ),
 		'name'         => $users->display_name,
-		'avatar'       => htmlspecialchars_decode( bp_core_fetch_avatar( array( 
-				'item_id' => $users->ID, 
-				'object'  => 'user', 
-				'type'    => 'full', 
+		'avatar'       => htmlspecialchars_decode( bp_core_fetch_avatar( array(
+				'item_id' => $users->ID,
+				'object'  => 'user',
+				'type'    => 'full',
 				'width'   => 150,
 				'height'  => 150,
-				'html'    => false 
+				'html'    => false
 			)
 		) ),
 	);
@@ -131,38 +131,39 @@ function rendez_vous_save( $args = array() ) {
 		'days'        => array(),   // array( 'timestamp' => array( attendees id ) )
 		'attendees'   => array(),	// Attendees id
 		'def_date'    => 0, 	    // timestamp
-		'report'      => ''
+		'report'      => '',
+		'group_id'    => false,
 	), 'rendez_vous_save_args' );
 
-	extract( $r, EXTR_SKIP );
-
-	if ( empty( $title ) || empty( $organizer ) )
+	if ( empty( $r['title'] ) || empty( $r['organizer'] ) ) {
 		return false;
+	}
 
-	// Using rendez_vous 
-	$rendez_vous = new Rendez_Vous_Item( $id );
+	// Using rendez_vous
+	$rendez_vous = new Rendez_Vous_Item( $r['id'] );
 
-	$rendez_vous->organizer   = $organizer;
-	$rendez_vous->title       = $title;
-	$rendez_vous->venue       = $venue;
-	$rendez_vous->description = $description;
-	$rendez_vous->duration    = $duration;
-	$rendez_vous->privacy     = $privacy;
-	$rendez_vous->status      = $status;
-	$rendez_vous->attendees   = $attendees;
-	$rendez_vous->def_date    = $def_date;
-	$rendez_vous->report      = $report;
+	$rendez_vous->organizer   = $r['organizer'];
+	$rendez_vous->title       = $r['title'];
+	$rendez_vous->venue       = $r['venue'];
+	$rendez_vous->description = $r['description'];
+	$rendez_vous->duration    = $r['duration'];
+	$rendez_vous->privacy     = $r['privacy'];
+	$rendez_vous->status      = $r['status'];
+	$rendez_vous->attendees   = $r['attendees'];
+	$rendez_vous->def_date    = $r['def_date'];
+	$rendez_vous->report      = $r['report'];
+	$rendez_vous->group_id    = $r['group_id'];
 
 	// Allow attendees to not attend !
-	if ( 'draft' == $status && ! in_array( 'none', array_keys( $days ) ) ) {
-		$days['none'] = array();
+	if ( 'draft' == $r['status'] && ! in_array( 'none', array_keys( $r['days'] ) ) ) {
+		$r['days']['none'] = array();
 
 		// Saving days the first time only
-		$rendez_vous->days    = $days;
+		$rendez_vous->days    = $r['days'];
 	}
 
 	do_action( 'rendez_vous_before_saved', $rendez_vous, $r );
-	
+
 	$id = $rendez_vous->save();
 
 	do_action( 'rendez_vous_after_saved', $rendez_vous, $r );
@@ -245,7 +246,7 @@ function rendez_vous_get_edit_link( $id = 0, $organizer_id = 0 ) {
 
 	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug );
 	$link = add_query_arg( array( 'rdv' => $id, 'action' => 'edit' ), $link );
-	
+
 	return apply_filters( 'rendez_vous_get_edit_link', $link, $id, $organizer_id );
 }
 
@@ -290,37 +291,3 @@ function rendez_vous_maybe_upgrade() {
 		}
 	}
 }
-
-// oops forgot this would be introduced in BuddyPress 2.0
-if ( ! function_exists( 'bp_parse_args' ) ) :
-
-function bp_parse_args( $args, $defaults = array(), $filter_key = '' ) {
-	// Setup a temporary array from $args
-	if ( is_object( $args ) ) {
-		$r = get_object_vars( $args );
-	} elseif ( is_array( $args ) ) {
-		$r =& $args;
-	} else {
-		wp_parse_str( $args, $r );
-	}
-
-	// Passively filter the args before the parse
-	if ( !empty( $filter_key ) ) {
-		$r = apply_filters( 'bp_before_' . $filter_key . '_parse_args', $r );
-	}
-
-	// Parse
-	if ( is_array( $defaults ) && !empty( $defaults ) ) {
-		$r = array_merge( $defaults, $r );
-	}
-
-	// Aggressively filter the args after the parse
-	if ( !empty( $filter_key ) ) {
-		$r = apply_filters( 'bp_after_' . $filter_key . '_parse_args', $r );
-	}
-
-	// Return the parsed results
-	return $r;
-}
-
-endif;

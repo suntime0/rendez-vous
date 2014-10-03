@@ -167,15 +167,16 @@ class Rendez_Vous_Template {
 	public function __construct( $args = array() ) {
 
 		$defaults = array(
-			'attendees' => array(), // one or more attendee ids 
+			'attendees' => array(), // one or more attendee ids
 			'organizer'	=> false,   // the organize id of the rendez-vous
 			'per_page'	=> 20,
 			'page'		=> 1,
 			'search'    => false,
 			'exclude'	=> false,   // comma separated list or array of rendez-vous ids.
-			'orderby' 	=> 'modified', 
+			'orderby' 	=> 'modified',
 			'order'     => 'DESC',
 			'page_arg'  => 'rpage',
+			'group_id'  => false,
 		);
 
 		// Parse arguments
@@ -198,6 +199,7 @@ class Rendez_Vous_Template {
 		$this->page_arg     = $r['page_arg'];
 		$this->order_by     = $r['orderby'];
 		$this->sort_order   = $r['order'];
+		$this->group_id     = $r['group_id'];
 
 		// Get the Rendez Vous
 		$rendez_vouss      = rendez_vous_get_items( array(
@@ -207,8 +209,9 @@ class Rendez_Vous_Template {
 			'page'		=> $this->pag_page,
 			'search'    => $this->search_terms,
 			'exclude'	=> $this->exclude,
-			'orderby' 	=> $this->order_by, 
+			'orderby' 	=> $this->order_by,
 			'order'     => $this->sort_order,
+			'group_id'  => $this->group_id,
 		) );
 
 		// Setup the Rendez Vous to loop through
@@ -352,15 +355,16 @@ function rendez_vous_has_rendez_vouss( $args = array() ) {
 
 	// Parse the args
 	$r = bp_parse_args( $args, array(
-		'attendees' => $attendees, // one or more attendee ids 
+		'attendees' => $attendees, // one or more attendee ids
 		'organizer'	=> $organizer,   // the organize id of the rendez-vous
 		'per_page'	=> 20,
 		'page'		=> 1,
 		'search'    => isset( $_REQUEST['s'] ) ? stripslashes( $_REQUEST['s'] ) : '',
 		'exclude'	=> false,   // comma separated list or array of rendez-vous ids.
-		'orderby' 	=> 'modified', 
+		'orderby' 	=> 'modified',
 		'order'     => 'DESC',
-		'page_arg'  => 'rpage'
+		'page_arg'  => 'rpage',
+		'group_id'  => false,
 	), 'rendez_vouss_has_args' );
 
 	// Get the Rendez Vous
@@ -468,7 +472,7 @@ function rendez_vous_the_rendez_vous_id() {
 function rendez_vous_class() {
 	echo rendez_vous_get_class();
 }
-	
+
 	/**
 	 * Return the class of the Rendez Vous row.
 	 *
@@ -496,7 +500,7 @@ function rendez_vous_class() {
 function rendez_vous_avatar() {
 	echo rendez_vous_get_avatar();
 }
-	
+
 	/**
 	 * Return the "avatar" of the Rendez Vous row.
 	 *
@@ -504,7 +508,7 @@ function rendez_vous_avatar() {
 	 */
 	function rendez_vous_get_avatar() {
 		$output = '<div class="rendez-vous-avatar icon-' . rendez_vous()->query_loop->rendez_vous->post_status . '"></div>';
-		
+
 		return apply_filters( 'rendez_vous_get_avatar', $output );
 	}
 
@@ -516,7 +520,7 @@ function rendez_vous_avatar() {
 function rendez_vous_the_title() {
 	echo rendez_vous_get_the_title();
 }
-	
+
 	/**
 	 * Return the title of the Rendez Vous.
 	 *
@@ -534,7 +538,7 @@ function rendez_vous_the_title() {
 function rendez_vous_the_link() {
 	echo rendez_vous_get_the_link();
 }
-	
+
 	/**
 	 * Return the link of the Rendez Vous.
 	 *
@@ -569,7 +573,7 @@ function rendez_vous_the_link() {
 function rendez_vous_last_modified() {
 	echo rendez_vous_get_last_modified();
 }
-	
+
 	/**
 	 * Return the date of the Rendez Vous.
 	 *
@@ -609,7 +613,7 @@ function rendez_vous_has_description() {
 function rendez_vous_the_excerpt() {
 	echo rendez_vous_get_the_excerpt();
 }
-	
+
 	/**
 	 * Return the description of the Rendez Vous.
 	 *
@@ -629,7 +633,7 @@ function rendez_vous_the_excerpt() {
 function rendez_vous_the_status() {
 	echo rendez_vous_get_the_status();
 }
-	
+
 	/**
 	 * Return the status of the Rendez Vous.
 	 *
@@ -642,7 +646,7 @@ function rendez_vous_the_status() {
 			$status = __( 'Private', 'rendez-vous' );
 		else if ( 'draft' == rendez_vous()->query_loop->rendez_vous->post_status )
 			$status = __( 'Draft', 'rendez-vous' );
-			
+
 		return apply_filters( 'rendez_vous_get_the_status', $status );
 	}
 
@@ -665,7 +669,7 @@ add_action( 'rendez_vous_attend_actions', 'rendez_vous_the_user_actions' );
 	function rendez_vous_get_the_user_actions() {
 		$rendez_vous_id = rendez_vous()->query_loop->rendez_vous->ID;
 		$user_id = rendez_vous()->query_loop->rendez_vous->post_author;
-		
+
 		$edit = $view = false;
 
 		$status = rendez_vous()->query_loop->rendez_vous->post_status;
@@ -708,7 +712,7 @@ function rendez_vous_single_the_form_action() {
 function rendez_vous_single_the_id() {
 	echo rendez_vous_single_get_the_id();
 }
-	
+
 	/**
 	 * Return the ID of the Rendez Vous.
 	 *
@@ -726,7 +730,7 @@ function rendez_vous_single_the_id() {
 function rendez_vous_single_the_title() {
 	echo rendez_vous_single_get_the_title();
 }
-	
+
 	/**
 	 * Return the title of the Rendez Vous.
 	 *
@@ -841,7 +845,7 @@ function rendez_vous_single_the_privacy() {
 
 	function rendez_vous_single_get_privacy() {
 		$privacy = 'draft' == rendez_vous()->item->status ? rendez_vous()->item->privacy : rendez_vous()->item->status;
-		
+
 		$retval = 0;
 
 		if ( in_array( $privacy, array( 1, 'private' ) ) )
@@ -863,7 +867,7 @@ function rendez_vous_single_the_privacy() {
 function rendez_vous_single_the_dates( $view = 'single' ) {
 	echo rendez_vous_single_get_the_dates( $view );
 }
-	
+
 	function rendez_vous_single_get_the_dates( $view = 'single' ) {
 		// First add organizer
 		$all_attendees = (array) rendez_vous()->item->attendees;
@@ -892,7 +896,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 		$output  = '<table id="rendez-vous-attendees-prefs">';
 		$output .= '<thead>';
 		$output .= '<tr><th>&nbsp;</th>';
-			
+
 		foreach ( $header as $date ) {
 			$output .= '<th class="rendez-vous-date">';
 
@@ -902,7 +906,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			} else {
 				$output .= '<div class="none">' . esc_html__( 'None', 'rendez-vous') . '</div>';
 			}
-			
+
 			$output .= '</th>';
 		}
 
@@ -918,17 +922,17 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			$output .= '<tr class="'. $tr_class .'"><td>';
 
 			if ( 'edit' == $view && $attendee != rendez_vous()->item->organizer )
-				$output .= '<input type="checkbox" name="_rendez_vous_edit[attendees][]" value="' . $attendee . '" checked="true"/>&nbsp;'; 
+				$output .= '<input type="checkbox" name="_rendez_vous_edit[attendees][]" value="' . $attendee . '" checked="true"/>&nbsp;';
 
-			$output .= '<a href="' . $user_link . '" title="' . $user_name . '">' . bp_core_fetch_avatar( 
-				array( 
-					'object'  => 'user', 
-					'item_id' => $attendee, 
+			$output .= '<a href="' . $user_link . '" title="' . $user_name . '">' . bp_core_fetch_avatar(
+				array(
+					'object'  => 'user',
+					'item_id' => $attendee,
 					'type'    => 'thumb',
 					'class'   => 'mini',
 					'width'   => 20,
 					'height'  => 20
-				) 
+				)
 			) . ' ' . $user_name . '</a></td>';
 
 			foreach( $header as $date ) {
@@ -946,17 +950,17 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 		);
 
 		if ( 'edit' != $view ) {
-			$ending_rows['editable_row'] = '<td><a href="' . bp_loggedin_user_domain() . '" title="' . bp_get_loggedin_user_username() . '">' . bp_core_fetch_avatar( 
-				array( 
-					'object'  => 'user', 
-					'item_id' => bp_loggedin_user_id(), 
+			$ending_rows['editable_row'] = '<td><a href="' . bp_loggedin_user_domain() . '" title="' . bp_get_loggedin_user_username() . '">' . bp_core_fetch_avatar(
+				array(
+					'object'  => 'user',
+					'item_id' => bp_loggedin_user_id(),
 					'type'    => 'thumb',
 					'class'   => 'mini',
 					'width'   => 20,
 					'height'  => 20
 				)
 			) . ' ' . bp_get_loggedin_user_fullname() . '</a></td>';
-		// Set definitive date	
+		// Set definitive date
 		} else {
 			$ending_rows['editable_row'] = '<td>' . esc_html__( 'Set date', 'rendez-vous' ) . '</td>';
 		}
@@ -976,7 +980,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			// Let the organizer choose the definitive date
 			} else {
 				$def_date = ! empty( rendez_vous()->item->def_date ) ? rendez_vous()->item->def_date : false;
-				
+
 				if ( 'none' != $date )
 					$ending_rows['editable_row'] .= '<td><input type="radio" name="_rendez_vous_edit[def_date]" value="'. $date .'" '. checked( $date, $def_date, false ) . '/></td>';
 				else
@@ -1006,7 +1010,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			if ( 'draft' != rendez_vous()->item->status )
 				$output .= '<tr>' . $ending_rows['editable_row'] . '</tr>';
 		}
-		
+
 		$output .= '</tbody>';
 		$output .= '</table>';
 
@@ -1151,16 +1155,16 @@ function rendez_vous_single_the_submit( $view = 'single' ) {
 
 	if ( 'edit' == $view ) {
 		$caption = 'draft' == rendez_vous()->item->status ? __( 'Publish Rendez-vous', 'rendez-vous' ) : __( 'Edit Rendez-vous', 'rendez-vous' );
-		
+
 		if ( current_user_can( 'delete_rendez_vous', rendez_vous()->item->id ) ) :
 			$delete_link = rendez_vous_get_delete_link( rendez_vous()->item->id, rendez_vous()->item->organizer );
-			
+
 			if ( ! empty( $delete_link) ): ?>
-		
+
 			<a href="<?php echo esc_url( $delete_link ) ;?>" class="button delete-rendez-vous bp-secondary-action" id="delete-rendez-vous-<?php echo rendez_vous()->item->id ;?>"><?php esc_html_e( 'Cancel Rendez-vous', 'rendez-vous' ) ;?></a>
-			
+
 			<?php endif;
-			
+
 		endif;
 
 		if ( current_user_can( 'edit_rendez_vous', rendez_vous()->item->id ) ) :?>

@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package Rendez_Vous
  * @subpackage Component
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 class Rendez_Vous_Component extends BP_Component {
@@ -26,7 +26,7 @@ class Rendez_Vous_Component extends BP_Component {
 	 *
 	 * @package Rendez_Vous
 	 * @subpackage Component
-	 * 
+	 *
 	 * @since Rendez Vous (1.0.0)
 	 */
 	function __construct() {
@@ -39,7 +39,7 @@ class Rendez_Vous_Component extends BP_Component {
 		);
 
 		$this->includes();
-		
+
 		$bp->active_components[$this->id] = '1';
 
 		/**
@@ -72,11 +72,17 @@ class Rendez_Vous_Component extends BP_Component {
 			'rendez-vous-functions.php',
 		);
 
-		if ( bp_is_active( 'notifications' ) )
+		if ( bp_is_active( 'notifications' ) ) {
 			$includes[] = 'rendez-vous-notifications.php';
+		}
 
-		if ( bp_is_active( 'activity' ) )
+		if ( bp_is_active( 'activity' ) ) {
 			$includes[] = 'rendez-vous-activity.php';
+		}
+
+		if ( bp_is_active( 'groups' ) ) {
+			$includes[] = 'rendez-vous-groups.php';
+		}
 
 		parent::includes( $includes );
 	}
@@ -233,7 +239,7 @@ class Rendez_Vous_Component extends BP_Component {
 			'not_found'          => _x( 'No Rendez-vous Found',          'rendez-vous not found',          'rendez-vous' ),
 			'not_found_in_trash' => _x( 'No Rendez-vous Found in Trash', 'rendez-vous not found in trash', 'rendez-vous' )
 		);
-		
+
 		$rdv_args = array(
 			'label'	            => _x( 'Rendez-vous',                    'rendez-vous label',              'rendez-vous' ),
 			'labels'            => $rdv_labels,
