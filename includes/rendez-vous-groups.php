@@ -22,8 +22,7 @@ if ( ! class_exists( 'Rendez_Vous_Group' ) && class_exists( 'BP_Group_Extension'
  */
 class Rendez_Vous_Group extends BP_Group_Extension {
 
-	public static $post_type        = null;
-	public static $post_type_object = null;
+	public $screen  = null;
 
 	/**
 	 * Constructor
@@ -41,10 +40,8 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 
 		/**
 		 * Add actions and filters to extend Rendez-vous
-		 * and manage activities
 		 */
-		//$this->setup_actions();
-		$this->setup_filters();
+		$this->setup_hooks();
 	}
 
 	/** Group extension methods ***************************************************/
@@ -310,6 +307,13 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		$this->edit_screen_save( $group_id );
 	}
 
+	public function group_handle_screens() {
+		if ( bp_is_group() && bp_is_current_action( $this->slug ) ) {
+			$this->screen = rendez_vous_handle_actions();
+			rendez_vous()->screens->screen = $this->screen;
+		}
+	}
+
 	/**
 	 * Loads needed Rendez-vous template parts
 	 *
@@ -321,11 +325,21 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @return string html output
 	 */
 	public function display() {
-		?>
-		<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => bp_get_current_group_id() ) ); ?></h1>
-		<?php
-		rendez_vous_loop();
-		//var_dump( bp_action_variables() );
+		if ( ! empty( $this->screen ) )  {
+			if ( 'edit' == $this->screen ) {
+				?>
+				<h1><?php rendez_vous_edit_title();?></h1>
+				<?php rendez_vous_edit_content();
+			} else if ( 'single' ==  $this->screen ) {
+				?>
+				<h1><?php rendez_vous_single_title();?></h1>
+				<?php rendez_vous_single_content();
+			}
+		} else {
+			?>
+			<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => bp_get_current_group_id() ) ); ?></h1>
+			<?php rendez_vous_loop();
+		}
 	}
 
 	/**
@@ -341,8 +355,6 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	public function widget_display() {
 		return false;
 	}
-
-	/** Static Methods ************************************************************/
 
 	/**
 	 * Gets the group meta, use default if meta value is not set
@@ -413,12 +425,107 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $args;
 	}
 
-	public function setup_filters() {
-		add_filter( 'rendez_vous_load_scripts', array( $this, 'is_rendez_vous' ), 10, 1 );
-		add_filter( 'rendez_vous_load_editor',  array( $this, 'is_rendez_vous' ), 10, 1 );
-		add_filter( 'rendez_vous_map_meta_caps', array( $this, 'map_meta_caps' ), 10, 4 );
-		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ), 10, 1 );
-		//'rendez_vous_get_edit_link'
+	public function group_current_action( $action = '' ) {
+		if ( ! bp_is_group() ) {
+			return $action;
+		}
+
+		if ( empty( $_GET ) ) {
+			$action = 'schedule';
+		}
+
+		return $action;
+	}
+
+	public function group_rendez_vous_link( $id = 0 ) {
+		$link = false;
+
+		if ( empty( $id ) ) {
+			return $link;
+		}
+
+		$group_id = get_post_meta( $id, '_rendez_vous_group_id', true );
+
+		if ( empty( $group_id ) ) {
+			return $link;
+		}
+
+		$group = groups_get_current_group();
+
+		if ( empty( $group->id ) || $group_id == $group->id ) {
+			$group = groups_get_group( array( 'group_id' => $group_id, 'populate_extras' => false ) );
+
+			$link = trailingslashit( bp_get_group_permalink( $group ) . $this->slug );
+		}
+
+		return $link;
+	}
+
+	public function group_edit_link( $link = '', $id = 0, $organizer = 0 ) {
+		if ( empty( $id ) ) {
+			return $link;
+		}
+
+		$group_link = $this->group_rendez_vous_link( $id );
+
+		if ( empty( $group_link ) ) {
+			return $link;
+		}
+
+		$link = add_query_arg(
+			array( 'rdv' => $id, 'action' => 'edit' ),
+			$group_link
+		);
+
+		return $link;
+	}
+
+	public function group_view_link( $link = '', $id = 0, $organizer = 0 ) {
+		if ( empty( $id ) ) {
+			return $link;
+		}
+
+		$group_link = $this->group_rendez_vous_link( $id );
+
+		if ( empty( $group_link ) ) {
+			return $link;
+		}
+
+		$link = add_query_arg(
+			array( 'rdv' => $id ),
+			$group_link
+		);
+
+		return $link;
+	}
+
+	public function group_delete_link( $link = '', $id = 0, $organizer = 0 ) {
+		if ( empty( $id ) ) {
+			return $link;
+		}
+
+		$group_link = $this->group_rendez_vous_link( $id );
+
+		if ( empty( $group_link ) ) {
+			return $link;
+		}
+
+		$link = add_query_arg( array( 'rdv' => $id, 'action' => 'delete' ), $group_link );
+		$link = wp_nonce_url( $link, 'rendez_vous_delete' );
+
+		return $link;
+	}
+
+	public function setup_hooks() {
+		add_action( 'bp_screens',                                 array( $this, 'group_handle_screens' ), 20    );
+		add_filter( 'rendez_vous_load_scripts',                   array( $this, 'is_rendez_vous' ),       10, 1 );
+		add_filter( 'rendez_vous_load_editor',                    array( $this, 'is_rendez_vous' ),       10, 1 );
+		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),        10, 4 );
+		add_filter( 'rendez_vous_current_action',                 array( $this, 'group_current_action' ), 10, 1 );
+		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ),      10, 1 );
+		add_filter( 'rendez_vous_get_edit_link',                  array( $this, 'group_edit_link' ),      10, 3 );
+		add_filter( 'rendez_vous_get_single_link',                array( $this, 'group_view_link' ),      10, 3 );
+		add_filter( 'rendez_vous_get_delete_link',                array( $this, 'group_delete_link' ),    10, 3 );
 		// 'rendez_vous_has_rendez_vouss' pour enlever les drafts si author != current user
 		// 'rendez_vous_map_meta_caps'
 	}

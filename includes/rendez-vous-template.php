@@ -683,7 +683,9 @@ add_action( 'rendez_vous_attend_actions', 'rendez_vous_the_user_actions' );
 			}
 		}
 
-		if ( current_user_can( 'edit_rendez_vous', $rendez_vous_id ) && bp_is_current_action( 'schedule' ) ) {
+		$current_action = apply_filters( 'rendez_vous_current_action', bp_current_action() );
+
+		if ( current_user_can( 'edit_rendez_vous', $rendez_vous_id ) && 'schedule' == $current_action ) {
 			$edit_link = rendez_vous_get_edit_link( $rendez_vous_id, $user_id );
 			$edit = '<a href="'. esc_url( $edit_link ) .'" class="button edit-rendez-vous bp-primary-action" id="edit-rendez-vous-'. $rendez_vous_id .' ">' . _x( 'Edit', 'rendez-vous edit link', 'rendez-vous' ) . '</a>';
 		}
