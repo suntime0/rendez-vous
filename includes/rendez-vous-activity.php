@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_activity_edit_form() {
@@ -35,7 +35,7 @@ add_action( 'rendez_vous_edit_form_after_dates', 'rendez_vous_activity_edit_form
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_register_activity_actions() {
@@ -56,7 +56,7 @@ function rendez_vous_register_activity_actions() {
 	bp_activity_set_action(
 		$bp->rendez_vous->id,
 		'updated_rendez_vous',
-		__( 'Updated rendez-vous', 'rendez-vous' ),
+		__( 'Updated a rendez-vous', 'rendez-vous' ),
 		'rendez_vous_format_activity_action'
 	);
 
@@ -69,7 +69,7 @@ add_action( 'bp_register_activity_actions', 'rendez_vous_register_activity_actio
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_format_activity_action( $action, $activity ) {
@@ -110,7 +110,7 @@ function rendez_vous_format_activity_action( $action, $activity ) {
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_activity_options() {
@@ -131,7 +131,7 @@ add_action( 'bp_member_activity_filter_options', 'rendez_vous_activity_options' 
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_published_activity( $id = 0 , $args = array(), $notify = false, $activity = false ) {
@@ -161,7 +161,7 @@ function rendez_vous_published_activity( $id = 0 , $args = array(), $notify = fa
 		'type'              => 'new_rendez_vous',
 		'primary_link'      => $rendez_vous_url, // need to check why this is not passed..
 		'user_id'           => bp_loggedin_user_id(),
-		'item_id'           => $rendez_vous->id, 
+		'item_id'           => $rendez_vous->id,
 		'secondary_item_id' => $rendez_vous->organizer
 	) );
 
@@ -177,7 +177,7 @@ add_action( 'rendez_vous_after_publish', 'rendez_vous_published_activity', 10, 4
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_updated_activity( $id = 0 , $args = array(), $notify = false, $activity = false ) {
@@ -191,7 +191,7 @@ function rendez_vous_updated_activity( $id = 0 , $args = array(), $notify = fals
 	} else {
 		$rendez_vous = $rdv->item;
 	}
-	
+
 	$rendez_vous_url = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 
 	$rendez_vous_link  = '<a href="' . $rendez_vous_url . '">' . $rendez_vous->title . '</a>';
@@ -208,7 +208,7 @@ function rendez_vous_updated_activity( $id = 0 , $args = array(), $notify = fals
 		'type'              => 'updated_rendez_vous',
 		'primary_link'      => $rendez_vous_url,
 		'user_id'           => bp_loggedin_user_id(),
-		'item_id'           => $rendez_vous->id, 
+		'item_id'           => $rendez_vous->id,
 		'secondary_item_id' => $rendez_vous->organizer
 	) );
 
@@ -224,7 +224,7 @@ add_action( 'rendez_vous_after_update', 'rendez_vous_updated_activity', 11, 4 );
  *
  * @package Rendez Vous
  * @subpackage Activity
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_delete_item_activities( $rendez_vous_id = 0, $rendez_vous = null ) {

@@ -537,3 +537,27 @@ function rendez_vous_register_group_extension() {
 	bp_register_group_extension( 'Rendez_Vous_Group' );
 }
 add_action( 'bp_init', 'rendez_vous_register_group_extension' );
+
+function rendez_vous_groups_activity_actions() {
+	$bp = buddypress();
+
+	// Bail if activity is not active
+	if ( ! bp_is_active( 'activity' ) ) {
+		return false;
+	}
+
+	bp_activity_set_action(
+		$bp->groups->id,
+		'new_rendez_vous',
+		__( 'New rendez-vous in a group', 'rendez-vous' ),
+		array( 'Rendez_Vous_Group', 'format_activity_action' )
+	);
+
+	bp_activity_set_action(
+		$bp->groups->id,
+		'updated_rendez_vous',
+		__( 'Updated a rendez-vous in a group', 'rendez-vous' ),
+		array( 'Rendez_Vous_Group', 'format_activity_action' )
+	);
+}
+add_action( 'rendez_vous_register_activity_actions', 'rendez_vous_groups_activity_actions', 20 );
