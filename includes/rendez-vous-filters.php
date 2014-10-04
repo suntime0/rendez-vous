@@ -65,6 +65,8 @@ add_filter( 'rendez_vous_single_get_the_report',      'rendez_vous_make_nofollow
 add_filter( 'rendez_vous_single_get_the_report',      'rendez_vous_make_nofollow_filter' );
 add_filter( 'rendez_vous_single_get_the_description', 'rendez_vous_make_nofollow_filter' );
 
+add_filter( 'rendez_vous_single_get_the_date', 'rendez_vous_append_ical_link', 10, 2 );
+
 /**
  * Custom kses filtering for rendez-vous excerpt content.
  *
@@ -100,13 +102,13 @@ function rendez_vous_filter_kses( $content ) {
 
 /**
  * Add rel=nofollow to a link.
- * 
+ *
  * inspired bp_activity_make_nofollow_filter
  *
  * @package Rendez Vous
  * @subpackage Filters
  *
- * @since Rendez Vous (1.0.0) 
+ * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_make_nofollow_filter( $text = '' ) {
 	return preg_replace_callback( '|<a (.+?)>|i', 'rendez_vous_make_nofollow_filter_callback', $text );
@@ -120,7 +122,7 @@ function rendez_vous_make_nofollow_filter( $text = '' ) {
 	 * @package Rendez Vous
 	 * @subpackage Filters
 	 *
-	 * @since Rendez Vous (1.0.0) 
+	 * @since Rendez Vous (1.0.0)
 	 */
 	function rendez_vous_make_nofollow_filter_callback( $matches ) {
 		$text = $matches[1];
@@ -134,7 +136,7 @@ function rendez_vous_make_nofollow_filter( $text = '' ) {
  * @package Rendez Vous
  * @subpackage Filters
  *
- * @since Rendez Vous (1.0.0)        
+ * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
 
@@ -313,7 +315,7 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
  * @package Rendez Vous
  * @subpackage Filters
  *
- * @since Rendez Vous (1.0.0)        
+ * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_tiny_mce_plugins( $plugins = array() ) {
 
@@ -334,7 +336,7 @@ function rendez_vous_tiny_mce_plugins( $plugins = array() ) {
  * @package Rendez Vous
  * @subpackage Filters
  *
- * @since Rendez Vous (1.0.0)        
+ * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_teeny_mce_buttons( $buttons = array() ) {
 
@@ -360,7 +362,7 @@ function rendez_vous_teeny_mce_buttons( $buttons = array() ) {
  * @package Rendez Vous
  * @subpackage Filters
  *
- * @since Rendez Vous (1.0.0)        
+ * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_quicktags_settings( $settings = array() ) {
 
@@ -384,4 +386,28 @@ function rendez_vous_quicktags_settings( $settings = array() ) {
 	return apply_filters( 'rendez_vous_quicktags_settings', $settings );
 }
 
+/**
+ * Append a link to download the iCalendar file of the rendez-vous
+ *
+ * If for some reason, the dates/hours are not consistent, simply use
+ * remove_filter( 'rendez_vous_single_get_the_date', 'rendez_vous_append_ical_link' );
+ * till i'll fix the issue ;)
+ *
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since Rendez Vous (1.1.0)
+ *
+ * @param  string $output      the definitive date output for the rendez-vous
+ * @param  Rendez_Vous_Item $rendez_vous the rendez-vous object
+ * @return string              HTML Output
+ */
+function rendez_vous_append_ical_link( $output = '', $rendez_vous = null ) {
+	if ( empty( $output ) || empty( $rendez_vous ) ) {
+		return $output;
+	}
 
+	$output .= ' <a href="' . esc_url( rendez_vous_get_ical_link( $rendez_vous->id, $rendez_vous->organizer ) ) . '" title="' . esc_attr__( 'Download the iCal file', 'rendez-vous' ) . '" class="ical-link"><span></span></a>';
+
+	return $output;
+}

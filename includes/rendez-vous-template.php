@@ -1108,18 +1108,20 @@ function rendez_vous_single_the_date() {
 	function rendez_vous_single_get_the_date() {
 		$date_set = rendez_vous()->item->def_date;
 
-		if ( empty( $date_set ) )
+		if ( empty( $date_set ) ) {
 			return false;
+		}
 
-		if ( ! is_numeric( $date_set ) )
+		if ( ! is_numeric( $date_set ) ) {
 			return esc_html( $date_set );
+		}
 
 		$date = '<span class="date" data-timestamp="' .$date_set. '">' . date_i18n( get_option('date_format'), $date_set ) . '</span>';
 		$time = '<span class="time" data-timestamp="' .$date_set. '">' . date_i18n( get_option('time_format'), $date_set ) . '</span>';
 
 		$output = sprintf( __( '%s at %s', 'rendez-vous' ), $date, $time );
 
-		return apply_filters( 'rendez_vous_single_get_the_date', $output );
+		return apply_filters( 'rendez_vous_single_get_the_date', $output, rendez_vous()->item );
 	}
 
 /**

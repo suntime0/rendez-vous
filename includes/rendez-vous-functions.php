@@ -261,8 +261,9 @@ function rendez_vous_get_edit_link( $id = 0, $organizer_id = 0 ) {
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_get_delete_link( $id = 0, $organizer_id = 0 ) {
-	if ( empty( $id ) || empty( $organizer_id ) )
+	if ( empty( $id ) || empty( $organizer_id ) ) {
 		return false;
+	}
 
 	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug );
 	$link = add_query_arg( array( 'rdv' => $id, 'action' => 'delete' ), $link );
@@ -272,7 +273,30 @@ function rendez_vous_get_delete_link( $id = 0, $organizer_id = 0 ) {
 }
 
 /**
- * Mayb run upgrate routines
+ * iCal Link
+ *
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since Rendez Vous (1.1.0)
+ *
+ * @param  int $id           the id of the rendez-vous
+ * @param  int $organizer_id the author id of the rendez-vous
+ * @return string            the iCal link
+ */
+function rendez_vous_get_ical_link( $id = 0, $organizer_id = 0 ) {
+	if ( empty( $id ) || empty( $organizer_id ) ) {
+		return false;
+	}
+
+	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug . '/schedule/ical/' . $id );
+	$link = wp_nonce_url( $link, 'rendez_vous_ical' );
+
+	return apply_filters( 'rendez_vous_get_ical_link', $link, $id, $organizer_id );
+}
+
+/**
+ * Maybe run upgrate routines
  *
  * @package Rendez Vous
  * @subpackage Functions
@@ -294,6 +318,16 @@ function rendez_vous_maybe_upgrade() {
 	}
 }
 
+/**
+ * Handle rendez-vous actions (group/member contexts)
+ *
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since Rendez Vous (1.1.0)
+ *
+ * @return string the rendez-vous screen id
+ */
 function rendez_vous_handle_actions() {
 	$action = isset( $_GET['action'] ) ? $_GET['action'] : false;
 	$screen = '';
@@ -473,3 +507,89 @@ function rendez_vous_handle_actions() {
 
 	return $screen;
 }
+
+/**
+ * Generates an iCal file using the rendez-vous datas
+ *
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since Rendez Vous (1.1.0)
+ *
+ * @return string calendar file
+ */
+function rendez_vous_download_ical() {
+	$ical_page = array(
+		'is'  => (bool) bp_is_current_action( 'schedule' ) && 'ical' == bp_action_variable( 0 ),
+		'rdv' => (int)  bp_action_variable( 1 ),
+	);
+
+	apply_filters( 'rendez_vous_download_ical', (array) $ical_page );
+
+	if ( empty( $ical_page['is'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'rendez_vous_ical' );
+
+	$redirect = wp_get_referer();
+
+	if ( empty( $ical_page['rdv'] ) ) {
+		bp_core_add_message( __( 'the Rendez-vous was not found.', 'rendez-vous' ), 'error' );
+		bp_core_redirect( $redirect );
+	}
+
+	$rendez_vous = rendez_vous_get_item( $ical_page['rdv'] );
+
+	if ( $rendez_vous->organizer != bp_loggedin_user_id() && ! in_array( bp_loggedin_user_id(), $rendez_vous->attendees ) ) {
+		bp_core_add_message( __( 'You are not attending this rendez-vous.', 'rendez-vous' ), 'error' );
+		bp_core_redirect( $redirect );
+	}
+
+	if ( empty( $rendez_vous->def_date ) ) {
+		bp_core_add_message( __( 'the Rendez-vous is not set yet.', 'rendez-vous' ), 'error' );
+		bp_core_redirect( $redirect );
+	}
+
+	$hourminutes = explode( ':', $rendez_vous->duration );
+
+	if ( ! is_array( $hourminutes ) && count( $hourminutes ) < 2 ) {
+		bp_core_add_message( __( 'the duration is not set the right way.', 'rendez-vous' ), 'error' );
+		bp_core_redirect( $redirect );
+	}
+
+	$minutes = intval( $hourminutes[1] ) + ( intval( $hourminutes[0] ) * 60 );
+	$end_date = strtotime( '+' . $minutes . ' minutes', $rendez_vous->def_date );
+
+	// Dates are stored as UTC althought values are local, we need to reconvert
+	$date_start = date_i18n( 'Y-m-d H:i:s', $rendez_vous->def_date, true );
+	$date_end   = date_i18n( 'Y-m-d H:i:s', $end_date, true );
+
+	date_default_timezone_set( get_option( 'timezone_string' ) );
+
+	status_header( 200 );
+	header( 'Cache-Control: cache, must-revalidate' );
+	header( 'Pragma: public' );
+	header( 'Content-Description: File Transfer' );
+	header( 'Content-Disposition: attachment; filename=rendez_vous_' . $rendez_vous->id . '.ics' );
+	header( 'Content-Type: text/calendar' );
+    ?>
+BEGIN:VCALENDAR<?php echo "\n"; ?>
+VERSION:2.0<?php echo "\n"; ?>
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN<?php echo "\n"; ?>
+CALSCALE:GREGORIAN<?php echo "\n"; ?>
+BEGIN:VEVENT<?php echo "\n"; ?>
+DTEND:<?php echo gmdate('Ymd\THis\Z', strtotime( $date_end ) ); ?><?php echo "\n"; ?>
+UID:<?php echo uniqid(); ?><?php echo "\n"; ?>
+DTSTAMP:<?php echo gmdate( 'Ymd\THis\Z', time() ); ?><?php echo "\n"; ?>
+LOCATION:<?php echo esc_html( preg_replace('/([\,;])/','\\\$1', $rendez_vous->venue ) ); ?><?php echo "\n"; ?>
+DESCRIPTION:<?php echo esc_html( preg_replace('/([\,;])/','\\\$1', $rendez_vous->description ) ); ?><?php echo "\n"; ?>
+URL;VALUE=URI:<?php echo esc_url( rendez_vous_get_single_link( $rendez_vous->id, $rendez_vous->organizer ) ); ?><?php echo "\n"; ?>
+SUMMARY:<?php echo esc_html( preg_replace('/([\,;])/','\\\$1', $rendez_vous->title ) ); ?><?php echo "\n"; ?>
+DTSTART:<?php echo gmdate('Ymd\THis\Z', strtotime( $date_start ) ); ?><?php echo "\n"; ?>
+END:VEVENT<?php echo "\n"; ?>
+END:VCALENDAR<?php echo "\n"; ?>
+	<?php
+	exit();
+}
+add_action( 'bp_actions', 'rendez_vous_download_ical' );

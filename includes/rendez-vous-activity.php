@@ -50,14 +50,18 @@ function rendez_vous_register_activity_actions() {
 		$bp->rendez_vous->id,
 		'new_rendez_vous',
 		__( 'New rendez-vous', 'rendez-vous' ),
-		'rendez_vous_format_activity_action'
+		'rendez_vous_format_activity_action',
+		__( 'New rendez-vous', 'rendez-vous' ),
+		array( 'activity', 'member' )
 	);
 
 	bp_activity_set_action(
 		$bp->rendez_vous->id,
 		'updated_rendez_vous',
 		__( 'Updated a rendez-vous', 'rendez-vous' ),
-		'rendez_vous_format_activity_action'
+		'rendez_vous_format_activity_action',
+		__( 'Updated a rendez-vous', 'rendez-vous' ),
+		array( 'activity', 'member' )
 	);
 
 	do_action( 'rendez_vous_register_activity_actions' );
@@ -104,27 +108,6 @@ function rendez_vous_format_activity_action( $action, $activity ) {
 
 	return apply_filters( 'rendez_vous_format_activity_action', $action, $activity );
 }
-
-/**
- * Options in front end filters
- *
- * @package Rendez Vous
- * @subpackage Activity
- *
- * @since Rendez Vous (1.0.0)
- */
-function rendez_vous_activity_options() {
-
-	$rendez_vous_actions = buddypress()->activity->actions->rendez_vous;
-
-	foreach ( $rendez_vous_actions as $action ) {
-		?>
-		<option value="<?php echo esc_attr( $action['key'] ) ;?>"><?php echo esc_html( $action['value'] ) ;?></option>
-		<?php
-	}
-}
-add_action( 'bp_activity_filter_options',        'rendez_vous_activity_options' );
-add_action( 'bp_member_activity_filter_options', 'rendez_vous_activity_options' );
 
 /**
  * Publish!

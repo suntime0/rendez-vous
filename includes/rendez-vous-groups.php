@@ -18,7 +18,7 @@ if ( ! class_exists( 'Rendez_Vous_Group' ) && class_exists( 'BP_Group_Extension'
  * @package Rendez Vous
  * @subpackage Groups
  *
- * @since  1.1
+ * @since Rendez Vous (1.1.0)
  */
 class Rendez_Vous_Group extends BP_Group_Extension {
 
@@ -30,7 +30,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 */
 	public function __construct() {
 		/**
@@ -52,7 +52,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @uses buddypress() to get the BuddyPress instance
 	 * @uses Rendez_Vous_Group->enable_nav_item() to display or not the Rendez-vous nav item for the group
@@ -93,7 +93,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @uses   bp_get_current_group_id() to get the group id
 	 * @uses   Rendez_Vous_Group::group_get_option() to check if extension is active for the group.
@@ -115,7 +115,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param  int $group_id the group ID
 	 * @uses   bp_is_group_creation_step() to make sure it's the extension create step
@@ -142,7 +142,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param  int $group_id the group ID
 	 * @uses   bp_get_new_group_id() to get the just created group ID
@@ -165,7 +165,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param  int $group_id the group ID
 	 * @uses   is_admin() to check if we're in WP Administration
@@ -224,7 +224,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param int $group_id the group id we save settings for
 	 * @uses  check_admin_referer() to check the request was made on the site
@@ -283,7 +283,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param  int $group_id  the group id
 	 * @uses   Rendez_Vous_Group->edit_screen() to display the group extension settings form
@@ -298,7 +298,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param  int $group_id  the group id
 	 * @uses   Rendez_Vous_Group->edit_screen_save() to save the group extension settings
@@ -320,7 +320,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @return string html output
 	 */
@@ -348,7 +348,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @return boolean false
 	 */
@@ -362,7 +362,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
-	 * @since  1.1
+	 * @since Rendez Vous (1.1.0)
 	 *
 	 * @param  int     $group_id the group ID
 	 * @param  string  $option   meta key
@@ -389,6 +389,17 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return apply_filters( "rendez_vous_groups_option{$option}", $group_option, $group_id );
 	}
 
+	/**
+	 * [is_rendez_vous description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  boolean $retval [description]
+	 * @return boolean         [description]
+	 */
 	public function is_rendez_vous( $retval = false ) {
 		if ( bp_is_group() && bp_is_current_action( $this->slug ) ) {
 			$retval = true;
@@ -397,6 +408,20 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $retval;
 	}
 
+	/**
+	 * [map_meta_caps description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  array   $caps    [description]
+	 * @param  string  $cap     [description]
+	 * @param  integer $user_id [description]
+	 * @param  array   $args    [description]
+	 * @return [type]           [description]
+	 */
 	public function map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
 		if ( ! bp_is_group() ) {
 			return $caps;
@@ -406,15 +431,26 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 
 		switch ( $cap ) {
 			case 'publish_rendez_vouss' :
-					if ( ! empty( $group->id ) && groups_is_user_member( $user_id, $group->id ) ) {
-						$caps = array( 'exist' );
-					}
+				if ( ! empty( $group->id ) && groups_is_user_member( $user_id, $group->id ) ) {
+					$caps = array( 'exist' );
+				}
 				break;
 		}
 
 		return $caps;
 	}
 
+	/**
+	 * [append_group_id description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  array  $args [description]
+	 * @return [type]       [description]
+	 */
 	public function append_group_id( $args = array() ) {
 		if ( ! bp_is_group() ) {
 			return $args;
@@ -425,6 +461,17 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $args;
 	}
 
+	/**
+	 * [group_current_action description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  string $action [description]
+	 * @return [type]         [description]
+	 */
 	public function group_current_action( $action = '' ) {
 		if ( ! bp_is_group() ) {
 			return $action;
@@ -437,6 +484,17 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $action;
 	}
 
+	/**
+	 * [group_rendez_vous_link description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  integer $id [description]
+	 * @return [type]      [description]
+	 */
 	public function group_rendez_vous_link( $id = 0 ) {
 		$link = false;
 
@@ -461,6 +519,19 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $link;
 	}
 
+	/**
+	 * [group_edit_link description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  string  $link      [description]
+	 * @param  integer $id        [description]
+	 * @param  integer $organizer [description]
+	 * @return [type]             [description]
+	 */
 	public function group_edit_link( $link = '', $id = 0, $organizer = 0 ) {
 		if ( empty( $id ) ) {
 			return $link;
@@ -480,6 +551,19 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $link;
 	}
 
+	/**
+	 * [group_view_link description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  string  $link      [description]
+	 * @param  integer $id        [description]
+	 * @param  integer $organizer [description]
+	 * @return [type]             [description]
+	 */
 	public function group_view_link( $link = '', $id = 0, $organizer = 0 ) {
 		if ( empty( $id ) ) {
 			return $link;
@@ -499,6 +583,19 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $link;
 	}
 
+	/**
+	 * [group_delete_link description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  string  $link      [description]
+	 * @param  integer $id        [description]
+	 * @param  integer $organizer [description]
+	 * @return [type]             [description]
+	 */
 	public function group_delete_link( $link = '', $id = 0, $organizer = 0 ) {
 		if ( empty( $id ) ) {
 			return $link;
@@ -516,28 +613,71 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $link;
 	}
 
+	/**
+	 * [format_activity_action description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  [type] $action   [description]
+	 * @param  [type] $activity [description]
+	 * @return [type]           [description]
+	 */
+	public function format_activity_action( $action, $activity ) {
+		return $action;
+	}
+
+	/**
+	 * [setup_hooks description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @return [type] [description]
+	 */
 	public function setup_hooks() {
-		add_action( 'bp_screens',                                 array( $this, 'group_handle_screens' ), 20    );
-		add_filter( 'rendez_vous_load_scripts',                   array( $this, 'is_rendez_vous' ),       10, 1 );
-		add_filter( 'rendez_vous_load_editor',                    array( $this, 'is_rendez_vous' ),       10, 1 );
-		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),        10, 4 );
-		add_filter( 'rendez_vous_current_action',                 array( $this, 'group_current_action' ), 10, 1 );
-		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ),      10, 1 );
-		add_filter( 'rendez_vous_get_edit_link',                  array( $this, 'group_edit_link' ),      10, 3 );
-		add_filter( 'rendez_vous_get_single_link',                array( $this, 'group_view_link' ),      10, 3 );
-		add_filter( 'rendez_vous_get_delete_link',                array( $this, 'group_delete_link' ),    10, 3 );
-		// 'rendez_vous_has_rendez_vouss' pour enlever les drafts si author != current user
-		// 'rendez_vous_map_meta_caps'
+		add_action( 'bp_screens',                                 array( $this, 'group_handle_screens' ),   20    );
+		add_filter( 'rendez_vous_load_scripts',                   array( $this, 'is_rendez_vous' ),         10, 1 );
+		add_filter( 'rendez_vous_load_editor',                    array( $this, 'is_rendez_vous' ),         10, 1 );
+		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),          10, 4 );
+		add_filter( 'rendez_vous_current_action',                 array( $this, 'group_current_action' ),   10, 1 );
+		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ),        10, 1 );
+		add_filter( 'rendez_vous_get_edit_link',                  array( $this, 'group_edit_link' ),        10, 3 );
+		add_filter( 'rendez_vous_get_single_link',                array( $this, 'group_view_link' ),        10, 3 );
+		add_filter( 'rendez_vous_get_delete_link',                array( $this, 'group_delete_link' ),      10, 3 );
+		add_filter( 'rendez_vous_format_activity_action',         array( $this, 'format_activity_action' ), 10, 3 );
 	}
 }
 
 endif ;
 
+/**
+ * [rendez_vous_register_group_extension description]
+ *
+ * @package Rendez Vous
+ * @subpackage Groups
+ *
+ * @since Rendez Vous (1.1.0)
+ *
+ * @return [type] [description]
+ */
 function rendez_vous_register_group_extension() {
 	bp_register_group_extension( 'Rendez_Vous_Group' );
 }
 add_action( 'bp_init', 'rendez_vous_register_group_extension' );
 
+/**
+ * [rendez_vous_groups_activity_actions description]
+ *
+ * @package Rendez Vous
+ * @subpackage Groups
+ *
+ * @since Rendez Vous (1.1.0)
+ */
 function rendez_vous_groups_activity_actions() {
 	$bp = buddypress();
 
@@ -550,14 +690,18 @@ function rendez_vous_groups_activity_actions() {
 		$bp->groups->id,
 		'new_rendez_vous',
 		__( 'New rendez-vous in a group', 'rendez-vous' ),
-		array( 'Rendez_Vous_Group', 'format_activity_action' )
+		'rendez_vous_format_activity_action',
+		__( 'New rendez-vous', 'rendez-vous' ),
+		array( 'group', 'member' )
 	);
 
 	bp_activity_set_action(
 		$bp->groups->id,
 		'updated_rendez_vous',
 		__( 'Updated a rendez-vous in a group', 'rendez-vous' ),
-		array( 'Rendez_Vous_Group', 'format_activity_action' )
+		'rendez_vous_format_activity_action',
+		__( 'Updated a rendez-vous', 'rendez-vous' ),
+		array( 'group', 'member_groups' )
 	);
 }
 add_action( 'rendez_vous_register_activity_actions', 'rendez_vous_groups_activity_actions', 20 );
