@@ -484,6 +484,21 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $action;
 	}
 
+	public function group_edit_rendez_vous( $organizer_id = 0, $args = array() ) {
+		if ( ! bp_is_group() || empty( $args['id'] ) ) {
+			return $organizer_id;
+		}
+
+		$rendez_vous_id = intval( $args['id'] );
+		$author = get_post_field( 'post_author', $rendez_vous_id );
+
+		if ( empty( $author ) ) {
+			return $organizer_id;
+		}
+
+		return $author;
+	}
+
 	/**
 	 * [group_rendez_vous_link description]
 	 *
@@ -613,6 +628,55 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		return $link;
 	}
 
+	public function group_form_action( $action = '', $rendez_vous_id = 0 ) {
+		if ( ! bp_is_group() ) {
+			return $action;
+		}
+
+		$group = groups_get_current_group();
+
+		return trailingslashit( bp_get_group_permalink( $group ) . $this->slug );
+	}
+
+	public function group_activity_save_args( $args = array() ) {
+		if ( ! bp_is_group() || empty( $args['action'] ) ) {
+			return $args;
+		}
+
+		$group = groups_get_current_group();
+
+		$group_link = '<a href="' . esc_url( bp_get_group_permalink( $group ) ) . '">' . esc_html( $group->name ) . '</a>';
+
+		$action         = $args['action'] . ' ' . sprintf( __( 'in %s', 'rendez-vous' ), $group_link );
+		$rendez_vous_id = $args['item_id'];
+
+		$args = array_merge( $args, array(
+			'action'            => $action,
+			'component'         => buddypress()->groups->id,
+			'item_id'           => $group->id,
+			'secondary_item_id' => $rendez_vous_id
+		) );
+
+		return $args;
+	}
+
+	public function group_activity_delete_args( $args = array() ) {
+		if ( ! bp_is_group() || empty( $args['item_id'] ) ) {
+			return $args;
+		}
+
+		$group = groups_get_current_group();
+		$rendez_vous_id = $args['item_id'];
+
+		$args = array(
+			'item_id'           => $group->id,
+			'secondary_item_id' => $rendez_vous_id,
+			'component'         => buddypress()->groups->id,
+		);
+
+		return $args;
+	}
+
 	/**
 	 * [format_activity_action description]
 	 *
@@ -626,6 +690,23 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @return [type]           [description]
 	 */
 	public function format_activity_action( $action, $activity ) {
+		// Bail if not a rendez vous activity posted in a group
+		if ( buddypress()->groups->id != $activity->component || empty( $action ) ) {
+			return $action;
+		}
+
+		$group = groups_get_group( array(
+			'group_id'        => $activity->item_id,
+			'populate_extras' => false,
+		) );
+
+		if ( empty( $group ) ) {
+			return $action;
+		}
+
+		$group_link = '<a href="' . esc_url( bp_get_group_permalink( $group ) ) . '">' . esc_html( $group->name ) . '</a>';
+
+		$action .= ' ' . sprintf( __( 'in %s', 'rendez-vous' ), $group_link );
 		return $action;
 	}
 
@@ -640,16 +721,21 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @return [type] [description]
 	 */
 	public function setup_hooks() {
-		add_action( 'bp_screens',                                 array( $this, 'group_handle_screens' ),   20    );
-		add_filter( 'rendez_vous_load_scripts',                   array( $this, 'is_rendez_vous' ),         10, 1 );
-		add_filter( 'rendez_vous_load_editor',                    array( $this, 'is_rendez_vous' ),         10, 1 );
-		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),          10, 4 );
-		add_filter( 'rendez_vous_current_action',                 array( $this, 'group_current_action' ),   10, 1 );
-		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ),        10, 1 );
-		add_filter( 'rendez_vous_get_edit_link',                  array( $this, 'group_edit_link' ),        10, 3 );
-		add_filter( 'rendez_vous_get_single_link',                array( $this, 'group_view_link' ),        10, 3 );
-		add_filter( 'rendez_vous_get_delete_link',                array( $this, 'group_delete_link' ),      10, 3 );
-		add_filter( 'rendez_vous_format_activity_action',         array( $this, 'format_activity_action' ), 10, 3 );
+		add_action( 'bp_screens',                                 array( $this, 'group_handle_screens' ),       20    );
+		add_filter( 'rendez_vous_load_scripts',                   array( $this, 'is_rendez_vous' ),             10, 1 );
+		add_filter( 'rendez_vous_load_editor',                    array( $this, 'is_rendez_vous' ),             10, 1 );
+		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),              10, 4 );
+		add_filter( 'rendez_vous_current_action',                 array( $this, 'group_current_action' ),       10, 1 );
+		add_filter( 'rendez_vous_edit_action_organizer_id',       array( $this, 'group_edit_rendez_vous' ),     10, 2 );
+		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ),            10, 1 );
+		add_filter( 'rendez_vous_get_edit_link',                  array( $this, 'group_edit_link' ),            10, 3 );
+		add_filter( 'rendez_vous_get_single_link',                array( $this, 'group_view_link' ),            10, 3 );
+		add_filter( 'rendez_vous_get_delete_link',                array( $this, 'group_delete_link' ),          10, 3 );
+		add_filter( 'rendez_vous_single_the_form_action',         array( $this, 'group_form_action' ),          10, 2 );
+		add_filter( 'rendez_vous_published_activity_args',        array( $this, 'group_activity_save_args' ),   10, 1 );
+		add_filter( 'rendez_vous_updated_activity_args',          array( $this, 'group_activity_save_args' ),   10, 1 );
+		add_filter( 'rendez_vous_delete_item_activities_args',    array( $this, 'group_activity_delete_args' ), 10, 1 );
+		add_filter( 'rendez_vous_format_activity_action',         array( $this, 'format_activity_action' ),     10, 3 );
 	}
 }
 

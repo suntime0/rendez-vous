@@ -366,11 +366,17 @@ function rendez_vous_handle_actions() {
 
 		$rendez_vous = rendez_vous_get_item( $rendez_vous_id );
 
+		if ( is_null( $rendez_vous->organizer ) ) {
+			bp_core_add_message( __( 'The rendez-vous was not found', 'rendez-vous' ), 'error' );
+			bp_core_redirect( $redirect );
+		}
+
 		// Public rendez-vous can be seen by anybody
 		$has_access = true;
 
-		if ( 'private' == $rendez_vous->status )
+		if ( 'private' == $rendez_vous->status ) {
 			$has_access = current_user_can( 'read_private_rendez_vouss', $rendez_vous_id );
+		}
 
 		if ( empty( $rendez_vous ) || empty( $has_access ) || 'draft' == $rendez_vous->status ) {
 			bp_core_add_message( __( 'You do not have access to this rendez-vous', 'rendez-vous' ), 'error' );
@@ -409,7 +415,7 @@ function rendez_vous_handle_actions() {
 		// Super Admins cannot "steal" the ownership of a rendez-vous
 		// but they surely can edit it :)
 		if ( bp_current_user_can( 'bp_moderate' ) && ! bp_is_my_profile() ) {
-			$args['organizer'] = bp_displayed_user_id();
+			$args['organizer'] = apply_filters( 'rendez_vous_edit_action_organizer_id', bp_displayed_user_id(), $args );
 		}
 
 

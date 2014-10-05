@@ -131,29 +131,31 @@ class Rendez_Vous_Item {
 	 */
 	public function populate() {
 		$rendez_vous       = get_post( $this->id );
-		$this->id          = $rendez_vous->ID;
-		$this->organizer   = $rendez_vous->post_author;
-		$this->title       = $rendez_vous->post_title;
-		$this->venue       = get_post_meta( $rendez_vous->ID, '_rendez_vous_venue', true );
-		$this->description = $rendez_vous->post_excerpt;
-		$this->duration    = get_post_meta( $rendez_vous->ID, '_rendez_vous_duration', true );
-		$this->privacy     = 'draft' == $rendez_vous->post_status ? get_post_meta( $rendez_vous->ID, '_rendez_vous_status', true ) : $rendez_vous->post_status;
-		$this->status      = $rendez_vous->post_status;
-		$this->days        = get_post_meta( $rendez_vous->ID, '_rendez_vous_days', true );
-		$this->attendees   = get_post_meta( $this->id, '_rendez_vous_attendees' );
-		$this->report      = $rendez_vous->post_content;
-		$this->older_date  = false;
 
-		if ( ! empty( $this->days ) ) {
-			$timestamps = array_keys( $this->days );
-			rsort( $timestamps );
-			$this->older_date = date_i18n( 'Y-m-d H:i:s', $timestamps[0] );
+		if ( is_a( $rendez_vous, 'WP_Post' ) ) {
+			$this->id          = $rendez_vous->ID;
+			$this->organizer   = $rendez_vous->post_author;
+			$this->title       = $rendez_vous->post_title;
+			$this->venue       = get_post_meta( $rendez_vous->ID, '_rendez_vous_venue', true );
+			$this->description = $rendez_vous->post_excerpt;
+			$this->duration    = get_post_meta( $rendez_vous->ID, '_rendez_vous_duration', true );
+			$this->privacy     = 'draft' == $rendez_vous->post_status ? get_post_meta( $rendez_vous->ID, '_rendez_vous_status', true ) : $rendez_vous->post_status;
+			$this->status      = $rendez_vous->post_status;
+			$this->days        = get_post_meta( $rendez_vous->ID, '_rendez_vous_days', true );
+			$this->attendees   = get_post_meta( $this->id, '_rendez_vous_attendees' );
+			$this->report      = $rendez_vous->post_content;
+			$this->older_date  = false;
+
+			if ( ! empty( $this->days ) ) {
+				$timestamps = array_keys( $this->days );
+				rsort( $timestamps );
+				$this->older_date = date_i18n( 'Y-m-d H:i:s', $timestamps[0] );
+			}
+
+			$this->def_date    = get_post_meta( $rendez_vous->ID, '_rendez_vous_defdate', true );
+			$this->modified    = $rendez_vous->post_modified;
+			$this->group_id    = get_post_meta( $rendez_vous->ID, '_rendez_vous_group_id', true );
 		}
-
-		$this->def_date    = get_post_meta( $rendez_vous->ID, '_rendez_vous_defdate', true );
-		$this->modified    = $rendez_vous->post_modified;
-		$this->group_id    = get_post_meta( $rendez_vous->ID, '_rendez_vous_group_id', true );
-
 	}
 
 	/**
