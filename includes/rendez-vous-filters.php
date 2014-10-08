@@ -411,3 +411,30 @@ function rendez_vous_append_ical_link( $output = '', $rendez_vous = null ) {
 
 	return $output;
 }
+
+/**
+ * Adds Rendez-vous slug into groups forbidden names
+ *
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since  Rendez Vous (1.1.0)
+ *
+ * @param  array  $names the groups forbidden names
+ * @uses   buddypress() to get the BuddyPress main instance
+ * @return array        the same names + rendez-vous forbidden ones.
+ */
+function rendez_vous_forbidden_names( $names = array() ) {
+	// Get the rendez-vous slug
+	$rendez_vous_slug = buddypress()->rendez_vous->slug;
+
+	$forbidden = array( $rendez_vous_slug );
+
+	// Just in case!
+	if ( 'rendez-vous' != $rendez_vous_slug ) {
+		$forbidden[] = 'rendez-vous';
+	}
+
+	return array_merge( $names, $forbidden );
+}
+add_filter( 'groups_forbidden_names', 'rendez_vous_forbidden_names', 10, 1 );
