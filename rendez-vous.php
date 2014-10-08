@@ -365,9 +365,6 @@ class Rendez_Vous {
 		$locale        = apply_filters( 'plugin_locale', get_locale(), $this->domain );
 		$mofile        = sprintf( '%1$s-%2$s.mo', $this->domain, $locale );
 
-		// Setup paths to current locale file
-		$mofile_local  = $this->lang_dir . $mofile;
-
 		// Setup paths to a rendez-vous subfolder in WP LANG DIR
 		$mofile_global = WP_LANG_DIR . '/rendez-vous/' . $mofile;
 
