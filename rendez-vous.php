@@ -358,6 +358,7 @@ class Rendez_Vous {
 	 *
 	 * @uses get_locale() to get the language of WordPress config
 	 * @uses load_texdomain() to load the translation if any is available for the language
+	 * @uses load_plugin_textdomain() to load the translation if any is available for the language
 	 */
 	public function load_textdomain() {
 		// Traditional WordPress plugin locale filter
@@ -366,13 +367,17 @@ class Rendez_Vous {
 
 		// Setup paths to current locale file
 		$mofile_local  = $this->lang_dir . $mofile;
+
+		// Setup paths to a rendez-vous subfolder in WP LANG DIR
 		$mofile_global = WP_LANG_DIR . '/rendez-vous/' . $mofile;
 
-		// Look in global /wp-content/languages/buddyplug folder
-		load_textdomain( $this->domain, $mofile_global );
+		// Look in global /wp-content/languages/rendez-vous folder
+		if ( ! load_textdomain( $this->domain, $mofile_global ) ) {
 
-		// Look in local /wp-content/plugins/buddyplug/languages/ folder
-		load_textdomain( $this->domain, $mofile_local );
+			// Look in local /wp-content/plugins/rendez-vous/languages/ folder
+			// or /wp-content/languages/plugins/
+			load_plugin_textdomain( $this->domain, false, basename( $this->plugin_dir ) . '/languages' );
+		}
 	}
 }
 
