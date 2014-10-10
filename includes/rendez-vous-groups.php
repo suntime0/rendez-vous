@@ -204,6 +204,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 								<?php printf( __( 'Activate %s.', 'rendez-vous' ), $this->name );?>
 							</input>
 						</label>
+					</label>
 				</div>
 			</div>
 
@@ -307,10 +308,42 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		$this->edit_screen_save( $group_id );
 	}
 
+	/**
+	 * [group_handle_screens description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 * 
+	 * @return [type] [description]
+	 */
 	public function group_handle_screens() {
 		if ( bp_is_group() && bp_is_current_action( $this->slug ) ) {
-			$this->screen = rendez_vous_handle_actions();
-			rendez_vous()->screens->screen = $this->screen;
+			$rendez_vous = rendez_vous();
+
+			$this->screen                 = rendez_vous_handle_actions();
+			$rendez_vous->screens->screen = $this->screen;
+			$group_id                     = bp_get_current_group_id();
+
+			// if the group doesn't support rendez-vous anymore, delete meta & activities
+			if ( 'single' == $this->screen && ! self::group_get_option( $group_id, '_rendez_vous_group_activate', false ) ) {
+				// No item, do nothing
+				if( empty( $rendez_vous->item->id ) ) {
+					return;
+				}
+
+				// Delete the rendez-vous group id meta
+				delete_post_meta( $rendez_vous->item->id, '_rendez_vous_group_id' );
+				$redirect = rendez_vous_get_single_link( $rendez_vous->item->id, $rendez_vous->item->organizer );
+				bp_core_add_message( __( 'The Group, the rendez-vous was attached to, does not support rendez-vous anymore', 'rendez-vous' ), 'error' );
+				
+				// fire an action to deal with group activities
+				do_action( 'rendez_vous_groups_component_deactivated', $group_id, $rendez_vous->item );
+
+				// Redirect to organizer's rendez-vous page
+				bp_core_redirect( $redirect );
+			}
 		}
 	}
 
