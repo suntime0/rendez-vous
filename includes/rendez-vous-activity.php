@@ -252,3 +252,4 @@ function rendez_vous_delete_item_activities( $rendez_vous_id = 0, $rendez_vous =
 }
 add_action( 'rendez_vous_after_delete',                 'rendez_vous_delete_item_activities', 10, 2 );
 add_action( 'rendez_vous_groups_component_deactivated', 'rendez_vous_delete_item_activities', 10, 2 );
+add_action( 'rendez_vous_groups_member_removed',        'rendez_vous_delete_item_activities', 10, 2 );

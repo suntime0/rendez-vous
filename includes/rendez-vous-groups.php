@@ -326,20 +326,43 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			$rendez_vous->screens->screen = $this->screen;
 			$group_id                     = bp_get_current_group_id();
 
-			// if the group doesn't support rendez-vous anymore, delete meta & activities
-			if ( 'single' == $this->screen && ! self::group_get_option( $group_id, '_rendez_vous_group_activate', false ) ) {
-				// No item, do nothing
-				if( empty( $rendez_vous->item->id ) ) {
+			/**
+			 * Should we remove the rendez-vous from the group ?
+			 *
+			 * Although, this is already handled in Rendez_Vous_Group->group_rendez_vous_link()
+			 * an invited user can click on an email he received where the link is a group rendez-vous link.
+			 * @see rendez_vous_published_notification()
+			 *
+			 * Not checking if notifications are active, because there's also an edge case when the activity
+			 * has not been deleted yet and the user clicks on the activity link.
+			 */
+			if ( 'single' == $this->screen && ! empty( $rendez_vous->item->id ) ) {
+
+				$message = $action = false;
+
+				// The group doesn't support rendez-vous anymore
+				if( ! self::group_get_option( $group_id, '_rendez_vous_group_activate', false ) ) {
+					$message = __( 'The Group, the rendez-vous was attached to, does not support rendez-vous anymore', 'rendez-vous' );
+					$action  = 'rendez_vous_groups_component_deactivated';
+
+				// The organizer was removed or left the group
+				} else if( ! groups_is_user_member( $rendez_vous->item->organizer, $group_id ) ) {
+					$message = sprintf( __( '%s is not a member of the group, the rendez-vous was attached to, anymore. As a result, the rendez-vous was removed from the group.', 'rendez-vous' ), bp_core_get_user_displayname( $rendez_vous->item->organizer ) );
+					$action  = 'rendez_vous_groups_member_removed';
+				}
+
+				// Bail if everything is ok.
+				if ( empty( $message ) ) {
 					return;
 				}
 
 				// Delete the rendez-vous group id meta
 				delete_post_meta( $rendez_vous->item->id, '_rendez_vous_group_id' );
 				$redirect = rendez_vous_get_single_link( $rendez_vous->item->id, $rendez_vous->item->organizer );
-				bp_core_add_message( __( 'The Group, the rendez-vous was attached to, does not support rendez-vous anymore', 'rendez-vous' ), 'error' );
+				bp_core_add_message( $message, 'error' );
 
 				// fire an action to deal with group activities
-				do_action( 'rendez_vous_groups_component_deactivated', $rendez_vous->item->id, $rendez_vous->item );
+				do_action( $action, $rendez_vous->item->id, $rendez_vous->item );
 
 				// Redirect to organizer's rendez-vous page
 				bp_core_redirect( $redirect );
@@ -543,10 +566,10 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @param  integer $id [description]
 	 * @return [type]      [description]
 	 */
-	public function group_rendez_vous_link( $id = 0 ) {
-		$link = false;
+	public function group_rendez_vous_link( $id = 0, $organizer = 0 ) {
+		$link = $action = false;
 
-		if ( empty( $id ) ) {
+		if ( empty( $id ) || empty( $organizer ) ) {
 			return $link;
 		}
 
@@ -556,6 +579,25 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			return $link;
 		}
 
+		if ( ! self::group_get_option( $group_id, '_rendez_vous_group_activate', false ) ) {
+			$action = 'rendez_vous_groups_component_deactivated';
+		} else if ( ! groups_is_user_member( $organizer, $group_id ) ) {
+			$action = 'rendez_vous_groups_member_removed';
+		}
+
+		/**
+		 * If the group does not support rendez-vous or
+		 * the organizer is not a member of the group anymore
+		 * Remove post meta & activities to be sure the organize
+		 * can always access to his rendez-vous.
+		 */
+		if ( ! empty( $action ) ) {
+			delete_post_meta( $id, '_rendez_vous_group_id' );
+			do_action( $action, $id, get_post( $id ) );
+			return $link;
+		}
+
+		// Everything is ok, build the group rendez-vous link
 		$group = groups_get_current_group();
 
 		if ( empty( $group->id ) || $group_id == $group->id ) {
@@ -585,7 +627,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			return $link;
 		}
 
-		$group_link = $this->group_rendez_vous_link( $id );
+		$group_link = $this->group_rendez_vous_link( $id, $organizer );
 
 		if ( empty( $group_link ) ) {
 			return $link;
@@ -617,7 +659,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			return $link;
 		}
 
-		$group_link = $this->group_rendez_vous_link( $id );
+		$group_link = $this->group_rendez_vous_link( $id, $organizer );
 
 		if ( empty( $group_link ) ) {
 			return $link;
@@ -649,7 +691,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			return $link;
 		}
 
-		$group_link = $this->group_rendez_vous_link( $id );
+		$group_link = $this->group_rendez_vous_link( $id, $organizer );
 
 		if ( empty( $group_link ) ) {
 			return $link;
