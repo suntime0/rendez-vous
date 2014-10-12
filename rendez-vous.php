@@ -261,7 +261,7 @@ class Rendez_Vous {
 		wp_enqueue_script ( 'rendez-vous-script', $this->plugin_js . "rendezvous$suffix.js", array( 'jquery' ), $this->version, 1 );
 		wp_localize_script( 'rendez-vous-script', 'rendez_vous_vars', array(
 			'confirm'  => esc_html__( 'Are you sure you want to cancel this rendez-vous ?', 'rendez-vous' ),
-			'noaccess' => esc_html__( 'This rendez-vous is private and you have not been invited to it.', 'rendez-vous' ),
+			'noaccess' => esc_html__( 'This rendez-vous is restricted and you have not been invited to it.', 'rendez-vous' ),
 		) );
 	}
 

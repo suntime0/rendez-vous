@@ -181,8 +181,8 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			array(
 				'id'          => 'privacy',
 				'type'        => 'checkbox',
-				'placeholder' => esc_html__( 'Make this rendez-vous private', 'rendez-vous' ),
-				'label'       => esc_html__( 'Privacy', 'rendez-vous' ),
+				'placeholder' => esc_html__( 'Restrict to the selected members of the Who? tab', 'rendez-vous' ),
+				'label'       => esc_html__( 'Access', 'rendez-vous' ),
 				'value'       => '',
 				'tab'         => 'what',
 				'class'       => ''

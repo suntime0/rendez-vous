@@ -160,7 +160,7 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 
 					// Allow author to edit his rendez vous
 					if ( $user_id == $_post->post_author || in_array( $user_id, $attendees ) ) {
-						$caps[] = 'read';
+						$caps[] = 'exist';
 
 					// Admins can always edit
 					} else if ( user_can( $user_id, 'manage_options' ) ) {
@@ -182,7 +182,7 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 		case 'publish_rendez_vouss' :
 
 			if ( bp_is_my_profile() ) {
-				$caps = array( 'read' );
+				$caps = array( 'exist' );
 			}
 
 			// Admins can always publish
@@ -192,12 +192,21 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 
 			break;
 
+		/** Participate to rendez-vous *********************************/
+
+		case 'subscribe_rendez_vous' :
+			if ( ! empty( $user_id ) ) {
+				$caps = array( 'exist' );
+			}
+
+			break;
+
 		/** Editing ***********************************************************/
 
 		case 'edit_rendez_vouss'        :
 
 			if ( bp_is_my_profile() ) {
-				$caps = array( 'read' );
+				$caps = array( 'exist' );
 			}
 
 			// Admins can always edit
@@ -231,7 +240,7 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 
 					// Allow author to edit his rendez vous
 					if ( $user_id == $_post->post_author ) {
-						$caps[] = 'read';
+						$caps[] = 'exist';
 
 					// Admins can always edit
 					} else if ( user_can( $user_id, 'manage_options' ) ) {
@@ -263,7 +272,7 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 
 					// Allow author to edit his rendez vous
 					if ( $user_id == $_post->post_author ) {
-						$caps[] = 'read';
+						$caps[] = 'exist';
 
 					// Admins can always edit
 					} else if ( user_can( $user_id, 'manage_options' ) ) {

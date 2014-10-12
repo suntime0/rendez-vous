@@ -479,7 +479,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @return [type]           [description]
 	 */
 	public function map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $args = array() ) {
-		if ( ! bp_is_group() ) {
+		if ( ! bp_is_group() || empty( $user_id ) ) {
 			return $caps;
 		}
 
@@ -490,6 +490,31 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				if ( ! empty( $group->id ) && groups_is_user_member( $user_id, $group->id ) ) {
 					$caps = array( 'exist' );
 				}
+
+				break;
+
+			case 'subscribe_rendez_vous' :
+				if ( groups_is_user_member( $user_id, $group->id ) ) {
+					$caps = array( 'exist' );
+				} else {
+					$caps = array( 'manage_options' );
+				}
+
+				break;
+
+			// Group Admins have full powers
+			case 'read_private_rendez_vouss'  :
+			case 'edit_rendez_vouss'          :
+			case 'edit_others_rendez_vouss'   :
+			case 'edit_rendez_vous'           :
+			case 'delete_rendez_vous'         :
+			case 'delete_rendez_vouss'        :
+			case 'delete_others_rendez_vouss' :
+
+				if ( ! in_array( 'exist', $caps ) && groups_is_user_admin( $user_id, $group->id ) ) {
+					$caps = array( 'exist' );
+				}
+
 				break;
 		}
 
@@ -824,6 +849,35 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	}
 
 	/**
+	 * [group_rendez_vous_status description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  string  $status             [description]
+	 * @param  integer $rendez_vous_id     [description]
+	 * @param  string  $rendez_vous_status [description]
+	 * @return [type]                      [description]
+	 */
+	public function group_rendez_vous_status( $status = '', $rendez_vous_id = 0, $rendez_vous_status = '' ) {
+		if ( empty( $rendez_vous_id ) || empty( $rendez_vous_status ) ) {
+			return $status;
+		}
+
+		if ( 'publish' == $rendez_vous_status ) {
+			$group_id = get_post_meta( $rendez_vous_id, '_rendez_vous_group_id', true );
+
+			if ( ! empty( $group_id ) ) {
+				$status = __( 'All group members', 'rendez-vous' );
+			}
+		}
+
+		return $status;
+	}
+
+	/**
 	 * [setup_hooks description]
 	 *
 	 * @package Rendez Vous
@@ -850,6 +904,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		add_filter( 'rendez_vous_delete_item_activities_args',    array( $this, 'group_activity_delete_args' ), 10, 1 );
 		add_filter( 'rendez_vous_format_activity_action',         array( $this, 'format_activity_action' ),     10, 3 );
 		add_filter( 'rendez_vous_get_avatar',                     array( $this, 'group_rendez_vous_avatar' ),   10, 2 );
+		add_filter( 'rendez_vous_get_the_status',                 array( $this, 'group_rendez_vous_status' ),   10, 3 );
 	}
 }
 

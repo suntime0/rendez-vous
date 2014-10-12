@@ -412,9 +412,8 @@ function rendez_vous_handle_actions() {
 
 		$args['status'] = 'publish';
 
-		// Super Admins cannot "steal" the ownership of a rendez-vous
-		// but they surely can edit it :)
-		if ( bp_current_user_can( 'bp_moderate' ) && ! bp_is_my_profile() ) {
+		// Make sure the organizer doesn't change if rendez-vous is edited by someone else
+		if ( ! bp_is_my_profile() ) {
 			$args['organizer'] = apply_filters( 'rendez_vous_edit_action_organizer_id', bp_displayed_user_id(), $args );
 		}
 

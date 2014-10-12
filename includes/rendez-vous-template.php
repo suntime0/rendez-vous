@@ -558,8 +558,9 @@ function rendez_vous_the_link() {
 			break;
 		}
 
-		if ( empty( $user_can ) )
+		if ( empty( $user_can ) ) {
 			return '#noaccess';
+		}
 
 		return apply_filters( 'rendez_vous_get_the_link', $link );
 	}
@@ -639,14 +640,16 @@ function rendez_vous_the_status() {
 	 * @since Rendez Vous (1.0.0)
  	 */
 	function rendez_vous_get_the_status() {
-		$status = __( 'Public', 'rendez-vous' );
+		$status = __( 'All members', 'rendez-vous' );
+		$rendez_vous = rendez_vous()->query_loop->rendez_vous;
 
-		if ( 'private' == rendez_vous()->query_loop->rendez_vous->post_status )
-			$status = __( 'Private', 'rendez-vous' );
-		else if ( 'draft' == rendez_vous()->query_loop->rendez_vous->post_status )
+		if ( 'private' == $rendez_vous->post_status ) {
+			$status = __( 'Restricted', 'rendez-vous' );
+		} else if ( 'draft' == $rendez_vous->post_status ) {
 			$status = __( 'Draft', 'rendez-vous' );
+		}
 
-		return apply_filters( 'rendez_vous_get_the_status', $status );
+		return apply_filters( 'rendez_vous_get_the_status', $status, $rendez_vous->ID, $rendez_vous->post_status );
 	}
 
 /**
@@ -995,12 +998,14 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			if ( ! rendez_vous_single_date_set() ) {
 				if ( 'private' == rendez_vous()->item->privacy ) {
 					// If private, display the row only if current user is an attendee or the author
-					if ( bp_loggedin_user_id() == rendez_vous()->item->organizer || in_array( bp_loggedin_user_id(), $all_attendees ) )
+					if ( bp_loggedin_user_id() == rendez_vous()->item->organizer || in_array( bp_loggedin_user_id(), $all_attendees ) ) {
 						$output .= '<tr class="edited">' . $ending_rows['editable_row'] . '</tr>';
+					}
 
 				} else {
-					if ( bp_loggedin_user_id() )
+					if ( current_user_can( 'subscribe_rendez_vous' ) ) {
 						$output .= '<tr class="edited">' . $ending_rows['editable_row'] . '</tr>';
+					}
 				}
 				// Display totals
 				$output .= '<tr>' . $ending_rows['total'] . '</tr>';
@@ -1009,8 +1014,9 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			// Display totals
 			$output .= '<tr>' . $ending_rows['total'] . '</tr>';
 			// Display the radio to set the date
-			if ( 'draft' != rendez_vous()->item->status )
+			if ( 'draft' != rendez_vous()->item->status ) {
 				$output .= '<tr>' . $ending_rows['editable_row'] . '</tr>';
+			}
 		}
 
 		$output .= '</tbody>';
@@ -1174,7 +1180,12 @@ function rendez_vous_single_the_submit( $view = 'single' ) {
 		if ( current_user_can( 'edit_rendez_vous', rendez_vous()->item->id ) ) :?>
 			<input type="submit" name="_rendez_vous_edit[submit]" id="rendez-vous-edit-submit" value="<?php echo esc_attr( $caption ); ?>" class="bp-primary-action"/>
 		<?php endif;
-	} else {
+	} else if ( current_user_can( 'subscribe_rendez_vous' ) ) {
+
+		if ( 'publish' != rendez_vous()->item->status && ! in_array( bp_loggedin_user_id(), rendez_vous()->item->attendees ) ) {
+			return;
+		}
+
 		?>
 		<input type="submit" name="_rendez_vous_prefs[submit]" id="rendez-vous-prefs-submit" value="<?php echo esc_attr( __( 'Save preferences', 'rendez-vous' ) ); ?>" class="bp-primary-action"/>
 		<?php
