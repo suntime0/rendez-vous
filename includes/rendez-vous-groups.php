@@ -315,7 +315,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @subpackage Groups
 	 *
 	 * @since Rendez Vous (1.1.0)
-	 * 
+	 *
 	 * @return [type] [description]
 	 */
 	public function group_handle_screens() {
@@ -337,7 +337,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				delete_post_meta( $rendez_vous->item->id, '_rendez_vous_group_id' );
 				$redirect = rendez_vous_get_single_link( $rendez_vous->item->id, $rendez_vous->item->organizer );
 				bp_core_add_message( __( 'The Group, the rendez-vous was attached to, does not support rendez-vous anymore', 'rendez-vous' ), 'error' );
-				
+
 				// fire an action to deal with group activities
 				do_action( 'rendez_vous_groups_component_deactivated', $group_id, $rendez_vous->item );
 
@@ -744,6 +744,38 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	}
 
 	/**
+	 * [group_rendez_vous_avatar description]
+	 *
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  string  $output         [description]
+	 * @param  integer $rendez_vous_id [description]
+	 * @return [type]                  [description]
+	 */
+	public function group_rendez_vous_avatar( $output = '', $rendez_vous_id = 0 ) {
+		if ( empty( $rendez_vous_id ) || bp_is_group() ) {
+			return $output;
+		}
+
+		$group_id = get_post_meta( $rendez_vous_id, '_rendez_vous_group_id', true );
+
+		if ( ! empty( $group_id ) && self::group_get_option( $group_id, '_rendez_vous_group_activate', false ) ) {
+			$output = '<div class="rendez-vous-avatar">';
+			$output .= bp_core_fetch_avatar( array(
+				'item_id' => $group_id,
+				'object'  => 'group',
+				'type'    => 'thumb',
+			) );
+			$output .= '</div>';
+		}
+
+		return $output;
+	}
+
+	/**
 	 * [setup_hooks description]
 	 *
 	 * @package Rendez Vous
@@ -769,6 +801,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		add_filter( 'rendez_vous_updated_activity_args',          array( $this, 'group_activity_save_args' ),   10, 1 );
 		add_filter( 'rendez_vous_delete_item_activities_args',    array( $this, 'group_activity_delete_args' ), 10, 1 );
 		add_filter( 'rendez_vous_format_activity_action',         array( $this, 'format_activity_action' ),     10, 3 );
+		add_filter( 'rendez_vous_get_avatar',                     array( $this, 'group_rendez_vous_avatar' ),   10, 2 );
 	}
 }
 

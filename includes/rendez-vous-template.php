@@ -508,7 +508,7 @@ function rendez_vous_avatar() {
 	function rendez_vous_get_avatar() {
 		$output = '<div class="rendez-vous-avatar icon-' . rendez_vous()->query_loop->rendez_vous->post_status . '"></div>';
 
-		return apply_filters( 'rendez_vous_get_avatar', $output );
+		return apply_filters( 'rendez_vous_get_avatar', $output, rendez_vous()->query_loop->rendez_vous->ID );
 	}
 
 /**
