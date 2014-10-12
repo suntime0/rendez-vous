@@ -682,12 +682,18 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 
 		$action         = $args['action'] . ' ' . sprintf( __( 'in %s', 'rendez-vous' ), $group_link );
 		$rendez_vous_id = $args['item_id'];
+		$hide_sitewide  = false;
+
+		if ( 'public' != $group->status ) {
+			$hide_sitewide = true;
+		}
 
 		$args = array_merge( $args, array(
 			'action'            => $action,
 			'component'         => buddypress()->groups->id,
 			'item_id'           => $group->id,
-			'secondary_item_id' => $rendez_vous_id
+			'secondary_item_id' => $rendez_vous_id,
+			'hide_sitewide'     => $hide_sitewide,
 		) );
 
 		return $args;
