@@ -339,7 +339,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				bp_core_add_message( __( 'The Group, the rendez-vous was attached to, does not support rendez-vous anymore', 'rendez-vous' ), 'error' );
 
 				// fire an action to deal with group activities
-				do_action( 'rendez_vous_groups_component_deactivated', $group_id, $rendez_vous->item );
+				do_action( 'rendez_vous_groups_component_deactivated', $rendez_vous->item->id, $rendez_vous->item );
 
 				// Redirect to organizer's rendez-vous page
 				bp_core_redirect( $redirect );

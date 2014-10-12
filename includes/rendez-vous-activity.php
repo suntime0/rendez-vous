@@ -223,8 +223,17 @@ function rendez_vous_delete_item_activities( $rendez_vous_id = 0, $rendez_vous =
 	if ( empty( $rendez_vous_id ) )
 		return;
 
+	$rendez_vous_status = 'publish';
+
+	if ( is_a( $rendez_vous, 'WP_Post' ) ) {
+		$rendez_vous_status = $rendez_vous->post_status;
+
+	} else if ( is_a( $rendez_vous, 'Rendez_Vous_Item' ) ) {
+		$rendez_vous_status = $rendez_vous->status;
+	}
+
 	// No need to delete activities in case of drafts
-	if ( ! empty( $rendez_vous ) && 'draft' == $rendez_vous->post_status ) {
+	if ( ! empty( $rendez_vous ) && 'draft' == $rendez_vous_status ) {
 		return;
 	}
 
@@ -241,4 +250,5 @@ function rendez_vous_delete_item_activities( $rendez_vous_id = 0, $rendez_vous =
 		bp_activity_delete_by_item_id( $args );
 	}
 }
-add_action( 'rendez_vous_after_delete', 'rendez_vous_delete_item_activities', 10, 2 );
+add_action( 'rendez_vous_after_delete',                 'rendez_vous_delete_item_activities', 10, 2 );
+add_action( 'rendez_vous_groups_component_deactivated', 'rendez_vous_delete_item_activities', 10, 2 );
