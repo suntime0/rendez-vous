@@ -967,7 +967,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 			) . ' ' . bp_get_loggedin_user_fullname() . '</a></td>';
 		// Set definitive date
 		} else {
-			$ending_rows['editable_row'] = '<td>' . esc_html__( 'Set date', 'rendez-vous' ) . '</td>';
+			$ending_rows['editable_row'] = '<td id="rendez-vous-set">' . esc_html__( 'Set date', 'rendez-vous' ) . '</td>';
 		}
 
 		foreach ( $header as $date ) {
@@ -1189,5 +1189,12 @@ function rendez_vous_single_the_submit( $view = 'single' ) {
 		?>
 		<input type="submit" name="_rendez_vous_prefs[submit]" id="rendez-vous-prefs-submit" value="<?php echo esc_attr( __( 'Save preferences', 'rendez-vous' ) ); ?>" class="bp-primary-action"/>
 		<?php
+
+		if ( 'edit' != $view && bp_loggedin_user_id() == rendez_vous()->item->organizer && empty( rendez_vous()->item->def_date ) ) {
+			?>
+			<a href="<?php echo esc_url( rendez_vous_get_edit_link( rendez_vous()->item->id ,rendez_vous()->item->organizer ) ) ;?>#rendez-vous-set" class="button bp-secondary-action last"><?php esc_html_e( 'Set the date', 'rendez-vous' ) ;?></a>
+			<div class="clear"/>
+			<?php
+		}
 	}
 }

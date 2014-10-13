@@ -74,6 +74,11 @@ body.rendez-vous #rendez-vous-attendees-prefs td.inactive {
 	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
 }
 
+body.rendez-vous a.bp-secondary-action.last {
+	display:inline-block;
+	float:right;
+}
+
 body.rendez-vous .standard-form label.normal,
 body.rendez-vous  #buddypress .standard-form label.normal {
 	font-weight: normal;
