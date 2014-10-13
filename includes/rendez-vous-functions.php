@@ -290,7 +290,6 @@ function rendez_vous_get_ical_link( $id = 0, $organizer_id = 0 ) {
 	}
 
 	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug . '/schedule/ical/' . $id );
-	$link = wp_nonce_url( $link, 'rendez_vous_ical' );
 
 	return apply_filters( 'rendez_vous_get_ical_link', $link, $id, $organizer_id );
 }
@@ -535,8 +534,6 @@ function rendez_vous_download_ical() {
 		return;
 	}
 
-	check_admin_referer( 'rendez_vous_ical' );
-
 	$redirect = wp_get_referer();
 
 	if ( empty( $ical_page['rdv'] ) ) {
@@ -545,6 +542,14 @@ function rendez_vous_download_ical() {
 	}
 
 	$rendez_vous = rendez_vous_get_item( $ical_page['rdv'] );
+
+	if ( ! is_user_logged_in() ) {
+		bp_core_no_access( array(
+			'redirect' => $_SERVER['REQUEST_URI'],
+		) );
+
+		return;
+	}
 
 	if ( $rendez_vous->organizer != bp_loggedin_user_id() && ! in_array( bp_loggedin_user_id(), $rendez_vous->attendees ) ) {
 		bp_core_add_message( __( 'You are not attending this rendez-vous.', 'rendez-vous' ), 'error' );

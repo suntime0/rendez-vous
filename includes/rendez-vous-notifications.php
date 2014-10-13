@@ -212,23 +212,27 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 	$bp = buddypress();
 	$rdv = rendez_vous();
 
-	if ( empty( $id ) || empty( $notify ) || empty( $rdv->item ) || $id != $rdv->item->id )
+	if ( empty( $id ) || empty( $notify ) || empty( $rdv->item ) || $id != $rdv->item->id ) {
 		return;
+	}
 
 	$has_updated = ! empty( $rdv->item->date_fixed ) || ! empty( $rdv->item->report_created ) ? true : false ;
 
-	if ( empty( $has_updated ) )
+	if ( empty( $has_updated ) ) {
 		return;
+	}
 
 	$rendez_vous = $rdv->item;
 	$attendees = $rendez_vous->attendees;
 
-	if ( empty( $attendees ) )
+	if ( empty( $attendees ) ) {
 		return;
+	}
 
 	// Remove the organizer
-	if ( in_array( $rendez_vous->organizer, $attendees ) )
+	if ( in_array( $rendez_vous->organizer, $attendees ) ) {
 		$attendees = array_diff( $attendees, array( $rendez_vous->organizer ) );
+	}
 
 	$organizer_name = bp_core_get_username( $rendez_vous->organizer );
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
@@ -243,6 +247,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 				date_i18n( get_option('date_format'), $rdv->item->date_fixed ),
 				date_i18n( get_option('time_format'), $rdv->item->date_fixed )
 			);
+			$rendez_vous_content .= "\n\n" . sprintf( __( 'Download the Calendar file %s', 'rendez-vous' ), rendez_vous_get_ical_link( $id, $rendez_vous->organizer ) );
 		} else {
 			$rendez_vous_content .= "\n\n" . sprintf( __( 'Date fixed to %s', 'rendez-vous' ), 
 				esc_html( $rdv->item->date_fixed )
@@ -288,8 +293,9 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		) );
 
 		// Sending Emails
-		if ( 'no' == get_user_meta( $attendee->ID, 'notification_rendez_vous_attend', true ) )
+		if ( 'no' == get_user_meta( $attendee->ID, 'notification_rendez_vous_attend', true ) ) {
 			continue;
+		}
 
 		$user_settings = false;
 		$user_fullname = ! empty( $attendee->fullname ) ? $attendee->fullname : $attendee->display_name;

@@ -447,3 +447,24 @@ function rendez_vous_forbidden_names( $names = array() ) {
 	return array_merge( $names, $forbidden );
 }
 add_filter( 'groups_forbidden_names', 'rendez_vous_forbidden_names', 10, 1 );
+
+/**
+ * [render_vous_login_message description]
+ * 
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since  Rendez Vous (1.1.0)
+ * 
+ * @param  string $message  [description]
+ * @param  string $redirect [description]
+ * @return [type]           [description]
+ */
+function render_vous_login_message( $message = '', $redirect = '' ) {
+	if( ! empty( $redirect ) && false !== strpos( $redirect, buddypress()->rendez_vous->slug . '/schedule/ical' ) ) {
+		$message = __( 'You must log in to download the calendar file.', 'render-vous' );
+	}
+	
+	return $message;
+}
+add_filter( 'bp_wp_login_error', 'render_vous_login_message', 10, 2 );
