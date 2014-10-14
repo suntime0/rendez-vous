@@ -44,11 +44,13 @@ function rendez_vous_screen_notification_settings() {
 	$schedule_notifications = get_user_meta( $user_id, 'notification_rendez_vous_schedule', true );
 	$attend_notifications   = get_user_meta( $user_id, 'notification_rendez_vous_attend', true );
 
-	if ( empty( $schedule_notifications ) )
+	if ( empty( $schedule_notifications ) ) {
 		$schedule_notifications = 'yes';
+	}
 
-	if ( empty( $attend_notifications ) )
+	if ( empty( $attend_notifications ) ) {
 		$attend_notifications = 'yes';
+	}
 	?>
 	<table class="notification-settings" id="rendez-vous-notification-settings">
 
@@ -104,8 +106,9 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 		return;
 
 	// Remove the organizer
-	if ( in_array( $rendez_vous->organizer, $attendees ) )
+	if ( in_array( $rendez_vous->organizer, $attendees ) ) {
 		$attendees = array_diff( $attendees, array( $rendez_vous->organizer ) );
+	}
 
 	$organizer_name = bp_core_get_username( $rendez_vous->organizer );
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
@@ -113,19 +116,19 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 	$organizer_name = stripslashes( $organizer_name );
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
-	$message = sprintf( 
-		__( "%s is scheduling a new rendez-vous: %s\n\nTo help him fix the date, please log in and visit: %s\n\n---------------------\n", 'rendez-vous' ), 
-		$organizer_name, 
-		$rendez_vous_content, 
-		$rendez_vous_link 
+	$message = sprintf(
+		__( "%s is scheduling a new rendez-vous: %s\n\nTo help him fix the date, please log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
+		$organizer_name,
+		$rendez_vous_content,
+		$rendez_vous_link
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s invited you to a new rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
 
 	// This way we'll have all needed users data at one and we will avoid spam users
-	$users = bp_core_get_users( array( 
+	$users = bp_core_get_users( array(
 		'type' => 'alphabetical',
-		'include' => implode( ',', $attendees ) 
+		'include' => implode( ',', $attendees )
 	) );
 
 	foreach ( $users['users'] as $attendee ) {
@@ -142,8 +145,9 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 		) );
 
 		// Sending Emails
-		if ( 'no' == get_user_meta( $attendee->ID, 'notification_rendez_vous_attend', true ) )
+		if ( 'no' == get_user_meta( $attendee->ID, 'notification_rendez_vous_attend', true ) ) {
 			continue;
+		}
 
 		$user_settings = false;
 		$user_fullname = ! empty( $attendee->fullname ) ? $attendee->fullname : $attendee->display_name;
@@ -181,20 +185,23 @@ add_action( 'rendez_vous_after_publish', 'rendez_vous_published_notification', 1
 function rendez_vous_maybe_notify_updates( $args = array(), $notify = 0 ) {
 	$rendez_vous = rendez_vous();
 
-	if ( empty( $notify ) || empty( $args ) )
+	if ( empty( $notify ) || empty( $args ) ) {
 		return;
+	}
 
 	$rendez_vous->item = rendez_vous_get_item( absint( $args['id'] ) );
 
-	if ( empty( $rendez_vous->item ) )
+	if ( empty( $rendez_vous->item ) ) {
 		return;
+	}
 
-	if ( empty( $rendez_vous->item->def_date ) && ! empty( $args['def_date'] ) )
+	if ( empty( $rendez_vous->item->def_date ) && ! empty( $args['def_date'] ) ) {
 		$rendez_vous->item->date_fixed = $args['def_date'];
+	}
 
-	if ( empty( $rendez_vous->item->report ) && ! empty( $args['report'] ) )
+	if ( empty( $rendez_vous->item->report ) && ! empty( $args['report'] ) ) {
 		$rendez_vous->item->report_created = 1;
-
+	}
 }
 add_action( 'rendez_vous_before_update', 'rendez_vous_maybe_notify_updates', 10, 2 );
 
@@ -243,13 +250,13 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 
 	if ( ! empty( $rdv->item->date_fixed ) ) {
 		if ( is_numeric( $rdv->item->date_fixed ) ) {
-			$rendez_vous_content .= "\n\n" . sprintf( __( 'Date fixed to %1$s at %2$s', 'rendez-vous' ), 
+			$rendez_vous_content .= "\n\n" . sprintf( __( 'Date fixed to %1$s at %2$s', 'rendez-vous' ),
 				date_i18n( get_option('date_format'), $rdv->item->date_fixed ),
 				date_i18n( get_option('time_format'), $rdv->item->date_fixed )
 			);
 			$rendez_vous_content .= "\n\n" . sprintf( __( 'Download the Calendar file %s', 'rendez-vous' ), rendez_vous_get_ical_link( $id, $rendez_vous->organizer ) );
 		} else {
-			$rendez_vous_content .= "\n\n" . sprintf( __( 'Date fixed to %s', 'rendez-vous' ), 
+			$rendez_vous_content .= "\n\n" . sprintf( __( 'Date fixed to %s', 'rendez-vous' ),
 				esc_html( $rdv->item->date_fixed )
 			);
 		}
@@ -259,24 +266,24 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		$rdv_updated_action = __( 'created the report', 'rendez-vous' );
 		$component_action = 'rendez_vous_report';
 	}
-	
+
 	$organizer_name = stripslashes( $organizer_name );
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
-	$message = sprintf( 
-		__( "%s %s for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ), 
-		$organizer_name, 
-		$rdv_updated_action, 
-		$rendez_vous_content, 
-		$rendez_vous_link 
+	$message = sprintf(
+		__( "%s %s for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
+		$organizer_name,
+		$rdv_updated_action,
+		$rendez_vous_content,
+		$rendez_vous_link
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s updated a rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
 
 	// This way we'll have all needed users data at one and we will avoid spam users
-	$users = bp_core_get_users( array( 
+	$users = bp_core_get_users( array(
 		'type' => 'alphabetical',
-		'include' => implode( ',', $attendees ) 
+		'include' => implode( ',', $attendees )
 	) );
 
 	foreach ( $users['users'] as $attendee ) {
@@ -334,8 +341,9 @@ add_action( 'rendez_vous_after_update', 'rendez_vous_updated_notification', 10, 
 function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rendez_vous = null ) {
 	$bp = buddypress();
 
-	if ( empty( $attendee_id ) || empty( $rendez_vous ) || $attendee_id == $rendez_vous->organizer )
+	if ( empty( $attendee_id ) || empty( $rendez_vous ) || $attendee_id == $rendez_vous->organizer ) {
 		return;
+	}
 
 	// Screen Notification
 	bp_notifications_add_notification( array(
@@ -347,10 +355,10 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	) );
 
 	// Sending Emails
-	if ( 'no' == get_user_meta( $rendez_vous->organizer, 'notification_rendez_vous_schedule', true ) )
+	if ( 'no' == get_user_meta( $rendez_vous->organizer, 'notification_rendez_vous_schedule', true ) ) {
 		return;
+	}
 
-	
 	$rendez_vous_link = rendez_vous_get_single_link( $rendez_vous->id, $rendez_vous->organizer );
 	$rendez_vous_title = stripslashes( $rendez_vous->title );
 	$rendez_vous_content = wp_kses( $rendez_vous_title, array() );
@@ -362,15 +370,15 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	$organizer_profile = bp_core_get_user_domain( $rendez_vous->organizer );
 	$organizer_email = bp_core_get_user_email( $rendez_vous->organizer );
 
-	$message = sprintf( 
-		__( "%s set their preferences for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ), 
-		$attendee_name, 
-		$rendez_vous_content, 
-		$rendez_vous_link 
+	$message = sprintf(
+		__( "%s set their preferences for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
+		$attendee_name,
+		$rendez_vous_content,
+		$rendez_vous_link
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected date(s) for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
-	
+
 	// Set up and send the message
 	$to = $organizer_email;
 
@@ -400,8 +408,9 @@ add_action( 'rendez_vous_after_attendee_prefs', 'rendez_vous_notify_organizer', 
  */
 function rendez_vous_remove_all_attend_notifications() {
 
-	if ( ! isset ( $_GET['n'] ) )
+	if ( ! isset ( $_GET['n'] ) ) {
 		return;
+	}
 
 	$bp = buddypress();
 
@@ -425,8 +434,9 @@ add_action( 'rendez_vous_attend', 'rendez_vous_remove_all_attend_notifications' 
  */
 function rendez_vous_remove_current_attend_notifications() {
 
-	if ( ! isset ( $_GET['rdv'] ) || ! isset ( $_GET['n'] ) )
+	if ( ! isset ( $_GET['rdv'] ) || ! isset ( $_GET['n'] ) ) {
 		return;
+	}
 
 	$bp = buddypress();
 
@@ -449,8 +459,9 @@ add_action( 'rendez_vous_single_screen', 'rendez_vous_remove_current_attend_noti
  */
 function rendez_vous_remove_all_schedule_notifications() {
 
-	if ( ! isset ( $_GET['n'] ) )
+	if ( ! isset( $_GET['n'] ) ) {
 		return;
+	}
 
 	$bp = buddypress();
 
@@ -477,17 +488,17 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 		case 'rendez_vous_schedule':
 
 			if ( (int) $total_items > 1 ) {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => $total_items ), 
-					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/schedule' ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => $total_items ),
+					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/schedule' )
 				);
 				$title = __( 'rendez-vous preferences updated', 'rendez-vous' );
 				$text = sprintf( __( '%d rendez-vous preferences updated', 'rendez-vous' ), (int) $total_items );
 				$filter = 'rendez_vous_multiple_userset_notification';
 			} else {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => 1 ), 
-					rendez_vous_get_single_link( $item_id, bp_loggedin_user_id() ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => 1 ),
+					rendez_vous_get_single_link( $item_id, bp_loggedin_user_id() )
 				);
 				$user_fullname = bp_core_get_user_displayname( $secondary_item_id, false );
 				$title = __( 'View the rendez-vous', 'rendez-vous' );
@@ -500,17 +511,17 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 		case 'rendez_vous_attend':
 
 			if ( (int) $total_items > 1 ) {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => $total_items ), 
-					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/attend' ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => $total_items ),
+					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/attend' )
 				);
 				$title = __( 'rendez-vous sheduled', 'rendez-vous' );
 				$text = sprintf( __( '%d rendez-vous sheduled', 'rendez-vous' ), (int) $total_items );
 				$filter = 'rendez_vous_multiple_attend_notification';
 			} else {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => 1 ), 
-					rendez_vous_get_single_link( $item_id, $secondary_item_id ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => 1 ),
+					rendez_vous_get_single_link( $item_id, $secondary_item_id )
 				);
 				$user_fullname = bp_core_get_user_displayname( $secondary_item_id, false );
 				$title = __( 'View the rendez-vous', 'rendez-vous' );
@@ -523,17 +534,17 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 		case 'rendez_vous_fixed':
 
 			if ( (int) $total_items > 1 ) {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => $total_items ), 
-					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/attend' ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => $total_items ),
+					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/attend' )
 				);
 				$title = __( 'rendez-vous fixed', 'rendez-vous' );
 				$text = sprintf( __( '%d rendez-vous fixed', 'rendez-vous' ), (int) $total_items );
 				$filter = 'rendez_vous_multiple_fixed_notification';
 			} else {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => 1 ), 
-					rendez_vous_get_single_link( $item_id, $secondary_item_id ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => 1 ),
+					rendez_vous_get_single_link( $item_id, $secondary_item_id )
 				);
 				$user_fullname = bp_core_get_user_displayname( $secondary_item_id, false );
 				$title = __( 'View the rendez-vous', 'rendez-vous' );
@@ -546,17 +557,17 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 		case 'rendez_vous_report':
 
 			if ( (int) $total_items > 1 ) {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => $total_items ), 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => $total_items ),
 					trailingslashit( bp_loggedin_user_domain() . $bp->rendez_vous->slug . '/attend' )
 				);
 				$title = __( 'rendez-vous report created', 'rendez-vous' );
 				$text = sprintf( __( '%d rendez-vous reports created', 'rendez-vous' ), (int) $total_items );
 				$filter = 'rendez_vous_multiple_report_notification';
 			} else {
-				$rendez_vous_link = add_query_arg( 
-					array( 'n' => 1 ), 
-					rendez_vous_get_single_link( $item_id, $secondary_item_id ) 
+				$rendez_vous_link = add_query_arg(
+					array( 'n' => 1 ),
+					rendez_vous_get_single_link( $item_id, $secondary_item_id )
 				);
 				$user_fullname = bp_core_get_user_displayname( $secondary_item_id, false );
 				$title = __( 'View the rendez-vous', 'rendez-vous' );
@@ -568,10 +579,10 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 	}
 
 	/**
-	 * If on notifications read screen remove the n arguments to 
+	 * If on notifications read screen remove the n arguments to
 	 * avoid re runing the mark notification function
 	 */
-	
+
 	if ( bp_is_user_notifications() && bp_is_current_action( 'read' ) ) {
 		$rendez_vous_link = remove_query_arg( 'n', $rendez_vous_link );
 	}
@@ -595,16 +606,18 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
  *
  * @package Rendez Vous
  * @subpackage Notifications
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_delete_item_notifications( $rendez_vous_id = 0, $rendez_vous = null ) {
-	if ( empty( $rendez_vous_id ) )
+	if ( empty( $rendez_vous_id ) ) {
 		return;
+	}
 
 	// No need to delete activities in case of drafts
-	if ( ! empty( $rendez_vous ) && 'draft' == $rendez_vous->post_status )
+	if ( ! empty( $rendez_vous ) && 'draft' == $rendez_vous->post_status ) {
 		return;
+	}
 
 	// delete all notifications
 	BP_Notifications_Notification::delete( array(
@@ -624,8 +637,9 @@ add_action( 'rendez_vous_after_delete', 'rendez_vous_delete_item_notifications',
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_remove_all_user_notifications( $user_id = 0 ) {
-	if ( empty( $user_id ) )
+	if ( empty( $user_id ) ) {
 		return false;
+	}
 
 	// delete all notifications user sent to others
 	BP_Notifications_Notification::delete( array(

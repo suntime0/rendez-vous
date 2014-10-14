@@ -113,9 +113,9 @@ class Rendez_Vous_Component extends BP_Component {
 
 		/**
 		 * Filter to change user's default subnav
-		 * 
+		 *
 		 * @since Rendez Vous (1.1.0)
-		 * 
+		 *
 		 * @param string default subnav to use (shedule or attend)
 		 */
 		$this->default_subnav = apply_filters( 'rendez_vous_member_default_subnav', 'schedule' );

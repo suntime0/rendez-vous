@@ -132,7 +132,7 @@ function rendez_vous_ajax_create() {
 	} else {
 		$dates = $_POST['maydates'];
 	}
-		
+
 
 	$maydates = array();
 	$maydates_errors = array();

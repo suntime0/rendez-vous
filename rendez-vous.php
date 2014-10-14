@@ -4,7 +4,7 @@
  * @author    imath https://twitter.com/imath
  * @license   GPL-2.0+
  * @link      http://imathi.eu
- * @copyright 2013 imath
+ * @copyright 2014 imath
  *
  * @wordpress-plugin
  * Plugin Name:       Rendez Vous
