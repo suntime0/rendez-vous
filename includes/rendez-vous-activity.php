@@ -150,7 +150,7 @@ function rendez_vous_published_activity( $id = 0 , $args = array(), $notify = fa
 		'component'         => buddypress()->rendez_vous->id,
 		'type'              => 'new_rendez_vous',
 		'primary_link'      => $rendez_vous_url,
-		'user_id'           => bp_loggedin_user_id(),
+		'user_id'           => $rendez_vous->organizer,
 		'item_id'           => $rendez_vous->id,
 		'secondary_item_id' => $rendez_vous->organizer
 	) ) );
@@ -198,7 +198,7 @@ function rendez_vous_updated_activity( $id = 0 , $args = array(), $notify = fals
 		'component'         => buddypress()->rendez_vous->id,
 		'type'              => 'updated_rendez_vous',
 		'primary_link'      => $rendez_vous_url,
-		'user_id'           => bp_loggedin_user_id(),
+		'user_id'           => $rendez_vous->organizer,
 		'item_id'           => $rendez_vous->id,
 		'secondary_item_id' => $rendez_vous->organizer
 	) ) );
