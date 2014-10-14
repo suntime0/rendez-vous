@@ -209,7 +209,8 @@ class Rendez_Vous_Item {
 			}
 
 			// reset privacy to get rid of the meta now the post has been published
-			$this->privacy = '';
+			$this->privacy  = '';
+			$this->group_id = get_post_meta( $this->id, '_rendez_vous_group_id', true );
 
 			$result = wp_update_post( $wp_update_post_args );
 
@@ -283,14 +284,18 @@ class Rendez_Vous_Item {
 
 					if ( ! empty( $to_delete ) ){
 						// Delete item ids
-						foreach ( $to_delete as $attendee )
-							delete_post_meta( $result, '_rendez_vous_attendees', $attendee );
+						foreach ( $to_delete as $del_attendee ) {
+							delete_post_meta( $result, '_rendez_vous_attendees', absint( $del_attendee ) );
+							// delete user's preferences
+							self::attendees_pref( $result, $del_attendee );
+						}
 					}
 
 					if ( ! empty( $to_add ) ){
 						// Add item ids
-						foreach ( $to_add as $attendee )
-							add_post_meta( $result, '_rendez_vous_attendees', absint( $attendee ) );
+						foreach ( $to_add as $add_attendee ) {
+							add_post_meta( $result, '_rendez_vous_attendees', absint( $add_attendee ) );
+						}
 					}
 				}
 
@@ -313,14 +318,16 @@ class Rendez_Vous_Item {
 	 * @since Rendez Vous (1.0.0)
 	 */
 	public static function attendees_pref( $id = 0, $user_id = 0, $prefs = array() ) {
-		if ( empty( $id ) || empty( $user_id ) || empty( $prefs ) )
+		if ( empty( $id ) || empty( $user_id ) ) {
 			return false;
+		}
 
 		$days      = get_post_meta( $id, '_rendez_vous_days', true );
 		$attendees = get_post_meta( $id, '_rendez_vous_attendees' );
 
-		if ( empty( $days ) || ! is_array( $days ) )
+		if ( empty( $days ) || ! is_array( $days ) ) {
 			return false;
+		}
 
 		$check_days = array_keys( $days );
 
@@ -339,7 +346,7 @@ class Rendez_Vous_Item {
 		update_post_meta( $id, '_rendez_vous_days', $days );
 
 		// We have a guest! Should only happen for public rendez-vous
-		if ( ! in_array( $user_id, $attendees ) ) {
+		if ( ! in_array( $user_id, $attendees ) && ! empty( $prefs ) ) {
 			add_post_meta( $id, '_rendez_vous_attendees', absint( $user_id ) );
 		}
 

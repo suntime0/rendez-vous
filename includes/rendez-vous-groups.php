@@ -469,6 +469,25 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	}
 
 	/**
+	 * Update the last activity of the group when a rendez-vous attached to it is saved
+	 * 
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 *
+	 * @param  Rendez_Vous_Item $rendez_vous the rendez-vous object
+	 */
+	public function group_last_activity( $rendez_vous = null ) {
+		if ( empty( $rendez_vous->group_id ) ) {
+			return;
+		}
+
+		// Update group's latest activity
+		groups_update_last_activity( $rendez_vous->group_id );
+	}
+
+	/**
 	 * [map_meta_caps description]
 	 *
 	 * @package Rendez Vous
@@ -893,6 +912,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 */
 	public function setup_hooks() {
 		add_action( 'bp_screens',                                 array( $this, 'group_handle_screens' ),       20    );
+		add_action( 'rendez_vous_after_saved',                    array( $this, 'group_last_activity' ),        10, 1 );
 		add_filter( 'rendez_vous_load_scripts',                   array( $this, 'is_rendez_vous' ),             10, 1 );
 		add_filter( 'rendez_vous_load_editor',                    array( $this, 'is_rendez_vous' ),             10, 1 );
 		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),              10, 4 );
