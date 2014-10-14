@@ -947,7 +947,7 @@ function rendez_vous_groups_activity_actions() {
 		__( 'New rendez-vous in a group', 'rendez-vous' ),
 		'rendez_vous_format_activity_action',
 		__( 'New rendez-vous', 'rendez-vous' ),
-		array( 'group', 'member' )
+		array( 'group', 'member_groups' )
 	);
 
 	bp_activity_set_action(
