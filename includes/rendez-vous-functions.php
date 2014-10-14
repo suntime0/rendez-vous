@@ -534,15 +534,17 @@ function rendez_vous_download_ical() {
 		return;
 	}
 
-	$redirect = wp_get_referer();
+	$redirect    = wp_get_referer();
+	$user_attend = trailingslashit( bp_loggedin_user_domain() . buddypress()->rendez_vous->slug . '/attend' );
 
 	if ( empty( $ical_page['rdv'] ) ) {
-		bp_core_add_message( __( 'the Rendez-vous was not found.', 'rendez-vous' ), 'error' );
+		bp_core_add_message( __( 'The rendez-vous was not found.', 'rendez-vous' ), 'error' );
 		bp_core_redirect( $redirect );
 	}
 
 	$rendez_vous = rendez_vous_get_item( $ical_page['rdv'] );
 
+	// Redirect the user to the login form
 	if ( ! is_user_logged_in() ) {
 		bp_core_no_access( array(
 			'redirect' => $_SERVER['REQUEST_URI'],
@@ -551,11 +553,19 @@ function rendez_vous_download_ical() {
 		return;
 	}
 
-	if ( $rendez_vous->organizer != bp_loggedin_user_id() && ! in_array( bp_loggedin_user_id(), $rendez_vous->attendees ) ) {
-		bp_core_add_message( __( 'You are not attending this rendez-vous.', 'rendez-vous' ), 'error' );
-		bp_core_redirect( $redirect );
+	// Redirect if no rendez vous found
+	if( empty( $rendez_vous->organizer ) || empty( $rendez_vous->attendees ) ) {
+		bp_core_add_message( __( 'The rendez-vous was not found.', 'rendez-vous' ), 'error' );
+		bp_core_redirect( $user_attend );
 	}
 
+	// Redirect if not an attendee
+	if ( $rendez_vous->organizer != bp_loggedin_user_id() && ! in_array( bp_loggedin_user_id(), $rendez_vous->attendees ) ) {
+		bp_core_add_message( __( 'You are not attending this rendez-vous.', 'rendez-vous' ), 'error' );
+		bp_core_redirect( $user_attend );
+	}
+
+	// Redirect if def date is not set
 	if ( empty( $rendez_vous->def_date ) ) {
 		bp_core_add_message( __( 'the Rendez-vous is not set yet.', 'rendez-vous' ), 'error' );
 		bp_core_redirect( $redirect );
@@ -563,6 +573,7 @@ function rendez_vous_download_ical() {
 
 	$hourminutes = explode( ':', $rendez_vous->duration );
 
+	// Redirect if can't use the duration
 	if ( ! is_array( $hourminutes ) && count( $hourminutes ) < 2 ) {
 		bp_core_add_message( __( 'the duration is not set the right way.', 'rendez-vous' ), 'error' );
 		bp_core_redirect( $redirect );

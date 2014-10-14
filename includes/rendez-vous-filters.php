@@ -416,6 +416,10 @@ function rendez_vous_append_ical_link( $output = '', $rendez_vous = null ) {
 		return $output;
 	}
 
+	if ( bp_loggedin_user_id() != $rendez_vous->organizer && ! in_array( bp_loggedin_user_id(), $rendez_vous->attendees ) ) {
+		return $output;
+	}
+
 	$output .= ' <a href="' . esc_url( rendez_vous_get_ical_link( $rendez_vous->id, $rendez_vous->organizer ) ) . '" title="' . esc_attr__( 'Download the iCal file', 'rendez-vous' ) . '" class="ical-link"><span></span></a>';
 
 	return $output;
