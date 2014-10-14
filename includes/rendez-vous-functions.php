@@ -228,7 +228,7 @@ function rendez_vous_get_single_link( $id = 0, $organizer_id = 0 ) {
 	if ( empty( $id ) || empty( $organizer_id ) )
 		return false;
 
-	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug );
+	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug . '/schedule' );
 	$link = add_query_arg( array( 'rdv' => $id ), $link );
 
 	return apply_filters( 'rendez_vous_get_single_link', $link, $id, $organizer_id );
@@ -246,7 +246,7 @@ function rendez_vous_get_edit_link( $id = 0, $organizer_id = 0 ) {
 	if ( empty( $id ) || empty( $organizer_id ) )
 		return false;
 
-	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug );
+	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug . '/schedule' );
 	$link = add_query_arg( array( 'rdv' => $id, 'action' => 'edit' ), $link );
 
 	return apply_filters( 'rendez_vous_get_edit_link', $link, $id, $organizer_id );
@@ -265,7 +265,7 @@ function rendez_vous_get_delete_link( $id = 0, $organizer_id = 0 ) {
 		return false;
 	}
 
-	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug );
+	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug . '/schedule' );
 	$link = add_query_arg( array( 'rdv' => $id, 'action' => 'delete' ), $link );
 	$link = wp_nonce_url( $link, 'rendez_vous_delete' );
 

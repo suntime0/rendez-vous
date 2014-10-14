@@ -705,7 +705,7 @@ add_action( 'rendez_vous_attend_actions', 'rendez_vous_the_user_actions' );
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_single_the_form_action() {
-	$action = trailingslashit( bp_core_get_user_domain( rendez_vous()->item->organizer ) . buddypress()->rendez_vous->slug );
+	$action = trailingslashit( bp_core_get_user_domain( rendez_vous()->item->organizer ) . buddypress()->rendez_vous->slug . '/schedule' );
 	return apply_filters( 'rendez_vous_single_the_form_action', $action, rendez_vous()->item );
 }
 
