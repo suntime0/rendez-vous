@@ -104,10 +104,10 @@ function rendez_vous_ajax_create() {
 	$args['attendees'] = $attendees;
 
 	// Then fields
-	$fields = $_POST['desc'];
-
-	if ( empty( $fields ) || ! is_array( $fields ) ) {
+	if ( empty( $_POST['desc'] ) || ! is_array( $_POST['desc'] ) ) {
 		wp_send_json_error( __( 'Please describe your rendez-vous using the What tab.', 'rendez-vous' ) );
+	} else {
+		$fields = $_POST['desc'];
 	}
 
 	$required_fields_missing = array();
@@ -121,11 +121,18 @@ function rendez_vous_ajax_create() {
 		$args[ $field['id'] ] = $field['value'];
 	}
 
-	// Then dates
-	$dates = $_POST['maydates'];
+	// Required fields are missing
+	if ( ! empty( $required_fields_missing ) ) {
+		wp_send_json_error( __( 'Please make sure to fill all required fields.', 'rendez-vous' ) );
+	}
 
-	if ( empty( $dates ) || ! is_array( $dates ) )
+	// Then dates
+	if ( empty( $_POST['maydates'] ) || ! is_array( $_POST['maydates'] ) ) {
 		wp_send_json_error( __( 'Please define dates for your rendez-vous using the When tab.', 'rendez-vous' ) );
+	} else {
+		$dates = $_POST['maydates'];
+	}
+		
 
 	$maydates = array();
 	$maydates_errors = array();
@@ -164,7 +171,11 @@ function rendez_vous_ajax_create() {
 			$timestamp = strtotime( $date['mysql'] . ' ' . $date['hour3'] );
 			$maydates[ $timestamp ] = array();
 		}
+	}
 
+	// Check duration format
+	if ( ! empty( $args['duration'] ) && ! preg_match( '/^[0-2]?[0-9]:[0-5][0-9]$/', $args['duration'] ) ) {
+		$maydates_errors[] = $args['duration'];
 	}
 
 	if ( ! empty( $maydates_errors ) ) {
