@@ -1182,7 +1182,7 @@ function rendez_vous_single_the_submit( $view = 'single' ) {
 		<?php endif;
 	} else if ( current_user_can( 'subscribe_rendez_vous' ) ) {
 
-		if ( 'publish' != rendez_vous()->item->status && ! in_array( bp_loggedin_user_id(), rendez_vous()->item->attendees ) ) {
+		if ( 'publish' != rendez_vous()->item->status && ! in_array( bp_loggedin_user_id(), rendez_vous()->item->attendees ) && bp_loggedin_user_id() != rendez_vous()->item->organizer ) {
 			return;
 		}
 
@@ -1190,7 +1190,7 @@ function rendez_vous_single_the_submit( $view = 'single' ) {
 		<input type="submit" name="_rendez_vous_prefs[submit]" id="rendez-vous-prefs-submit" value="<?php echo esc_attr( __( 'Save preferences', 'rendez-vous' ) ); ?>" class="bp-primary-action"/>
 		<?php
 
-		if ( 'edit' != $view && bp_loggedin_user_id() == rendez_vous()->item->organizer && empty( rendez_vous()->item->def_date ) ) {
+		if ( 'edit' != $view && current_user_can( 'edit_rendez_vous', rendez_vous()->item->id ) && empty( rendez_vous()->item->def_date ) ) {
 			?>
 			<a href="<?php echo esc_url( rendez_vous_get_edit_link( rendez_vous()->item->id ,rendez_vous()->item->organizer ) ) ;?>#rendez-vous-set" class="button bp-secondary-action last"><?php esc_html_e( 'Set the date', 'rendez-vous' ) ;?></a>
 			<div class="clear"/>
