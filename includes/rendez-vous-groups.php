@@ -320,6 +320,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 */
 	public function group_handle_screens() {
 		if ( bp_is_group() && bp_is_current_action( $this->slug ) ) {
+
 			$rendez_vous = rendez_vous();
 
 			$this->screen                 = rendez_vous_handle_actions();
@@ -367,6 +368,9 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				// Redirect to organizer's rendez-vous page
 				bp_core_redirect( $redirect );
 			}
+		} else if ( bp_is_current_component( 'groups' ) && bp_is_current_action( $this->slug ) && bp_current_item() ) {
+			bp_do_404();
+			return;
 		}
 	}
 
