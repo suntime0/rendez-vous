@@ -68,7 +68,7 @@ function rendez_vous_attend_content() {
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_loop() {
-	$current_action = bp_current_action();
+	$current_action = apply_filters( 'rendez_vous_current_action', bp_current_action() );
 	?>
 	<div class="rendez-vous <?php echo esc_attr( $current_action );?>">
 
@@ -179,16 +179,16 @@ function rendez_vous_edit_title() {
 	rendez_vous_single_the_title();
 
 	if ( rendez_vous_single_is_published() ) {
-		bp_button( array( 
-			'id'                => 'view-rendez-vous', 
+		bp_button( array(
+			'id'                => 'view-rendez-vous',
 			'component'         => 'rendez_vous',
 			'must_be_logged_in' => true,
 			'block_self'        => false,
 			'wrapper_id'        => 'rendez-vous-view-btn',
 			'wrapper_class'     => 'right',
-			'link_class'        => 'view-rendez-vous', 
-			'link_href'         => rendez_vous_single_get_permalink(), 
-			'link_title'        => __( 'View', 'rendez-vous'), 
+			'link_class'        => 'view-rendez-vous',
+			'link_href'         => rendez_vous_single_get_permalink(),
+			'link_title'        => __( 'View', 'rendez-vous'),
 			'link_text'         => __( 'View', 'rendez-vous')
 		) );
 	}
@@ -204,7 +204,7 @@ function rendez_vous_edit_title() {
  */
 function rendez_vous_edit_content() {
 	?>
-	<form action="<?php echo esc_url( rendez_vous_single_the_form_action() );?>" method="post" id="rendez-vous-edit-form" class="standard-form">  	
+	<form action="<?php echo esc_url( rendez_vous_single_the_form_action() );?>" method="post" id="rendez-vous-edit-form" class="standard-form">
 		<p>
 			<label for="rendez-vous-edit-title"><?php esc_html_e( 'Title', 'rendez-vous' ); ?></label>
 			<input type="text" name="_rendez_vous_edit[title]" id="rendez-vous-edit-title" value="<?php rendez_vous_single_the_title() ;?>"/>
@@ -222,7 +222,7 @@ function rendez_vous_edit_content() {
 			<input type="text" placeholder="00:00" name="_rendez_vous_edit[duration]" id="rendez-vous-edit-duration" value="<?php rendez_vous_single_the_duration() ;?>" class="rdv-duree"/>
 		</p>
 		<p>
-			<label for="rendez-vous-edit-status"><?php esc_html_e( 'Set as private', 'rendez-vous' ); ?>
+			<label for="rendez-vous-edit-status"><?php esc_html_e( 'Restrict this rendez-vous to the selected attendees', 'rendez-vous' ); ?>
 				<input type="checkbox" name="_rendez_vous_edit[privacy]" id="rendez-vous-edit-privacy" <?php rendez_vous_single_the_privacy();?> value="1">
 			</label>
 		</p>
@@ -269,16 +269,16 @@ function rendez_vous_single_title() {
 	rendez_vous_single_the_title();
 
 	if ( current_user_can( 'edit_rendez_vous', rendez_vous_single_get_the_id() ) ) {
-		bp_button( array( 
-			'id'                => 'edit-rendez-vous', 
+		bp_button( array(
+			'id'                => 'edit-rendez-vous',
 			'component'         => 'rendez_vous',
 			'must_be_logged_in' => true,
 			'block_self'        => false,
 			'wrapper_id'        => 'rendez-vous-edit-btn',
 			'wrapper_class'     => 'right',
-			'link_class'        => 'edit-rendez-vous', 
-			'link_href'         => rendez_vous_single_get_edit_link(), 
-			'link_title'        => __( 'Edit', 'rendez-vous'), 
+			'link_class'        => 'edit-rendez-vous',
+			'link_href'         => rendez_vous_single_get_edit_link(),
+			'link_title'        => __( 'Edit', 'rendez-vous'),
 			'link_text'         => __( 'Edit', 'rendez-vous')
 		) );
 	}
@@ -294,11 +294,11 @@ function rendez_vous_single_title() {
  */
 function rendez_vous_single_content() {
 	?>
-	<form action="<?php echo esc_url( rendez_vous_single_the_form_action() );?>" method="post" id="rendez-vous-single-form" class="standard-form">  	
-		
+	<form action="<?php echo esc_url( rendez_vous_single_the_form_action() );?>" method="post" id="rendez-vous-single-form" class="standard-form">
+
 		<label for="rendez-vous-single-description"><?php esc_html_e( 'Description', 'rendez-vous' ); ?></label>
 		<div id="rendez-vous-single-description"><?php rendez_vous_single_the_description() ;?></div>
-		
+
 		<label for="rendez-vous-single-venue"><?php esc_html_e( 'Venue', 'rendez-vous' ); ?></label>
 		<div id="rendez-vous-single-venue"><?php rendez_vous_single_the_venue() ;?></div>
 
@@ -308,7 +308,7 @@ function rendez_vous_single_content() {
 			<div id="rendez-vous-single-date"><?php rendez_vous_single_the_date() ;?></div>
 
 		<?php endif ;?>
-		
+
 		<label for="rendez-vous-single-duration"><?php esc_html_e( 'Duration (hours)', 'rendez-vous' ); ?></label>
 		<div id="rendez-vous-single-duration"><?php rendez_vous_single_the_duration() ;?></div>
 

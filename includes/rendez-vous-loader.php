@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package Rendez_Vous
  * @subpackage Component
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 class Rendez_Vous_Component extends BP_Component {
@@ -26,7 +26,7 @@ class Rendez_Vous_Component extends BP_Component {
 	 *
 	 * @package Rendez_Vous
 	 * @subpackage Component
-	 * 
+	 *
 	 * @since Rendez Vous (1.0.0)
 	 */
 	function __construct() {
@@ -39,7 +39,7 @@ class Rendez_Vous_Component extends BP_Component {
 		);
 
 		$this->includes();
-		
+
 		$bp->active_components[$this->id] = '1';
 
 		/**
@@ -72,11 +72,17 @@ class Rendez_Vous_Component extends BP_Component {
 			'rendez-vous-functions.php',
 		);
 
-		if ( bp_is_active( 'notifications' ) )
+		if ( bp_is_active( 'notifications' ) ) {
 			$includes[] = 'rendez-vous-notifications.php';
+		}
 
-		if ( bp_is_active( 'activity' ) )
+		if ( bp_is_active( 'activity' ) ) {
 			$includes[] = 'rendez-vous-activity.php';
+		}
+
+		if ( bp_is_active( 'groups' ) ) {
+			$includes[] = 'rendez-vous-groups.php';
+		}
 
 		parent::includes( $includes );
 	}
@@ -104,6 +110,24 @@ class Rendez_Vous_Component extends BP_Component {
 
 		// Let BP_Component::setup_globals() do its work.
 		parent::setup_globals( $args );
+
+		/**
+		 * Filter to change user's default subnav
+		 *
+		 * @since Rendez Vous (1.1.0)
+		 *
+		 * @param string default subnav to use (shedule or attend)
+		 */
+		$this->default_subnav = apply_filters( 'rendez_vous_member_default_subnav', 'schedule' );
+
+		$this->subnav_position = array(
+			'schedule' => 10,
+			'attend'   => 20,
+		);
+
+		if ( 'attend' == $this->default_subnav ) {
+			$this->subnav_position['attend'] = 5;
+		}
 	}
 
 	/**
@@ -121,11 +145,11 @@ class Rendez_Vous_Component extends BP_Component {
 			'slug' 		          => $this->slug,
 			'position' 	          => 80,
 			'screen_function'     => array( 'Rendez_Vous_Screens', 'public_screen' ),
-			'default_subnav_slug' => 'schedule'
+			'default_subnav_slug' => $this->default_subnav
 		);
 
 		// Stop if there is no user displayed or logged in
-		if ( !is_user_logged_in() && !bp_displayed_user_id() )
+		if ( ! is_user_logged_in() && ! bp_displayed_user_id() )
 			return;
 
 		// Determine user to use
@@ -146,7 +170,7 @@ class Rendez_Vous_Component extends BP_Component {
 			'parent_url'      => $rendez_vous_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => array( 'Rendez_Vous_Screens', 'schedule_screen' ),
-			'position'        => 10
+			'position'        => $this->subnav_position['schedule']
 		);
 
 		// Add a subnav item under the main Rendez-vous tab
@@ -156,7 +180,7 @@ class Rendez_Vous_Component extends BP_Component {
 			'parent_url'      => $rendez_vous_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => array( 'Rendez_Vous_Screens', 'attend_screen' ),
-			'position'        => 20
+			'position'        => $this->subnav_position['attend']
 		);
 
 		parent::setup_nav( $main_nav, $sub_nav );
@@ -181,7 +205,7 @@ class Rendez_Vous_Component extends BP_Component {
 			$rendez_vous_link = trailingslashit( $user_domain . $this->slug );
 
 			// Add the "Example" sub menu
-			$wp_admin_nav[] = array(
+			$wp_admin_nav[0] = array(
 				'parent' => $bp->my_account_menu_id,
 				'id'     => 'my-account-' . $this->id,
 				'title'  => __( 'Rendez-vous', 'rendez-vous' ),
@@ -189,7 +213,7 @@ class Rendez_Vous_Component extends BP_Component {
 			);
 
 			// Personal
-			$wp_admin_nav[] = array(
+			$wp_admin_nav[ $this->subnav_position['schedule'] ] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-schedule',
 				'title'  => __( 'Schedule', 'rendez-vous' ),
@@ -197,13 +221,15 @@ class Rendez_Vous_Component extends BP_Component {
 			);
 
 			// Screen two
-			$wp_admin_nav[] = array(
+			$wp_admin_nav[ $this->subnav_position['attend'] ] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-attend',
 				'title'  => __( 'Attend', 'rendez-vous' ),
 				'href'   => trailingslashit( $rendez_vous_link . 'attend' )
 			);
 
+			// Sort WP Admin Nav
+			ksort( $wp_admin_nav );
 		}
 
 		parent::setup_admin_bar( $wp_admin_nav );
@@ -233,7 +259,7 @@ class Rendez_Vous_Component extends BP_Component {
 			'not_found'          => _x( 'No Rendez-vous Found',          'rendez-vous not found',          'rendez-vous' ),
 			'not_found_in_trash' => _x( 'No Rendez-vous Found in Trash', 'rendez-vous not found in trash', 'rendez-vous' )
 		);
-		
+
 		$rdv_args = array(
 			'label'	            => _x( 'Rendez-vous',                    'rendez-vous label',              'rendez-vous' ),
 			'labels'            => $rdv_labels,

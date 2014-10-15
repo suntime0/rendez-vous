@@ -62,31 +62,31 @@ var rdv = rdv || {};
                 options.context = this;
                 options.data = _.extend( options.data || {}, {
                     action: 'rendez_vous_get_users',
-                    query: { 
+                    query: {
                     	/*
                     	Future version : get friends !
-                    	user_id: wp.media.view.settings.user,
-                    	And filter users by Groups
+                    	user_id: wp.media.view.settings.user
                     	*/
-                    	page:this.options.current_page,
-                    	search_terms: media.frame().state().get( 'search' ),
+                    	page         : this.options.current_page,
+                    	search_terms : media.frame().state().get( 'search' ),
+                    	group_id     : wp.media.view.settings.group_id,
                     },
                     _wpnonce: wp.media.view.settings.nonce.rendezvous
                 });
-                
+
                 return wp.ajax.send( options );
             }
         },
 
         parse: function( resp, xhr ) {
-            
+
             if ( ! _.isArray( resp.items ) )
                 resp.items = [resp.items];
 
             _.each( resp.items, function( value, index ) {
                 if ( _.isNull( value ) )
                     return;
-                
+
                 resp.items[index].id = value.id;
                 resp.items[index].avatar = value.avatar;
                 resp.items[index].name = value.name;
@@ -96,9 +96,9 @@ var rdv = rdv || {};
                  this.options.current_page = resp.meta.current_page;
                  this.options.total_page = resp.meta.total_page;
             }
-            
+
             return resp.items;
-            
+
         },
 	} );
 
@@ -159,7 +159,7 @@ var rdv = rdv || {};
 
 					_this.$el.append( item.render().$el );
 				}
-				
+
 			} );
 
 		}
@@ -215,11 +215,11 @@ var rdv = rdv || {};
 					this.days[content.model.id] = content;
 					this.views.add( content );
 				}
-					
+
 			} else {
 				if ( ! _.isUndefined( this.days[0] ) )
 					this.days[0].remove();
-				
+
 				_.each( this.collection.models, function( model ){
 					content = new media.view.RendezVousDay({
 						controller: this.controller,
@@ -247,7 +247,7 @@ var rdv = rdv || {};
 		tagName: 'div',
 
 		render:function() {
-			_this = this; 
+			_this = this;
 			this.$el.datepicker( {
 				dayNames:media.RdvSettings.datestrings.daynames,
 				monthNames:media.RdvSettings.datestrings.monthnames,
@@ -321,7 +321,7 @@ var rdv = rdv || {};
 	    },
 
 		displayUsers:function( model ) {
-			var _this = this, 
+			var _this = this,
 				selection = this.getSelection();
 
 			if( _.isUndefined( this.users ) )
@@ -347,7 +347,7 @@ var rdv = rdv || {};
 					this.users[content.model.id] = content;
 					this.views.add( content );
 				}
-					
+
 			} else {
 				_.each( this.collection.models, function( model ){
 					content = new media.view.RendezVousUser({
@@ -359,7 +359,7 @@ var rdv = rdv || {};
 					_this.views.add( content );
 				} );
 			}
-			
+
 			selection.each( function( model ) {
 				var id = '#user-' + model.get( 'id' );
 				this.$el.find( id ).parent( 'li' ).addClass( 'selected details' );
@@ -392,7 +392,7 @@ var rdv = rdv || {};
 				this.removeFromSelection( target, id );
 			else
 				this.addToSelection( target, id );
-			
+
 		},
 
 		addToSelection: function( target, id ) {
@@ -435,12 +435,12 @@ var rdv = rdv || {};
 			'blur .rdv-input-when' : 'storeWhenInput',
 			'click .trashday' : 'trashDay',
 		},
-		
+
 		initialize:function() {
 			var activeTab = this.options.tab.id,
 				activeTpl = this.options.tab.tpl;
 
-			this.createSteps(); 
+			this.createSteps();
 
 			if( activeTab == 'when' )
 				this.createSidebar();
@@ -461,7 +461,7 @@ var rdv = rdv || {};
 
 		createSteps:function() {
 			var content;
-			
+
 			switch( this.options.tab.id ) {
 				case 'what':
 					content = this.rdvfields = new media.view.RendezVousFields({
@@ -499,10 +499,10 @@ var rdv = rdv || {};
 				value = event.target.checked ? 1 : 0;
 			else
 				value = $(event.target).val()
-			
+
 			this.model.get( 'rdvfields').get( event.target.id ).set( 'value', value );
 		},
-		
+
 		storeWhenInput: function( event ) {
 			var id, index, toparse;
 
@@ -663,7 +663,7 @@ var rdv = rdv || {};
 
 			if ( ! this.$el.children().length )
 				return;
-			
+
 
 			var collection = this.collection,
 				element = this.$el,
@@ -677,7 +677,7 @@ var rdv = rdv || {};
 			} else {
 				element.removeClass( 'empty' );
 			}
-			
+
 			element.find( '.selection-info .count' ).html( rdv.strings.invited.replace('%d', collection.length) );
 
 			collection.each( function( model ) {
@@ -722,7 +722,7 @@ var rdv = rdv || {};
 					text : rdv.strings.whoTab,
 					priority:60,
 					id:'who'
-				} 
+				}
 			},
 
 		},
@@ -764,7 +764,7 @@ var rdv = rdv || {};
 
 		fillMirror:function( model, collection, options ) {
 			var mirror = media.frame().state().props.get( '_all' ).get( 'mirror' );
-			
+
 			if( !mirror || !mirror.get( model.id ) )
 				mirror.add( model );
 		},
@@ -800,23 +800,29 @@ var rdv = rdv || {};
 		},
 
 		rdvInsert:function() {
-			var users, dates, fields;
+			var users, dates, fields, postdata;
 
 			users = _.pluck( this.props.get( '_all' ).get( 'selection' ).models, 'id' );
 			dates = _.pluck( this.get('rdvdays').models, 'attributes' );
 			fields = _.pluck( this.get('rdvfields').models, 'attributes' );
 
-			wp.media.post( 'create_rendez_vous', {
+			postdata = {
 				json:          true,
 				attendees:     users,
 				maydates:      dates,
 				desc:          fields,
 				nonce:         wp.media.view.settings.nonce.rendezvous
-			}).done( function( link ) {
+			};
+
+			if ( wp.media.view.settings.group_id ) {
+				postdata.group_id = wp.media.view.settings.group_id;
+			}
+
+			wp.media.post( 'create_rendez_vous', postdata ).done( function( link ) {
 				window.location.href = link;
-			}).fail( function( error ) {
+			} ).fail( function( error ) {
 				alert( error );
-			});
+			} );
 		}
 
 	} );
@@ -844,14 +850,14 @@ var rdv = rdv || {};
 			});
 
 			wp.media.view.Toolbar.prototype.initialize.apply( this, arguments );
-			
+
 			this.set( 'userSelection', new media.view.RendezVousUserSelection({
 				controller: media.frame(),
 				collection: this.controller.state().props.get( '_all' ).get( 'selection' ),
 				priority:   -40,
 				editable: false
 			}) );
-			
+
 		},
 
 		refresh: function() {
@@ -864,7 +870,7 @@ var rdv = rdv || {};
 						fields.push( model.id );
 					else
 						fields = [];
-					
+
 				}
 			} );
 
@@ -938,12 +944,12 @@ var rdv = rdv || {};
 						_this._frame.on( 'content:render:' + tab, _.bind( _this.rdvContentRender, this, item.attributes.tabs[tab] ) );
 					}
 				}
-					
+
 			});
 
 			this._frame.on( 'open', this.open );
 			this._frame.on( 'close', this.close );
-			
+
 			this._frame.on( 'router:create:steps', this.createRouter, this  );
 			this._frame.on( 'router:render:steps', _.bind( this.stepsRouter, this, _tabs ) );
 			this._frame.on( 'toolbar:create:rdv_insert', _.bind( this.rdvToolbarCreate, this, _tabs ) );
@@ -962,13 +968,13 @@ var rdv = rdv || {};
 			var tabs = {};
 
 			for ( var tab in routerItems ) {
-			
+
 				tabs[tab] = {
 					text : routerItems[tab].text,
 					priority : routerItems[tab].priority
 				};
 			}
-			
+
 			view.set( tabs );
 		},
 
@@ -979,7 +985,7 @@ var rdv = rdv || {};
 				model      : media.frame().state(),
 				tab        : tab,
 			} ) );
-			
+
 		},
 
 		rdvToolbarCreate:function( tabs, toolbar ) {
@@ -1023,5 +1029,5 @@ var rdv = rdv || {};
 	} );
 
 	$( media.init );
-	
+
 } )( jQuery );

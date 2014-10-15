@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package Rendez Vous
  * @subpackage Ajax
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_ajax_get_users() {
@@ -24,8 +24,8 @@ function rendez_vous_ajax_get_users() {
 	check_ajax_referer( 'rendez-vous-editor' );
 
 	$query_args = isset( $_REQUEST['query'] ) ? (array) $_REQUEST['query'] : array();
-	
-	$args = wp_parse_args( $query_args, array( 
+
+	$args = wp_parse_args( $query_args, array(
 			'user_id'      => false,
 			'type'         => 'alphabetical',
 			'per_page'     => 20,
@@ -34,8 +34,15 @@ function rendez_vous_ajax_get_users() {
 			'exclude'      => array( bp_loggedin_user_id() ), // we don't want the organizer to be included in the attendees
 		)
 	);
-	
-	$query = new BP_User_Query( $args );
+
+	if ( ! empty( $args['group_id'] ) ) {
+		// Get all type of group users
+		$args['group_role'] = array( 'admin', 'mod', 'member' );
+
+		$query = new BP_Group_Member_Query( $args );
+	} else {
+		$query = new BP_User_Query( $args );
+	}
 
 	$response = new stdClass();
 
@@ -43,17 +50,17 @@ function rendez_vous_ajax_get_users() {
 
 	if( empty( $query->results ) )
 		wp_send_json_error( $response );
-	
+
 	$users = array_map( 'rendez_vous_prepare_user_for_js', array_values( $query->results ) );
 	$users = array_filter( $users );
 
 	if( !empty( $args['per_page'] ) ) {
-		$response->meta = array( 
-			'total_page' => ceil( (int) $query->total_users / (int) $args['per_page'] ), 
-			'current_page' => (int) $args['page']  
+		$response->meta = array(
+			'total_page' => ceil( (int) $query->total_users / (int) $args['per_page'] ),
+			'current_page' => (int) $args['page']
 		);
 	}
-		
+
 	$response->items = $users;
 
 	wp_send_json_success( $response );
@@ -65,15 +72,16 @@ add_action( 'wp_ajax_rendez_vous_get_users', 'rendez_vous_ajax_get_users' );
  *
  * @package Rendez Vous
  * @subpackage Ajax
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_ajax_create() {
-	
+
 	check_ajax_referer( 'rendez-vous-editor', 'nonce' );
 
-	if ( ! bp_current_user_can( 'publish_rendez_vouss' ) )
+	if ( ! bp_current_user_can( 'publish_rendez_vouss' ) ) {
 		wp_send_json_error( __( 'You cannot create a rendez-vous.', 'rendez-vous' ) );
+	}
 
 	// Init the create arguments
 	$args = array(
@@ -88,17 +96,19 @@ function rendez_vous_ajax_create() {
 	// First attendees
 	$attendees = array_map( 'absint', $_POST['attendees'] );
 
-	if ( empty( $attendees ) )
+	if ( empty( $attendees ) ) {
 		wp_send_json_error( __( 'No users were selected.', 'rendez-vous' ) );
+	}
 
 	// Add to create arguments
 	$args['attendees'] = $attendees;
 
 	// Then fields
-	$fields = $_POST['desc'];
-
-	if ( empty( $fields ) || ! is_array( $fields ) )
+	if ( empty( $_POST['desc'] ) || ! is_array( $_POST['desc'] ) ) {
 		wp_send_json_error( __( 'Please describe your rendez-vous using the What tab.', 'rendez-vous' ) );
+	} else {
+		$fields = $_POST['desc'];
+	}
 
 	$required_fields_missing = array();
 
@@ -111,11 +121,18 @@ function rendez_vous_ajax_create() {
 		$args[ $field['id'] ] = $field['value'];
 	}
 
-	// Then dates
-	$dates = $_POST['maydates'];
+	// Required fields are missing
+	if ( ! empty( $required_fields_missing ) ) {
+		wp_send_json_error( __( 'Please make sure to fill all required fields.', 'rendez-vous' ) );
+	}
 
-	if ( empty( $dates ) || ! is_array( $dates ) )
+	// Then dates
+	if ( empty( $_POST['maydates'] ) || ! is_array( $_POST['maydates'] ) ) {
 		wp_send_json_error( __( 'Please define dates for your rendez-vous using the When tab.', 'rendez-vous' ) );
+	} else {
+		$dates = $_POST['maydates'];
+	}
+
 
 	$maydates = array();
 	$maydates_errors = array();
@@ -154,15 +171,25 @@ function rendez_vous_ajax_create() {
 			$timestamp = strtotime( $date['mysql'] . ' ' . $date['hour3'] );
 			$maydates[ $timestamp ] = array();
 		}
-			
 	}
 
-	if ( ! empty( $maydates_errors ) )
-		wp_send_json_error( __( 'Please make sure to respect the format HH:MM when defining time.', 'rendez-vous' ) );
+	// Check duration format
+	if ( ! empty( $args['duration'] ) && ! preg_match( '/^[0-2]?[0-9]:[0-5][0-9]$/', $args['duration'] ) ) {
+		$maydates_errors[] = $args['duration'];
+	}
 
-	if ( ! empty( $maydates ) )
+	if ( ! empty( $maydates_errors ) ) {
+		wp_send_json_error( __( 'Please make sure to respect the format HH:MM when defining time.', 'rendez-vous' ) );
+	}
+
+	if ( ! empty( $maydates ) ) {
 		$args['days'] = $maydates;
-	
+	}
+
+	if ( ! empty( $_POST['group_id'] ) ) {
+		$args['group_id'] = absint( $_POST['group_id'] );
+	}
+
 	$rendez_vous_id = rendez_vous_save( $args );
 
 	if ( empty( $rendez_vous_id ) ) {
