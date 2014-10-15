@@ -23,7 +23,7 @@ function rendez_vous_activity_edit_form() {
 	?>
 	<p>
 		<label for="rendez-vous-edit-activity" class="normal">
-			<input type="checkbox" id="rendez-vous-edit-activity" name="_rendez_vous_edit[activity]" value="1" <?php disabled( 1, rendez_vous_single_get_privacy() );?>> <?php esc_html_e( 'Record a public activity for all members', 'rendez-vous' );?>
+			<input type="checkbox" id="rendez-vous-edit-activity" name="_rendez_vous_edit[activity]" value="1" <?php disabled( 1, rendez_vous_single_get_privacy() );?>> <?php esc_html_e( 'Record an activity for all members', 'rendez-vous' );?>
 		</label>
 	</p>
 	<?php
