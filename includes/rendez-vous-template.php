@@ -926,8 +926,14 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 
 			$output .= '<tr class="'. $tr_class .'"><td>';
 
-			if ( 'edit' == $view && $attendee != rendez_vous()->item->organizer )
-				$output .= '<input type="checkbox" name="_rendez_vous_edit[attendees][]" value="' . $attendee . '" checked="true"/>&nbsp;';
+			if ( 'edit' == $view ) {
+				// Make sure the organizer is not removed from attendees
+				if ( $attendee == rendez_vous()->item->organizer ) {
+					$output .= '<input type="hidden" name="_rendez_vous_edit[attendees][]" value="' . $attendee . '"/>';
+				} else {
+					$output .= '<input type="checkbox" name="_rendez_vous_edit[attendees][]" value="' . $attendee . '" checked="true"/>&nbsp;';
+				}
+			}
 
 			$output .= '<a href="' . $user_link . '" title="' . $user_name . '">' . bp_core_fetch_avatar(
 				array(

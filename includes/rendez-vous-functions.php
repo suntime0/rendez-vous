@@ -366,7 +366,7 @@ function rendez_vous_handle_actions() {
 		$rendez_vous = rendez_vous_get_item( $rendez_vous_id );
 
 		if ( is_null( $rendez_vous->organizer ) ) {
-			bp_core_add_message( __( 'The rendez-vous was not found', 'rendez-vous' ), 'error' );
+			bp_core_add_message( __( 'The rendez-vous was not found.', 'rendez-vous' ), 'error' );
 			bp_core_redirect( $redirect );
 		}
 
