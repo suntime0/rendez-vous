@@ -2,9 +2,9 @@
 Contributors: imath
 Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
-Requires at least: 3.8.1
-Tested up to: 3.9
-Stable tag: 1.0.2
+Requires at least: 4.0
+Tested up to: 4.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ This is a BuddyPress plugin to let your community members schedule appointments.
 It's a "doodle" like feature plugin where the organizer defines some dates and hours to meet, and the potential attendees will select the ones that match their agenda.
 The organizer can then define the definitive date and once this date is past, he will also be able to add some notes or a report to inform about what happened during this meeting.
 
-Available in french and english. 
+Available in french and english.
 
 http://vimeo.com/91172041
 
@@ -29,7 +29,7 @@ Activate Rendez Vous in the "Plugins" admin panel using the "Activate" link. If 
 == Frequently Asked Questions ==
 
 = Is there a way to use it in groups component ? =
-Not for now, maybe soon :)
+Yes!! Since 1.1 :)
 
 == Screenshots ==
 
@@ -38,6 +38,9 @@ Not for now, maybe soon :)
 3. Member's schedule page
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Make sure to use WordPress 4.0 & BuddyPress 2.1
 
 = 1.0.2 =
 nothing particular
@@ -49,6 +52,11 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.1.0 =
+
+* Schedule rendez-vous within BuddyPress Groups
+* Download a calendar file to save the rendez-vous in your Calendar software
 
 = 1.0.2 =
 
