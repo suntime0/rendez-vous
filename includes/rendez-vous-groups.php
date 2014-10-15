@@ -572,7 +572,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	}
 
 	/**
-	 * Appends the group id to rendez-vous loop arguments if in a group's single item
+	 * Appends the group args to rendez-vous loop arguments
 	 *
 	 * @package Rendez Vous
 	 * @subpackage Groups
@@ -584,14 +584,72 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @uses   bp_get_current_group_id() to get the current group id
 	 * @return array                     the rendez-vous loop arguments
 	 */
-	public function append_group_id( $args = array() ) {
-		if ( ! bp_is_group() ) {
-			return $args;
+	public function append_group_args( $args = array() ) {
+		// if in a group's single item
+		if ( bp_is_group() ) {
+			$args['group_id'] = bp_get_current_group_id();
 		}
 
-		$args['group_id'] = bp_get_current_group_id();
+		// If viewing a single member
+		if ( bp_is_user() ) {
+
+			/**
+			 * Use this filter to show all displayed user's rendez-vous no matter if they are attached to an hidden group
+			 * eg: add_filter( 'rendez_vous_member_hide_hidden', '__return_false' );
+			 * 
+			 * To respect the hidden group visibility, by default, a member not viewing his profile will be returned false
+			 * avoiding him to see the displayed member's rendez-vous attached to an hidden group
+			 * 
+			 * @param bool false if a user is viewing his profile or an admin is viewing any user profile, true otherwise
+			 */
+			$hide_hidden = apply_filters( 'rendez_vous_member_hide_hidden', (bool) ! bp_is_my_profile() && ! bp_current_user_can( 'bp_moderate' ) );
+			
+			if ( ! empty( $hide_hidden ) ) {
+				$args['exclude'] = self::get_hidden_rendez_vous();
+			}
+		}
 
 		return $args;
+	}
+
+	/**
+	 * Gets the user's rendez-vous that are attached to an hidden group
+	 * 
+	 * As, it's not possible to do a mix of 'AND' and 'OR' relation with WP_Meta_Queries,
+	 * we are using the exclude args of the rendez-vous loop to exclude the rendez-vous
+	 * ids that are attached to an hidden group.
+	 * 
+	 * @package Rendez Vous
+	 * @subpackage Groups
+	 *
+	 * @since Rendez Vous (1.1.0)
+	 * 
+	 * @param   int                    $user_id the user id
+	 * @global  $wpdb
+	 * @uses    buddypress()           to get BuddyPress main instance
+	 * @uses    bp_displayed_user_id() to get the user id of the displayed profile
+	 * @return  array                  the list of rendez-vous to hide for the user
+	 */
+	public static function get_hidden_rendez_vous( $user_id = 0 ) {
+		global $wpdb;
+		$bp = buddypress();
+
+		if ( empty( $user_id ) ) {
+			$user_id = bp_displayed_user_id();
+		}
+
+		if ( empty( $user_id ) ) {
+			return array();
+		}
+
+		// BP_Groups_Member::get_group_ids does not suit the need
+		$user_hidden_groups = $wpdb->prepare( "SELECT DISTINCT m.group_id FROM {$bp->groups->table_name_members} m LEFT JOIN {$bp->groups->table_name} g ON ( g.id = m.group_id ) WHERE g.status = 'hidden' AND m.user_id = %d AND m.is_confirmed = 1 AND m.is_banned = 0", $user_id );
+		
+		// Get the rendez-vous attached to an hidden group of the user.
+		$hidden_rendez_vous = "SELECT pm.post_id FROM {$wpdb->postmeta} pm WHERE pm.meta_key = '_rendez_vous_group_id' AND pm.meta_value IN ( {$user_hidden_groups} )";
+		$hide = $wpdb->get_col( $hidden_rendez_vous );
+
+		return $hide;
 	}
 
 	/**
@@ -1037,7 +1095,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		add_filter( 'rendez_vous_map_meta_caps',                  array( $this, 'map_meta_caps' ),               10, 4 );
 		add_filter( 'rendez_vous_current_action',                 array( $this, 'group_current_action' ),        10, 1 );
 		add_filter( 'rendez_vous_edit_action_organizer_id',       array( $this, 'group_edit_get_organizer_id' ), 10, 2 );
-		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_id' ),             10, 1 );
+		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', array( $this, 'append_group_args' ),           10, 1 );
 		add_filter( 'rendez_vous_get_edit_link',                  array( $this, 'group_edit_link' ),             10, 3 );
 		add_filter( 'rendez_vous_get_single_link',                array( $this, 'group_view_link' ),             10, 3 );
 		add_filter( 'rendez_vous_get_delete_link',                array( $this, 'group_delete_link' ),           10, 3 );
