@@ -404,7 +404,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @uses   rendez_vous_loop()           to output the rendez-vous for the group
 	 * @return string                       html output
 	 */
-	public function display() {
+	public function display( $group_id = null ) {
 		if ( ! empty( $this->screen ) )  {
 			if ( 'edit' == $this->screen ) {
 				?>
@@ -416,8 +416,11 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				<?php rendez_vous_single_content();
 			}
 		} else {
+			if ( empty( $group_id ) ) {
+				$group_id = bp_get_current_group_id();
+			}
 			?>
-			<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => bp_get_current_group_id() ) ); ?></h1>
+			<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => $group_id ) ); ?></h1>
 			<?php rendez_vous_loop();
 		}
 	}
