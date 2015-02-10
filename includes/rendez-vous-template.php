@@ -891,11 +891,12 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 		}
 
 		$days = rendez_vous()->item->days;
-		ksort( $days );
 
-		if ( empty( $days ) )
+		if ( empty( $days ) ) {
 			return false;
+		}
 
+		ksort( $days );
 		$header = array_keys( $days );
 
 		$output  = '<table id="rendez-vous-attendees-prefs">';
