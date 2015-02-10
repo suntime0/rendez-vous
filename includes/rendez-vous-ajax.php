@@ -25,15 +25,14 @@ function rendez_vous_ajax_get_users() {
 
 	$query_args = isset( $_REQUEST['query'] ) ? (array) $_REQUEST['query'] : array();
 
-	$args = wp_parse_args( $query_args, array(
+	$args = bp_parse_args( $query_args, array(
 			'user_id'      => false,
 			'type'         => 'alphabetical',
 			'per_page'     => 20,
 			'page'         => 1,
 			'search_terms' => false,
 			'exclude'      => array( bp_loggedin_user_id() ), // we don't want the organizer to be included in the attendees
-		)
-	);
+	), 'rendez_vous_get_users' );
 
 	if ( ! empty( $args['group_id'] ) ) {
 		// Get all type of group users
