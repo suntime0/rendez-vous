@@ -57,6 +57,7 @@ nothing particular
 
 * Schedule rendez-vous within BuddyPress Groups
 * Download a calendar file to save the rendez-vous in your Calendar software
+* Fix rendez-vous editor css to adapt to WordPress 4.0 changes in the media editor
 
 = 1.0.2 =
 
