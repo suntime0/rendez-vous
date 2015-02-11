@@ -62,8 +62,8 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		$bp = buddypress();
 
 		$args = array(
-			'slug'              => $bp->rendez_vous->slug,
-			'name'              => $bp->rendez_vous->name,
+			'slug'              => rendez_vous()->get_component_slug(),
+			'name'              => rendez_vous()->get_component_name(),
 			'visibility'        => 'public',
 			'nav_item_position' => 80,
 			'enable_nav_item'   => $this->enable_nav_item(),

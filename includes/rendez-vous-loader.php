@@ -34,7 +34,7 @@ class Rendez_Vous_Component extends BP_Component {
 
 		parent::start(
 			'rendez_vous',
-			__( 'Rendez-vous', 'rendez-vous' ),
+			rendez_vous()->get_component_name(),
 			rendez_vous()->includes_dir
 		);
 
@@ -97,13 +97,9 @@ class Rendez_Vous_Component extends BP_Component {
 	 */
 	function setup_globals( $args = array() ) {
 
-		// Defining the slug in this way makes it possible for site admins to override it
-		if ( !defined( 'RENDEZ_VOUS_SLUG' ) )
-			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
-
 		// Set up the $globals array to be passed along to parent::setup_globals()
 		$args = array(
-			'slug'                  => RENDEZ_VOUS_SLUG,
+			'slug'                  => rendez_vous()->get_component_slug(),
 			'notification_callback' => 'rendez_vous_format_notifications',
 			'search_string'         => __( 'Search Rendez-vous...', 'rendez-vous' ),
 		);
@@ -118,14 +114,14 @@ class Rendez_Vous_Component extends BP_Component {
 		 *
 		 * @param string default subnav to use (shedule or attend)
 		 */
-		$this->default_subnav = apply_filters( 'rendez_vous_member_default_subnav', 'schedule' );
+		$this->default_subnav = apply_filters( 'rendez_vous_member_default_subnav', rendez_vous()->get_schedule_slug() );
 
 		$this->subnav_position = array(
 			'schedule' => 10,
 			'attend'   => 20,
 		);
 
-		if ( 'attend' == $this->default_subnav ) {
+		if ( rendez_vous()->get_attend_slug() == $this->default_subnav ) {
 			$this->subnav_position['attend'] = 5;
 		}
 	}
@@ -166,7 +162,7 @@ class Rendez_Vous_Component extends BP_Component {
 		// Add a subnav item under the main Rendez-vous tab
 		$sub_nav[] = array(
 			'name'            =>  __( 'Schedule', 'rendez-vous' ),
-			'slug'            => 'schedule',
+			'slug'            => rendez_vous()->get_schedule_slug(),
 			'parent_url'      => $rendez_vous_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => array( 'Rendez_Vous_Screens', 'schedule_screen' ),
@@ -176,7 +172,7 @@ class Rendez_Vous_Component extends BP_Component {
 		// Add a subnav item under the main Rendez-vous tab
 		$sub_nav[] = array(
 			'name'            =>  __( 'Attend', 'rendez-vous' ),
-			'slug'            => 'attend',
+			'slug'            => rendez_vous()->get_attend_slug(),
 			'parent_url'      => $rendez_vous_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => array( 'Rendez_Vous_Screens', 'attend_screen' ),
@@ -217,7 +213,7 @@ class Rendez_Vous_Component extends BP_Component {
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-schedule',
 				'title'  => __( 'Schedule', 'rendez-vous' ),
-				'href'   => trailingslashit( $rendez_vous_link . 'schedule' )
+				'href'   => trailingslashit( $rendez_vous_link . rendez_vous()->get_schedule_slug() )
 			);
 
 			// Screen two
@@ -225,7 +221,7 @@ class Rendez_Vous_Component extends BP_Component {
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-attend',
 				'title'  => __( 'Attend', 'rendez-vous' ),
-				'href'   => trailingslashit( $rendez_vous_link . 'attend' )
+				'href'   => trailingslashit( $rendez_vous_link . rendez_vous()->get_attend_slug() )
 			);
 
 			// Sort WP Admin Nav

@@ -376,6 +376,63 @@ class Rendez_Vous {
 			load_plugin_textdomain( $this->domain, false, basename( $this->plugin_dir ) . '/languages' );
 		}
 	}
+
+	/**
+	 * Get the component name of the plugin
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_component_name' to override default component name
+	 */
+	public static function get_component_name() {
+		return apply_filters( 'rendez_vous_get_component_name', __( 'Rendez-vous', 'rendez-vous' ) );
+	}
+
+	/**
+	 * Get the component slug of the plugin
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_component_slug' to override default component slug
+	 */
+	public static function get_component_slug() {
+		// Defining the slug in this way makes it possible for site admins to override it
+		if ( ! defined( 'RENDEZ_VOUS_SLUG' ) ) {
+			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
+		}
+
+		return sanitize_title( apply_filters( 'rendez_vous_get_component_slug', RENDEZ_VOUS_SLUG ) );
+	}
+
+	/**
+	 * Get the schedule slug of the component
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_schedule_slug' to override default schedule slug
+	 */
+	public static function get_schedule_slug() {
+		return sanitize_title( apply_filters( 'rendez_vous_get_schedule_slug', 'schedule' ) );
+	}
+
+	/**
+	 * Get the attend slug of the component
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_attend_slug' to override default attend slug
+	 */
+	public static function get_attend_slug() {
+		return sanitize_title( apply_filters( 'rendez_vous_get_attend_slug', 'attend' ) );
+	}
 }
 
 endif;
