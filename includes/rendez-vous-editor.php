@@ -360,7 +360,7 @@ function rendezvous_media_templates() {
 		<# } else if ( 'checkbox' === data.type ) { #>
 			<p>
 				<label for="{{data.id}}">{{data.label}} </label>
-				<input type="checkbox" id="{{data.id}}" value="{{data.value}}" class="rdv-check-what {{data.class}}"/> {{data.placeholder}}
+				<input type="checkbox" id="{{data.id}}" value="1" class="rdv-check-what {{data.class}}" <# if ( data.value == 1 ) { #>checked<# } #>/> {{data.placeholder}}
 			</p>
 		<# } else if ( 'timezone' === data.type ) { #>
 				<input type="hidden" id="{{data.id}}" value="{{data.value}}" class="rdv-hidden-what"/>
