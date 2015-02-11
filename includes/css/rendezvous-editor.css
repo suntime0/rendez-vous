@@ -91,7 +91,7 @@
 	width:100%;
 }
 
-.rdv-calendar .ui-datepicker-calendar th, 
+.rdv-calendar .ui-datepicker-calendar th,
 .rdv-calendar .ui-datepicker-calendar td {
 	text-align: center;
 }
@@ -130,7 +130,7 @@
 	text-align:center;
 }
 
-.rdv-calendar .ui-datepicker .ui-datepicker-prev, 
+.rdv-calendar .ui-datepicker .ui-datepicker-prev,
 .rdv-calendar .ui-datepicker .ui-datepicker-next {
 	top: -1px;
 	background: #298cba;
@@ -158,7 +158,7 @@
 	float:right;
 }
 
-.rdv-calendar .ui-datepicker .ui-datepicker-prev span, 
+.rdv-calendar .ui-datepicker .ui-datepicker-prev span,
 .rdv-calendar .ui-datepicker .ui-datepicker-next span {
 	margin-top: 2px;
 	text-indent:-9999px;
@@ -248,7 +248,7 @@
 	margin-right:5px;
 	height:50px;
 	text-align: left;
-	
+
 }
 .rendez-vous-users .user .displayname strong{
 	font-weight:bold;
@@ -261,7 +261,6 @@
 }
 
 .user-selection {
-	position: absolute;
 	top: 0;
 	left: 0;
 	right: 180px;
