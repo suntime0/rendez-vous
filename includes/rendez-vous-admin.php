@@ -109,7 +109,6 @@ class Rendez_Vous_Admin {
 	 * @subpackage Admin
 	 *
 	 * @since Rendez Vous (1.2.0)
-	 * @todo  localize strings, enqueue some css rules
 	 */
 	public function enqueue_script() {
 		$current_screen = get_current_screen();
@@ -122,7 +121,17 @@ class Rendez_Vous_Admin {
 		$suffix = SCRIPT_DEBUG ? '' : '.min';
 		$rdv = rendez_vous();
 
-		wp_enqueue_script( 'rendez-vous-admin-backbone', $rdv->plugin_js . "rendez-vous-admin-backbone$suffix.js", array( 'wp-backbone' ), $rdv->version, true );
+		wp_enqueue_style  ( 'rendez-vous-admin-style', $rdv->plugin_css . "rendezvous-admin$suffix.css", array( 'dashicons' ), $rdv->version );
+		wp_enqueue_script ( 'rendez-vous-admin-backbone', $rdv->plugin_js . "rendez-vous-admin-backbone$suffix.js", array( 'wp-backbone' ), $rdv->version, true );
+		wp_localize_script( 'rendez-vous-admin-backbone', 'rendez_vous_admin_vars', array(
+			'nonce'               => wp_create_nonce( 'rendez-vous-admin' ),
+			'placeholder_default' => esc_html__( 'Name of your rendez-vous type.', 'rendez-vous' ),
+			'placeholder_saving'  => esc_html__( 'Saving the rendez-vous type...', 'rendez-vous' ),
+			'placeholder_success' => esc_html__( 'Success: type saved.', 'rendez-vous' ),
+			'placeholder_error'   => esc_html__( 'Error: type not saved', 'rendez-vous' ),
+			'alert_notdeleted'    => esc_html__( 'Error: type not deleted', 'rendez-vous' ),
+			'current_edited_type' => esc_html__( 'Editing: %s', 'rendez-vous' ),
+		) );
 	}
 
 	/**
@@ -172,8 +181,6 @@ class Rendez_Vous_Admin {
 	 * @subpackage Admin
 	 *
 	 * @since Rendez Vous (1.2.0)
-	 *
-	 * @todo  edit a term
 	 */
 	public function admin_display() {
 		?>
@@ -183,7 +190,10 @@ class Rendez_Vous_Admin {
 
 			<h3><?php esc_html_e( 'Types', 'rendez-vous' ) ;?></h3>
 
-			<p class="description"><?php esc_html_e( 'Add your type in the field below and hit the return key to save it.', 'rendez-vous' ) ;?>
+			<p class="description rendez-vous-guide">
+				<?php esc_html_e( 'Add your type in the field below and hit the return key to save it.', 'rendez-vous' ) ;?>
+				<?php esc_html_e( 'To update a type, select it in the list, edit the name and hit the return key to save it.', 'rendez-vous' ) ;?>
+			</p>
 
 			<div class="rendez-vous-terms-admin">
 				<div class="rendez-vous-form"></div>
@@ -191,7 +201,7 @@ class Rendez_Vous_Admin {
 			</div>
 
 			<script id="tmpl-rendez-vous-term" type="text/html">
-				<b>{{data.name}}</b> <a href="#" class="rdv-delete-item" data-term_id="{{data.id}}">x</a>
+				<span class="rdv-term-name">{{data.name}}</span> <span class="rdv-term-actions"><a href="#" class="rdv-edit-item" data-term_id="{{data.id}}" title="<?php esc_attr_e( 'Edit type', 'rendez-vous' );?>"></a> <a href="#" class="rdv-delete-item" data-term_id="{{data.id}}" title="<?php esc_attr_e( 'Delete type', 'rendez-vous' );?>"></a></span>
 			</script>
 
 		</div>

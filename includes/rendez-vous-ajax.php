@@ -215,7 +215,7 @@ function rendez_vous_ajax_insert_term() {
 		wp_send_json_error();
 	}
 
-	//check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error();
@@ -227,7 +227,9 @@ function rendez_vous_ajax_insert_term() {
 		wp_send_json_error();
 	}
 
-	$inserted = wp_insert_term( $_POST['rendez_vous_type_name'], $taxonomy );
+	$term = esc_html( $_POST['rendez_vous_type_name'] );
+
+	$inserted = wp_insert_term( $term, $taxonomy );
 
 	if ( empty( $inserted['term_id'] ) || is_wp_error( $inserted ) ) {
 		wp_send_json_error();
@@ -251,10 +253,10 @@ add_action( 'wp_ajax_rendez_vous_insert_term', 'rendez_vous_ajax_insert_term' );
  *
  * @since Rendez Vous (1.2.0)
  *
- * @todo  nonce check, use a wrapper function for taxonomy_exists, get_terms making sure current blog is BuddyPress root blog
+ * @todo  use a wrapper function for taxonomy_exists, get_terms making sure current blog is BuddyPress root blog
  */
 function rendez_vous_ajax_get_terms() {
-	//check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error();
@@ -282,14 +284,14 @@ add_action( 'wp_ajax_rendez_vous_get_terms', 'rendez_vous_ajax_get_terms' );
  *
  * @since Rendez Vous (1.2.0)
  *
- * @todo  nonce check, use a wrapper function for taxonomy_exists, wp_delete_term making sure current blog is BuddyPress root blog
+ * @todo  use a wrapper function for taxonomy_exists, wp_delete_term making sure current blog is BuddyPress root blog
  */
 function rendez_vous_ajax_delete_term() {
 	if ( ! isset( $_POST['rendez_vous_type_id'] ) ) {
 		wp_send_json_error();
 	}
 
-	//check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error();
@@ -311,3 +313,42 @@ function rendez_vous_ajax_delete_term() {
 	wp_send_json_success();
 }
 add_action( 'wp_ajax_rendez_vous_delete_term', 'rendez_vous_ajax_delete_term' );
+
+/**
+ * Update a rendez-vous types
+ *
+ * @package Rendez Vous
+ * @subpackage Ajax
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @todo  use a wrapper function for taxonomy_exists, wp_update_term making sure current blog is BuddyPress root blog
+ */
+function rendez_vous_ajax_update_term() {
+	if ( ! isset( $_POST['rendez_vous_type_id'] ) || empty( $_POST['rendez_vous_type_name'] ) ) {
+		wp_send_json_error();
+	}
+
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	$taxonomy  = 'rendez_vous_type';
+	$term_id   = intval( $_POST['rendez_vous_type_id'] );
+	$term_name = esc_html( $_POST['rendez_vous_type_name'] );
+
+	if ( ! taxonomy_exists( $taxonomy ) ) {
+		wp_send_json_error();
+	}
+
+	$updated = wp_update_term( $term_id, $taxonomy, array( 'name' => $term_name ) );
+
+	if ( empty( $updated ) || is_wp_error( $updated ) ) {
+		wp_send_json_error();
+	}
+
+	wp_send_json_success();
+}
+add_action( 'wp_ajax_rendez_vous_update_term', 'rendez_vous_ajax_update_term' );
