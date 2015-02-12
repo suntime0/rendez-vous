@@ -14,8 +14,8 @@ window.wp = window.wp || {};
 		form: function() {
 			var form;
 
-	        this.form = new this.Views.Form();
-	        this.form.inject( '.rendez-vous-form' );
+			this.form = new this.Views.Form();
+			this.form.inject( '.rendez-vous-form' );
 		},
 
 		inject: function() {
@@ -72,7 +72,7 @@ window.wp = window.wp || {};
 			} else {
 				console.log( method );
 			}
-	    },
+		},
 
 		parse: function( resp, xhr ) {
 			if ( ! _.isArray( resp ) ) {

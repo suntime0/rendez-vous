@@ -25,9 +25,9 @@ class Rendez_Vous_Admin {
 	 * Setup Admin.
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 *
 	 * @uses buddypress() to get BuddyPress main instance.
 	 */
@@ -45,9 +45,9 @@ class Rendez_Vous_Admin {
 	 * The constructor
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	public function __construct() {
 		$this->setup_globals();
@@ -58,9 +58,9 @@ class Rendez_Vous_Admin {
 	 * Set some globals.
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	private function setup_globals() {}
 
@@ -68,9 +68,9 @@ class Rendez_Vous_Admin {
 	 * Set the actions & filters
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	private function setup_hooks() {
 		// update plugin's db version
@@ -91,9 +91,9 @@ class Rendez_Vous_Admin {
 	 * Update plugin version if needed
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	public function maybe_update() {
 		if ( version_compare( bp_get_option( 'rendez-vous-version', 0 ), rendez_vous()->version, '<' ) ) {
@@ -105,10 +105,10 @@ class Rendez_Vous_Admin {
 	/**
 	 * Enqueue script
 	 *
-	 * @package BP Avatar Suggestions
+	 * @package Rendez Vous
 	 * @subpackage Admin
-	 * @since   1.1.0
 	 *
+	 * @since Rendez Vous (1.2.0)
 	 * @todo  localize strings, enqueue some css rules
 	 */
 	public function enqueue_script() {
@@ -129,9 +129,9 @@ class Rendez_Vous_Admin {
 	 * Set the plugin's BuddyPress sub menu
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	public function admin_menu() {
 		$page  = bp_core_do_network_admin()  ? 'settings.php' : 'options-general.php';
@@ -152,9 +152,9 @@ class Rendez_Vous_Admin {
 	 * Modify highlighted menu
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	public function modify_highlight() {
 		global $plugin_page, $submenu_file;
@@ -169,11 +169,11 @@ class Rendez_Vous_Admin {
 	 * Display the admin
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
-     *
-     * @todo  edit a term
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @todo  edit a term
 	 */
 	public function admin_display() {
 		?>
@@ -202,9 +202,9 @@ class Rendez_Vous_Admin {
 	 * Hide submenu
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	public function admin_head() {
 		$page  = bp_core_do_network_admin()  ? 'settings.php' : 'options-general.php';
@@ -216,9 +216,9 @@ class Rendez_Vous_Admin {
 	 * Rendez-vous tab
 	 *
 	 * @package Rendez Vous
- 	 * @subpackage Admin
-     *
-     * @since Rendez Vous (1.2.0)
+	 * @subpackage Admin
+	 *
+	 * @since Rendez Vous (1.2.0)
 	 */
 	public function admin_tab() {
 		$class = false;
