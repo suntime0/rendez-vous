@@ -112,6 +112,26 @@ function rendez_vous_prepare_user_for_js( $users ) {
 }
 
 /**
+ * Prepare the term for js
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ */
+function rendez_vous_prepare_term_for_js( $term ) {
+
+	$response = array(
+		'id'    => intval( $term->term_id ),
+		'name'  => $term->name,
+		'slug'  => $term->slug,
+		'count' => intval( $term->count ),
+	);
+
+	return apply_filters( 'rendez_vous_prepare_term_for_js', $response, $term );
+}
+
+/**
  * Save a Rendez Vous
  *
  * @package Rendez Vous

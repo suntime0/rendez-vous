@@ -84,6 +84,10 @@ class Rendez_Vous_Component extends BP_Component {
 			$includes[] = 'rendez-vous-groups.php';
 		}
 
+		if ( is_admin() ) {
+			$includes[] = 'rendez-vous-admin.php';
+		}
+
 		parent::includes( $includes );
 	}
 
@@ -276,6 +280,20 @@ class Rendez_Vous_Component extends BP_Component {
 		parent::register_post_types();
 	}
 
+	/**
+	 * Register the rendez_vous types taxonomy
+	 *
+	 * @package Rendez_Vous
+	 * @subpackage Component
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 */
+	public function register_taxonomies() {
+		// Register the taxonomy
+		register_taxonomy( 'rendez_vous_type', 'rendez_vous', array(
+			'public' => false,
+		) );
+	}
 }
 
 /**
