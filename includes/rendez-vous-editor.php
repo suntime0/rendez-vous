@@ -205,13 +205,55 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		)
 	);
 
+	// Do we have rendez-vous types ?
+	if ( rendez_vous_has_types() ) {
+		$rendez_vous_types_choices     = array();
+		$rendez_vous_types_placeholder = array();
+
+		foreach ( rendez_vous()->types as $rendez_vous_type ) {
+			$rendez_vous_types_choices[]     = $rendez_vous_type->term_id;
+			$rendez_vous_types_placeholder[] = $rendez_vous_type->name;
+		}
+
+		// Set the rendez-voys types field arg
+		$rendez_vous_types_args = array(
+			'id'          => 'type',
+			'order'       => 15,
+			'type'        => 'selectbox',
+			'placeholder' => $rendez_vous_types_placeholder,
+			'label'       => esc_html__( 'Type', 'rendez-vous' ),
+			'value'       => '',
+			'tab'         => 'what',
+			'class'       => '',
+			'choices'     => $rendez_vous_types_choices
+		);
+
+		// Merge with other rendez-vous fields
+		$rendez_vous_fields['what'] = array_merge( $rendez_vous_fields['what'], array( $rendez_vous_types_args ) );
+	}
+
+	/**
+	 * Use 'rendez_vous_editor_extra_fields' to add custom fields, you should be able
+	 * to save them using the 'rendez_vous_after_saved' action.
+	 */
 	$rendez_vous_extra_fields = apply_filters( 'rendez_vous_editor_extra_fields', array() );
 	$rendez_vous_add_fields = array();
-
+ 
 	if ( ! empty( $rendez_vous_extra_fields ) && is_array( $rendez_vous_extra_fields ) ) {
+		// Some id are restricted to the plugin usage
+		$restricted = array(
+			'title'       => true,
+			'venue'       => true,
+			'type'        => true,
+			'description' => true,
+			'duration'    => true,
+			'privacy'     => true,
+			'utcoffset'   => true,
+		);
+
 		foreach ( $rendez_vous_extra_fields as $rendez_vous_extra_field ) {
-			// The id is required
-			if ( empty( $rendez_vous_extra_field['id'] ) ) {
+			// The id is required and some ids are restricted.
+			if ( empty( $rendez_vous_extra_field['id'] ) || ! empty( $restricted[ $rendez_vous_extra_field['id'] ] ) ) {
 				continue;
 			}
 
@@ -231,10 +273,10 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 
 	if ( ! empty( $rendez_vous_add_fields ) ) {
 		$rendez_vous_fields['what'] = array_merge( $rendez_vous_fields['what'], $rendez_vous_add_fields );
-
-		// Sort by the order key
-		$rendez_vous_fields['what'] = bp_sort_by_key( $rendez_vous_fields['what'], 'order', 'num' );
 	}
+
+	// Sort by the order key
+	$rendez_vous_fields['what'] = bp_sort_by_key( $rendez_vous_fields['what'], 'order', 'num' );
 
 	$rendez_vous_date_strings = array(
 		'daynames'    => array(

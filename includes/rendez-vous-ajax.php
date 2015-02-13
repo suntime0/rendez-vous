@@ -86,6 +86,7 @@ function rendez_vous_ajax_create() {
 	$args = array(
 		'title'       => '',
 		'venue'       => '',
+		'type'        => 0,
 		'description' => '',
 		'duration'    => '',
 		'days'        => array(),
@@ -208,7 +209,9 @@ add_action( 'wp_ajax_create_rendez_vous', 'rendez_vous_ajax_create' );
  *
  * @since Rendez Vous (1.2.0)
  *
- * @todo  nonce check, use a wrapper function for taxonomy_exists, wp_insert_term, get_term making sure current blog is BuddyPress root blog
+ * @uses  rendez_vous_taxonomy_exists
+ * @uses  rendez_vous_insert_term()
+ * @uses  rendez_vous_get_term()
  */
 function rendez_vous_ajax_insert_term() {
 	if ( ! isset( $_POST['rendez_vous_type_name'] ) ) {
@@ -221,21 +224,19 @@ function rendez_vous_ajax_insert_term() {
 		wp_send_json_error();
 	}
 
-	$taxonomy = 'rendez_vous_type';
-
-	if ( ! taxonomy_exists( $taxonomy ) ) {
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
 		wp_send_json_error();
 	}
 
 	$term = esc_html( $_POST['rendez_vous_type_name'] );
 
-	$inserted = wp_insert_term( $term, $taxonomy );
+	$inserted = rendez_vous_insert_term( $term );
 
 	if ( empty( $inserted['term_id'] ) || is_wp_error( $inserted ) ) {
 		wp_send_json_error();
 	}
 
-	$term = rendez_vous_prepare_term_for_js( get_term( $inserted['term_id'], $taxonomy ) );
+	$term = rendez_vous_prepare_term_for_js( rendez_vous_get_term( $inserted['term_id'] ) );
 
 	if ( empty( $term ) ) {
 		wp_send_json_error();
@@ -253,7 +254,8 @@ add_action( 'wp_ajax_rendez_vous_insert_term', 'rendez_vous_ajax_insert_term' );
  *
  * @since Rendez Vous (1.2.0)
  *
- * @todo  use a wrapper function for taxonomy_exists, get_terms making sure current blog is BuddyPress root blog
+ * @uses  rendez_vous_taxonomy_exists
+ * @uses  rendez_vous_get_terms()
  */
 function rendez_vous_ajax_get_terms() {
 	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
@@ -262,13 +264,11 @@ function rendez_vous_ajax_get_terms() {
 		wp_send_json_error();
 	}
 
-	$taxonomy = 'rendez_vous_type';
-
-	if ( ! taxonomy_exists( $taxonomy ) ) {
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
 		wp_send_json_error();
 	}
 
-	$terms = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+	$terms = rendez_vous_get_terms( array( 'hide_empty' => false ) );
 	$terms = array_map( 'rendez_vous_prepare_term_for_js', array_values( $terms ) );
 	$terms = array_filter( $terms );
 
@@ -284,7 +284,8 @@ add_action( 'wp_ajax_rendez_vous_get_terms', 'rendez_vous_ajax_get_terms' );
  *
  * @since Rendez Vous (1.2.0)
  *
- * @todo  use a wrapper function for taxonomy_exists, wp_delete_term making sure current blog is BuddyPress root blog
+ * @uses  rendez_vous_taxonomy_exists
+ * @uses  rendez_vous_delete_term()
  */
 function rendez_vous_ajax_delete_term() {
 	if ( ! isset( $_POST['rendez_vous_type_id'] ) ) {
@@ -297,14 +298,13 @@ function rendez_vous_ajax_delete_term() {
 		wp_send_json_error();
 	}
 
-	$taxonomy = 'rendez_vous_type';
-	$term_id = intval( $_POST['rendez_vous_type_id'] );
-
-	if ( ! taxonomy_exists( $taxonomy ) ) {
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
 		wp_send_json_error();
 	}
 
-	$deleted = wp_delete_term( $term_id, $taxonomy );
+	$term_id = intval( $_POST['rendez_vous_type_id'] );
+
+	$deleted = rendez_vous_delete_term( $term_id );
 
 	if ( empty( $deleted ) || is_wp_error( $deleted ) ) {
 		wp_send_json_error();
@@ -335,15 +335,14 @@ function rendez_vous_ajax_update_term() {
 		wp_send_json_error();
 	}
 
-	$taxonomy  = 'rendez_vous_type';
-	$term_id   = intval( $_POST['rendez_vous_type_id'] );
-	$term_name = esc_html( $_POST['rendez_vous_type_name'] );
-
-	if ( ! taxonomy_exists( $taxonomy ) ) {
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
 		wp_send_json_error();
 	}
 
-	$updated = wp_update_term( $term_id, $taxonomy, array( 'name' => $term_name ) );
+	$term_id   = intval( $_POST['rendez_vous_type_id'] );
+	$term_name = esc_html( $_POST['rendez_vous_type_name'] );
+
+	$updated = rendez_vous_update_term( $term_id, array( 'name' => $term_name ) );
 
 	if ( empty( $updated ) || is_wp_error( $updated ) ) {
 		wp_send_json_error();

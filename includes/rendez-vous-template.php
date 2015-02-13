@@ -11,6 +11,40 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/** Type Filrer ***************************************************************/
+
+function render_vous_type_filter() {
+	if ( ! rendez_vous_has_types() ) {
+		return;
+	}
+
+	$selected_type = '';
+
+	if ( ! empty( $_REQUEST['type'] ) ) {
+		$selected_type = sanitize_title( $_REQUEST['type'] );
+	}
+	?>
+
+	<form id="rendez-vous-types-filter-form" action="">
+
+		<select name="type">
+
+			<option value="">---</option>
+
+			<?php foreach ( rendez_vous()->types as $type ) : ?>
+
+				<option value="<?php echo esc_attr( $type->slug ) ;?>" <?php selected( $selected_type, $type->slug );?>><?php echo esc_attr( $type->name ) ;?></option>
+
+			<?php endforeach; ?>
+
+		</select>
+
+		<input type="submit" value="<?php esc_attr_e( 'Filter', 'rendez-vous' ); ?>"/>
+
+	</form>
+	<?php
+}
+
 /** Main Loop *****************************************************************/
 
 /**
@@ -160,6 +194,14 @@ class Rendez_Vous_Template {
 	public $sort_order;
 
 	/**
+	 * The type to filter the results with
+	 *
+	 * @access public
+	 * @var string
+	 */
+	public $type;
+
+	/**
 	 * Constructor method.
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -177,6 +219,7 @@ class Rendez_Vous_Template {
 			'order'     => 'DESC',
 			'page_arg'  => 'rpage',
 			'group_id'  => false,
+			'type'      => '',
 		);
 
 		// Parse arguments
@@ -193,13 +236,14 @@ class Rendez_Vous_Template {
 		$this->pag_page     = $pag_page;
 		$this->pag_num      = $r['per_page'];
 		$this->attendees    = $r['attendees'];
-		$this->organizer    = $r['organizer'];
+		$this->organizer    = (int) $r['organizer'];
 		$this->search_terms = $r['search'];
 		$this->exclude      = $r['exclude'];
 		$this->page_arg     = $r['page_arg'];
 		$this->order_by     = $r['orderby'];
 		$this->sort_order   = $r['order'];
 		$this->group_id     = $r['group_id'];
+		$this->type         = $r['type'];
 
 		// Get the Rendez Vous
 		$rendez_vouss      = rendez_vous_get_items( array(
@@ -212,6 +256,7 @@ class Rendez_Vous_Template {
 			'orderby' 	=> $this->order_by,
 			'order'     => $this->sort_order,
 			'group_id'  => $this->group_id,
+			'type'      => $this->type,
 		) );
 
 		// Setup the Rendez Vous to loop through
@@ -226,6 +271,12 @@ class Rendez_Vous_Template {
 		}
 
 		if ( (int) $this->total_rendez_vous_count && (int) $this->pag_num ) {
+			$add_args = array();
+
+			if ( ! empty( $this->type ) ) {
+				$add_args['type'] = $this->type;
+			}
+
 			$this->pag_links = paginate_links( array(
 				'base'      => add_query_arg( $this->page_arg, '%#%' ),
 				'format'    => '',
@@ -234,6 +285,7 @@ class Rendez_Vous_Template {
 				'prev_text' => _x( '&larr;', 'rendez-vous pagination previous text', 'rendez-vous' ),
 				'next_text' => _x( '&rarr;', 'rendez-vous pagination next text',     'rendez-vous' ),
 				'mid_size'  => 1,
+				'add_args'  => $add_args,
 			) );
 
 			// Remove first page from pagination
@@ -342,6 +394,7 @@ function rendez_vous_has_rendez_vouss( $args = array() ) {
 	// init vars
 	$organizer = false;
 	$attendees = array();
+	$type = '';
 
 	// Get the user ID
 	if ( bp_is_user() ) {
@@ -351,6 +404,14 @@ function rendez_vous_has_rendez_vouss( $args = array() ) {
 			$attendee_id = bp_is_my_profile() ? bp_loggedin_user_id() : bp_displayed_user_id();
 			$attendees = array( $attendee_id );
 		}
+
+		if ( bp_is_current_component( rendez_vous()->get_component_slug() ) && ! empty( $_REQUEST['type'] ) ) {
+			$type = sanitize_title( $_REQUEST['type'] );
+		}
+	}
+
+	if ( bp_is_group() && bp_is_current_action( rendez_vous()->get_component_slug() ) && ! empty( $_REQUEST['type'] ) ) {
+		$type = sanitize_title( $_REQUEST['type'] );
 	}
 
 	// Parse the args
@@ -364,6 +425,7 @@ function rendez_vous_has_rendez_vouss( $args = array() ) {
 		'orderby' 	=> 'modified',
 		'order'     => 'DESC',
 		'page_arg'  => 'rpage',
+		'type'      => $type,
 	), 'rendez_vouss_has_args' );
 
 	// Get the Rendez Vous
@@ -605,6 +667,37 @@ function rendez_vous_has_description() {
 	return $user_can;
 }
 
+function rendez_vous_the_type() {
+	echo rendez_vous_get_the_type();
+}
+add_action( 'rendez_vous_after_item_description', 'rendez_vous_the_type' );
+
+	function rendez_vous_get_the_type() {
+		if ( ! rendez_vous_has_types() ) {
+			return false;
+		}
+
+		$types = rendez_vous_get_type( rendez_vous_get_the_rendez_vous_id() );
+
+		if ( empty( $types ) ) {
+			return false;
+		}
+
+		$type_names = wp_list_pluck( $types, 'name' );
+		$type_name = array_pop( $type_names );
+
+		$type_slugs = wp_list_pluck( $types, 'slug' );
+		$type_slug = array_pop( $type_slugs );
+
+		$output = sprintf( '<div class="item-desc"><a href="?type=%s" title="%s" class="rendez-vous-type">%s</a></div>', 
+			esc_attr( $type_slug ),
+			esc_attr__( 'Filter rendez-vous having this type', 'rendez-vous' ),
+			esc_html( $type_name )
+		);
+
+		return apply_filters( 'rendez_vous_get_the_type', $output, $type_name, $type_slug );
+	}
+
 /**
  * Output the description of the Rendez Vous.
  *
@@ -815,6 +908,82 @@ function rendez_vous_single_the_venue() {
 	 */
 	function rendez_vous_single_get_the_venue() {
 		return apply_filters( 'rendez_vous_single_get_the_venue', rendez_vous()->item->venue );
+	}
+
+/**
+ * Check if the current Rendez Vous has a type.
+ *
+ * @since Rendez Vous (1.2.0)
+ */
+function rendez_vous_single_has_type() {
+	return (bool) apply_filters( 'rendez_vous_single_has_type', rendez_vous_has_types( rendez_vous()->item ), rendez_vous()->item );
+}
+
+/**
+ * Output the type of the Rendez Vous.
+ *
+ * @since Rendez Vous (1.2.0)
+ */
+function rendez_vous_single_the_type() {
+	echo rendez_vous_single_get_the_type();
+}
+
+	/**
+	 * Return the type of the Rendez Vous.
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 */
+	function rendez_vous_single_get_the_type() {
+		$type = '';
+
+		if ( ! empty( rendez_vous()->item->type ) ) {
+			$types = wp_list_pluck( rendez_vous()->item->type, 'name' );
+			$type = array_pop( $types );
+		}
+		
+		return apply_filters( 'rendez_vous_single_get_the_type', $type, rendez_vous()->item->type );
+	}
+
+/**
+ * Output the selectbox to choose type for the Rendez Vous.
+ *
+ * @since Rendez Vous (1.2.0)
+ */
+function rendez_vous_single_edit_the_type() {
+	echo rendez_vous_single_edit_get_the_type();
+}
+	
+	/**
+	 * Return the selectbox to choose type for the Rendez Vous.
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 */
+	function rendez_vous_single_edit_get_the_type() {
+		$rdv = rendez_vous();
+
+		if ( empty( $rdv->types ) ) {
+			$types = rendez_vous_get_terms( array( 'hide_empty' => false ) );
+			$rdv->types = $types;
+		} else {
+			$types = $rdv->types;
+		}
+
+		$output = '<select name="_rendez_vous_edit[type]"><option value="">---</option>';
+
+		$selected_type = 0;
+
+		if ( ! empty( rendez_vous()->item->type ) ) {
+			$selected_types = wp_list_pluck( rendez_vous()->item->type, 'term_id' );
+			$selected_type = array_pop( $selected_types );
+		}
+
+		foreach ( $types as $type ) {
+			$output .= '<option value="' . intval( $type->term_id ) . '" ' . selected( $type->term_id, $selected_type, false ) . '>' . esc_attr( $type->name ) . '</option>';
+		}
+
+		$output .= '</select>';
+
+		return apply_filters( 'rendez_vous_single_edit_get_the_type', $output, $selected_type, $types, rendez_vous()->item );
 	}
 
 /**

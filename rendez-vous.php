@@ -51,7 +51,7 @@ class Rendez_Vous {
 	 *
 	 * @var      string
 	 */
-	public static $required_bp_version = '2.1';
+	public static $required_bp_version = '2.2';
 
 	/**
 	 * BuddyPress config.

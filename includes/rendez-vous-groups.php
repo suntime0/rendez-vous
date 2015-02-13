@@ -420,7 +420,12 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				$group_id = bp_get_current_group_id();
 			}
 			?>
-			<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => $group_id ) ); ?></h1>
+			<h3>
+				<ul id="rendez-vous-nav">
+					<li><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => $group_id ) ); ?></li> 
+					<li class="last"><?php render_vous_type_filter(); ?></li>
+				</ul>
+			</h3>
 			<?php rendez_vous_loop();
 		}
 	}

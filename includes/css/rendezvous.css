@@ -1,3 +1,20 @@
+body.rendez-vous ul#rendez-vous-nav {
+	overflow: hidden;
+	list-style: none;
+	padding-bottom: 10px;
+}
+
+body.rendez-vous ul#rendez-vous-nav li {
+	margin:0;
+	width:48%;
+	display:inline-block;
+}
+
+body.rendez-vous ul#rendez-vous-nav li.last,
+body.rendez-vous form#rendez-vous-types-filter-form {
+	float:right;
+}
+
 body.rendez-vous .item-list .rendez-vous-avatar {
 	width:50px;
 	height:50px;
@@ -35,6 +52,16 @@ body.rendez-vous .item-list .rendez-vous-avatar.icon-publish:before {
 
 body.rendez-vous .item-list .rendez-vous-avatar.icon-draft:before {
 	content: "\f464";
+}
+
+body.rendez-vous .item-list .item-desc a.rendez-vous-type {
+	display:inline-block;
+	margin:0 8px 0 0;
+	background:#f0f0f0;
+	text-decoration: none;
+	border:none;
+	padding:3px;
+	font-size: 110%;
 }
 
 body.rendez-vous #rendez-vous-view-btn.right,
