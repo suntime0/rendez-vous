@@ -2,8 +2,8 @@
 Contributors: imath
 Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
-Requires at least: 4.0
-Tested up to: 4.0
+Requires at least: 4.1
+Tested up to: 4.1
 Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -39,6 +39,9 @@ Yes!! Since 1.1 :)
 
 == Upgrade Notice ==
 
+= 1.2.0 =
+Make sure to use WordPress 4.1 & BuddyPress 2.2
+
 = 1.1.0 =
 Make sure to use WordPress 4.0 & BuddyPress 2.1
 
@@ -52,6 +55,12 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.2.0 =
+
+* Rendez-vous Types : it's now possible to add a type to a rendez-vous and filter the loops by type
+* Slugs are customizable using filters (WordPress Plugin API)
+* Fix some other bugs, in particular a localization one for the BuddyPress Groups component.
 
 = 1.1.0 =
 

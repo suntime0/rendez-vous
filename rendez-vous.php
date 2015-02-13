@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        http://imathi.eu/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.2.0-alpha
+ * Version:           1.2.0-beta
  * Author:            imath
  * Author URI:        http://imathi.eu
  * Text Domain:       rendez-vous
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.2.0-alpha';
+		$this->version       = '1.2.0-beta';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
