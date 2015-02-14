@@ -164,8 +164,6 @@ class Rendez_Vous {
 			// Load the component
 			add_action( 'bp_loaded', 'rendez_vous_load_component' );
 
-			add_filter( 'map_meta_cap', 'rendez_vous_map_meta_caps', 10, 4 );
-
 			// Enqueue the needed script and css files
 			add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Rendez-Vous\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/rendez-vous\n"
-"POT-Creation-Date: 2015-02-13 19:44:07+00:00\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
+"POT-Creation-Date: 2015-02-14 14:35:03+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.7.4\n"
+"X-Generator: Poedit 1.7.1\n"
 
 #: includes/rendez-vous-activity.php:26
 msgid "Record an activity for all members"
@@ -70,7 +70,7 @@ msgstr "Réglages de Rendez-vous"
 
 #: includes/rendez-vous-admin.php:189 includes/rendez-vous-admin.php:243
 #: includes/rendez-vous-loader.php:144 includes/rendez-vous-loader.php:211
-#: includes/rendez-vous-loader.php:249 rendez-vous.php:390
+#: includes/rendez-vous-loader.php:249 rendez-vous.php:388
 msgid "Rendez-vous"
 msgstr "Rendez-vous"
 
@@ -490,11 +490,11 @@ msgstr "Désélectionner"
 msgid "Clear"
 msgstr "Effacer"
 
-#: includes/rendez-vous-filters.php:423
+#: includes/rendez-vous-filters.php:424
 msgid "Download the iCal file"
 msgstr "Télécharger le fichier calendrier (.ics)"
 
-#: includes/rendez-vous-filters.php:470
+#: includes/rendez-vous-filters.php:471
 msgid "You must log in to download the calendar file."
 msgstr "Vous devez être connecté pour télécharger le fichier calendrier."
 
@@ -973,28 +973,28 @@ msgstr "Mettre à jour ses préférences."
 msgid "Set the date"
 msgstr "Fixer la date"
 
-#: rendez-vous.php:196
+#: rendez-vous.php:194
 msgid "Rendez Vous requires at least version %s of BuddyPress."
 msgstr "Rendez-vous requiert à minima la version %s de BuddyPress"
 
-#: rendez-vous.php:206
+#: rendez-vous.php:204
 msgid ""
 "Rendez Vous requires to be activated on the blog where BuddyPress is "
 "activated."
 msgstr ""
 "Rendez Vous a besoin d’être activé sur le blog où est activé BuddyPress"
 
-#: rendez-vous.php:210
+#: rendez-vous.php:208
 msgid ""
 "Rendez Vous and BuddyPress need to share the same network configuration."
 msgstr ""
 "Rendez Vous a besoin de partager la même configuration réseau que BuddyPress."
 
-#: rendez-vous.php:263
+#: rendez-vous.php:261
 msgid "Are you sure you want to cancel this rendez-vous ?"
 msgstr "Etes vous certain de vouloir annuler ce rendez-vous ?"
 
-#: rendez-vous.php:264
+#: rendez-vous.php:262
 msgid "This rendez-vous is restricted and you have not been invited to it."
 msgstr ""
 "Ce rendez-vous est réservé, vous n’avez pas été invité par son organisateur."

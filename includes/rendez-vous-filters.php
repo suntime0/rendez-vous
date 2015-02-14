@@ -314,6 +314,7 @@ function rendez_vous_map_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 
 	return apply_filters( 'rendez_vous_map_meta_caps', $caps, $cap, $user_id, $args );
 }
+add_filter( 'map_meta_cap', 'rendez_vous_map_meta_caps', 10, 4 );
 
 /*** Editor filters, inspired by bbPress way of dealing with it ***/
 
