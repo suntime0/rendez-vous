@@ -238,7 +238,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 	 */
 	$rendez_vous_extra_fields = apply_filters( 'rendez_vous_editor_extra_fields', array() );
 	$rendez_vous_add_fields = array();
- 
+
 	if ( ! empty( $rendez_vous_extra_fields ) && is_array( $rendez_vous_extra_fields ) ) {
 		// Some id are restricted to the plugin usage
 		$restricted = array(

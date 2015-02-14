@@ -422,7 +422,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			?>
 			<h3>
 				<ul id="rendez-vous-nav">
-					<li><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => $group_id ) ); ?></li> 
+					<li><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => $group_id ) ); ?></li>
 					<li class="last"><?php render_vous_type_filter(); ?></li>
 				</ul>
 			</h3>
@@ -604,14 +604,14 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 			/**
 			 * Use this filter to show all displayed user's rendez-vous no matter if they are attached to an hidden group
 			 * eg: add_filter( 'rendez_vous_member_hide_hidden', '__return_false' );
-			 * 
+			 *
 			 * To respect the hidden group visibility, by default, a member not viewing his profile will be returned false
 			 * avoiding him to see the displayed member's rendez-vous attached to an hidden group
-			 * 
+			 *
 			 * @param bool false if a user is viewing his profile or an admin is viewing any user profile, true otherwise
 			 */
 			$hide_hidden = apply_filters( 'rendez_vous_member_hide_hidden', (bool) ! bp_is_my_profile() && ! bp_current_user_can( 'bp_moderate' ) );
-			
+
 			if ( ! empty( $hide_hidden ) ) {
 				$args['exclude'] = self::get_hidden_rendez_vous();
 			}
@@ -622,16 +622,16 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 
 	/**
 	 * Gets the user's rendez-vous that are attached to an hidden group
-	 * 
+	 *
 	 * As, it's not possible to do a mix of 'AND' and 'OR' relation with WP_Meta_Queries,
 	 * we are using the exclude args of the rendez-vous loop to exclude the rendez-vous
 	 * ids that are attached to an hidden group.
-	 * 
+	 *
 	 * @package Rendez Vous
 	 * @subpackage Groups
 	 *
 	 * @since Rendez Vous (1.1.0)
-	 * 
+	 *
 	 * @param   int                    $user_id the user id
 	 * @global  $wpdb
 	 * @uses    buddypress()           to get BuddyPress main instance
@@ -652,7 +652,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 
 		// BP_Groups_Member::get_group_ids does not suit the need
 		$user_hidden_groups = $wpdb->prepare( "SELECT DISTINCT m.group_id FROM {$bp->groups->table_name_members} m LEFT JOIN {$bp->groups->table_name} g ON ( g.id = m.group_id ) WHERE g.status = 'hidden' AND m.user_id = %d AND m.is_confirmed = 1 AND m.is_banned = 0", $user_id );
-		
+
 		// Get the rendez-vous attached to an hidden group of the user.
 		$hidden_rendez_vous = "SELECT pm.post_id FROM {$wpdb->postmeta} pm WHERE pm.meta_key = '_rendez_vous_group_id' AND pm.meta_value IN ( {$user_hidden_groups} )";
 		$hide = $wpdb->get_col( $hidden_rendez_vous );

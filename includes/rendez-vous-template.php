@@ -689,7 +689,7 @@ add_action( 'rendez_vous_after_item_description', 'rendez_vous_the_type' );
 		$type_slugs = wp_list_pluck( $types, 'slug' );
 		$type_slug = array_pop( $type_slugs );
 
-		$output = sprintf( '<div class="item-desc"><a href="?type=%s" title="%s" class="rendez-vous-type">%s</a></div>', 
+		$output = sprintf( '<div class="item-desc"><a href="?type=%s" title="%s" class="rendez-vous-type">%s</a></div>',
 			esc_attr( $type_slug ),
 			esc_attr__( 'Filter rendez-vous having this type', 'rendez-vous' ),
 			esc_html( $type_name )
@@ -940,7 +940,7 @@ function rendez_vous_single_the_type() {
 			$types = wp_list_pluck( rendez_vous()->item->type, 'name' );
 			$type = array_pop( $types );
 		}
-		
+
 		return apply_filters( 'rendez_vous_single_get_the_type', $type, rendez_vous()->item->type );
 	}
 
@@ -952,7 +952,7 @@ function rendez_vous_single_the_type() {
 function rendez_vous_single_edit_the_type() {
 	echo rendez_vous_single_edit_get_the_type();
 }
-	
+
 	/**
 	 * Return the selectbox to choose type for the Rendez Vous.
 	 *

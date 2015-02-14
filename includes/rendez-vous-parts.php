@@ -9,7 +9,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Schedule screen title
@@ -22,7 +22,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 function rendez_vous_schedule_title() {
 	?>
 	<ul id="rendez-vous-nav">
-		<li><?php rendez_vous_editor( 'new-rendez-vous' ); ?></li> 
+		<li><?php rendez_vous_editor( 'new-rendez-vous' ); ?></li>
 		<li class="last"><?php render_vous_type_filter(); ?></li>
 	</ul>
 	<?php
