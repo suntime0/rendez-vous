@@ -395,7 +395,7 @@ class Rendez_Vous {
 	 *
 	 * @since Rendez Vous (1.2.0)
 	 *
-	 * @todo apply_filters() to call 'rendez_vous_get_component_slug' to override default component slug
+	 * @uses apply_filters() call 'rendez_vous_get_component_slug' to override default component slug
 	 */
 	public static function get_component_slug() {
 		// Defining the slug in this way makes it possible for site admins to override it
@@ -403,7 +403,7 @@ class Rendez_Vous {
 			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
 		}
 
-		return RENDEZ_VOUS_SLUG;
+		return sanitize_title( apply_filters( 'rendez_vous_get_component_slug', RENDEZ_VOUS_SLUG ) );
 	}
 
 	/**
@@ -413,10 +413,10 @@ class Rendez_Vous {
 	 *
 	 * @since Rendez Vous (1.2.0)
 	 *
-	 * @todo apply_filters() to call 'rendez_vous_get_schedule_slug' to override default schedule slug
+	 * @uses apply_filters() call 'rendez_vous_get_schedule_slug' to override default schedule slug
 	 */
 	public static function get_schedule_slug() {
-		return 'schedule';
+		return sanitize_title( apply_filters( 'rendez_vous_get_schedule_slug', 'schedule' ) );
 	}
 
 	/**
@@ -426,10 +426,10 @@ class Rendez_Vous {
 	 *
 	 * @since Rendez Vous (1.2.0)
 	 *
-	 * @todo apply_filters() to call 'rendez_vous_get_attend_slug' to override default attend slug
+	 * @uses apply_filters() call 'rendez_vous_get_attend_slug' to override default attend slug
 	 */
 	public static function get_attend_slug() {
-		return 'attend';
+		return sanitize_title( apply_filters( 'rendez_vous_get_attend_slug', 'attend' ) );
 	}
 }
 
