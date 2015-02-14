@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Rendez Vous package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rendez Vous 1.2.0-beta\n"
+"Project-Id-Version: Rendez Vous 1.2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2015-02-14 14:35:03+00:00\n"
+"POT-Creation-Date: 2015-02-14 17:36:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -68,8 +68,8 @@ msgid "Rendez-vous Settings"
 msgstr ""
 
 #: includes/rendez-vous-admin.php:189 includes/rendez-vous-admin.php:243
-#: includes/rendez-vous-loader.php:144 includes/rendez-vous-loader.php:211
-#: includes/rendez-vous-loader.php:249 rendez-vous.php:388
+#: includes/rendez-vous-loader.php:211 includes/rendez-vous-loader.php:249
+#: rendez-vous.php:388
 msgid "Rendez-vous"
 msgstr ""
 

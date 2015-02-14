@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rendez-Vous\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rendez-vous\n"
-"POT-Creation-Date: 2015-02-14 14:35:03+00:00\n"
+"POT-Creation-Date: 2015-02-14 17:36:02+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
@@ -69,8 +69,8 @@ msgid "Rendez-vous Settings"
 msgstr "Réglages de Rendez-vous"
 
 #: includes/rendez-vous-admin.php:189 includes/rendez-vous-admin.php:243
-#: includes/rendez-vous-loader.php:144 includes/rendez-vous-loader.php:211
-#: includes/rendez-vous-loader.php:249 rendez-vous.php:388
+#: includes/rendez-vous-loader.php:211 includes/rendez-vous-loader.php:249
+#: rendez-vous.php:388
 msgid "Rendez-vous"
 msgstr "Rendez-vous"
 

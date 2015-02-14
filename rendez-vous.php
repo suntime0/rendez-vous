@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        http://imathi.eu/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.2.0-beta
+ * Version:           1.2.0
  * Author:            imath
  * Author URI:        http://imathi.eu
  * Text Domain:       rendez-vous
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.2.0-beta';
+		$this->version       = '1.2.0';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
@@ -395,7 +395,7 @@ class Rendez_Vous {
 	 *
 	 * @since Rendez Vous (1.2.0)
 	 *
-	 * @uses apply_filters() call 'rendez_vous_get_component_slug' to override default component slug
+	 * @todo apply_filters() to call 'rendez_vous_get_component_slug' to override default component slug
 	 */
 	public static function get_component_slug() {
 		// Defining the slug in this way makes it possible for site admins to override it
@@ -403,7 +403,7 @@ class Rendez_Vous {
 			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
 		}
 
-		return sanitize_title( apply_filters( 'rendez_vous_get_component_slug', RENDEZ_VOUS_SLUG ) );
+		return RENDEZ_VOUS_SLUG;
 	}
 
 	/**
@@ -413,10 +413,10 @@ class Rendez_Vous {
 	 *
 	 * @since Rendez Vous (1.2.0)
 	 *
-	 * @uses apply_filters() call 'rendez_vous_get_schedule_slug' to override default schedule slug
+	 * @todo apply_filters() to call 'rendez_vous_get_schedule_slug' to override default schedule slug
 	 */
 	public static function get_schedule_slug() {
-		return sanitize_title( apply_filters( 'rendez_vous_get_schedule_slug', 'schedule' ) );
+		return 'schedule';
 	}
 
 	/**
@@ -426,10 +426,10 @@ class Rendez_Vous {
 	 *
 	 * @since Rendez Vous (1.2.0)
 	 *
-	 * @uses apply_filters() call 'rendez_vous_get_attend_slug' to override default attend slug
+	 * @todo apply_filters() to call 'rendez_vous_get_attend_slug' to override default attend slug
 	 */
 	public static function get_attend_slug() {
-		return sanitize_title( apply_filters( 'rendez_vous_get_attend_slug', 'attend' ) );
+		return 'attend';
 	}
 }
 

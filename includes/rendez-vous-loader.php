@@ -139,9 +139,9 @@ class Rendez_Vous_Component extends BP_Component {
 	 * @since Rendez Vous (1.0.0)
 	 */
 	function setup_nav( $main_nav = array(), $sub_nav = array() ) {
-		// Add 'Example' to the main navigation
+		// Add 'Rendez-vous' to the main navigation
 		$main_nav = array(
-			'name' 		          => __( 'Rendez-vous', 'rendez-vous' ),
+			'name' 		          => rendez_vous()->get_component_name(),
 			'slug' 		          => $this->slug,
 			'position' 	          => 80,
 			'screen_function'     => array( 'Rendez_Vous_Screens', 'public_screen' ),

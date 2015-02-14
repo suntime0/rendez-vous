@@ -4,7 +4,7 @@ Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
 Requires at least: 4.1
 Tested up to: 4.1
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,7 +59,6 @@ nothing particular
 = 1.2.0 =
 
 * Rendez-vous Types : it's now possible to add a type to a rendez-vous and filter the loops by type
-* Slugs are customizable using filters (WordPress Plugin API)
 * Fix some other bugs, in particular a localization one for the BuddyPress Groups component.
 
 = 1.1.0 =
