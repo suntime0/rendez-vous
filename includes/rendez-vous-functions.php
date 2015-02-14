@@ -47,6 +47,7 @@ function rendez_vous_get_items( $args = array() ) {
 		'orderby' 		  => 'modified',
 		'order'           => 'DESC',
 		'group_id'        => false,
+		'type'            => '',
 	);
 
 	$r = bp_parse_args( $args, $defaults, 'rendez_vous_get_items_args' );
@@ -64,6 +65,7 @@ function rendez_vous_get_items( $args = array() ) {
 			'orderby' 		  => $r['orderby'],
 			'order'           => $r['order'],
 			'group_id'        => $r['group_id'],
+			'type'            => $r['type'],
 		) );
 
 		wp_cache_set( 'rendez_vous_rendez_vouss', $rendez_vouss, 'bp' );
@@ -112,6 +114,26 @@ function rendez_vous_prepare_user_for_js( $users ) {
 }
 
 /**
+ * Prepare the term for js
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ */
+function rendez_vous_prepare_term_for_js( $term ) {
+
+	$response = array(
+		'id'    => intval( $term->term_id ),
+		'name'  => $term->name,
+		'slug'  => $term->slug,
+		'count' => intval( $term->count ),
+	);
+
+	return apply_filters( 'rendez_vous_prepare_term_for_js', $response, $term );
+}
+
+/**
  * Save a Rendez Vous
  *
  * @package Rendez Vous
@@ -126,6 +148,7 @@ function rendez_vous_save( $args = array() ) {
 		'organizer'   => bp_loggedin_user_id(),
 		'title'       => '',
 		'venue'       => '',
+		'type'        => 0, 
 		'description' => '',
 		'duration'    => '',
 		'privacy'     => '',
@@ -144,9 +167,10 @@ function rendez_vous_save( $args = array() ) {
 	// Using rendez_vous
 	$rendez_vous = new Rendez_Vous_Item( $r['id'] );
 
-	$rendez_vous->organizer   = $r['organizer'];
+	$rendez_vous->organizer   = (int) $r['organizer'];
 	$rendez_vous->title       = $r['title'];
 	$rendez_vous->venue       = $r['venue'];
+	$rendez_vous->type        = (int) $r['type'];
 	$rendez_vous->description = $r['description'];
 	$rendez_vous->duration    = $r['duration'];
 	$rendez_vous->privacy     = $r['privacy'];
@@ -276,7 +300,7 @@ function rendez_vous_get_delete_link( $id = 0, $organizer_id = 0 ) {
  * iCal Link
  *
  * @package Rendez Vous
- * @subpackage Filters
+ * @subpackage Functions
  *
  * @since Rendez Vous (1.1.0)
  *
@@ -321,7 +345,7 @@ function rendez_vous_maybe_upgrade() {
  * Handle rendez-vous actions (group/member contexts)
  *
  * @package Rendez Vous
- * @subpackage Filters
+ * @subpackage Functions
  *
  * @since Rendez Vous (1.1.0)
  *
@@ -516,7 +540,7 @@ function rendez_vous_handle_actions() {
  * Generates an iCal file using the rendez-vous datas
  *
  * @package Rendez Vous
- * @subpackage Filters
+ * @subpackage Functions
  *
  * @since Rendez Vous (1.1.0)
  *
@@ -614,3 +638,278 @@ END:VCALENDAR<?php echo "\n"; ?>
 	exit();
 }
 add_action( 'bp_actions', 'rendez_vous_download_ical' );
+
+/**
+ * Check whether types have been created.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param int|Rendez_Vous_Item $rendez_vous_id ID or object for the rendez-vous
+ * @uses rendez_vous_get_terms()
+ * @return bool Whether the taxonomy exists.
+ */
+function rendez_vous_has_types( $rendez_vous = null ) {
+	$rdv = rendez_vous();
+
+	if ( empty( $rdv->types ) ) {
+		$types = rendez_vous_get_terms( array( 'hide_empty' => false ) );
+		$rdv->types = $types;
+	} else {
+		$types = $rdv->types;
+	}
+
+	if ( empty( $types ) ) {
+		return false;
+	}
+
+	$retval = true;
+
+	if ( ! empty( $rendez_vous ) ) {
+		if ( ! is_a( $rendez_vous, 'Rendez_Vous_Item' ) ) {
+			$rendez_vous = rendez_vous_get_item( $rendez_vous );
+		}
+
+		$retval = ! empty( $rendez_vous->type );
+	}
+
+	return $retval;
+}
+
+/**
+ * Set type for a rendez-vous.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param int    $rendez_vous_id ID of the rendez-vous.
+ * @param string $type           Rendez-vous type.
+ * @return See {@see bp_set_object_terms()}.
+ */
+function rendez_vous_set_type( $rendez_vous_id, $type ) {
+	if ( ! empty( $type ) && ! rendez_vous_term_exists( $type ) ) {
+		return false;
+	}
+
+	$retval = bp_set_object_terms( $rendez_vous_id, $type, 'rendez_vous_type' );
+
+	// Clear cache.
+	if ( ! is_wp_error( $retval ) ) {
+		wp_cache_delete( $rendez_vous_id, 'rendez_vous_type' );
+
+		do_action( 'rendez_vous_set_type', $rendez_vous_id, $type );
+	}
+
+	return $retval;
+}
+
+/**
+ * Get type for a rendez-vous.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param  int $rendez_vous_id     ID of the rendez-vous.
+ * @return array|WP_Error The requested term data or empty array if no terms found. WP_Error if any of the $taxonomies don't exist.
+ */
+function rendez_vous_get_type( $rendez_vous_id ) {
+	$types = wp_cache_get( $rendez_vous_id, 'rendez_vous_type' );
+
+	if ( false === $types ) {
+		$types = bp_get_object_terms( $rendez_vous_id, 'rendez_vous_type' );
+
+		if ( ! is_wp_error( $types ) ) {
+			wp_cache_set( $rendez_vous_id, $types, 'rendez_vous_type' );
+		}
+	}
+
+	return apply_filters( 'rendez_vous_get_type', $types, $rendez_vous_id );
+}
+
+/** WP Taxonomy wrapper functions **/
+
+/**
+ * Check taxonomy exists on BuddyPress root blog.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param string $taxonomy Name of taxonomy object
+ * @uses taxonomy_exists()
+ * @return bool Whether the taxonomy exists.
+ */
+function rendez_vous_taxonomy_exists( $taxonomy ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = taxonomy_exists( $taxonomy );
+
+	restore_current_blog();
+
+	return $retval;
+}
+
+/**
+ * Check a type exists on BuddyPress root blog.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param int|string $term The term to check
+ * @uses term_exists()
+ * @return bool Whether the taxonomy exists.
+ */
+function rendez_vous_term_exists( $term, $taxonomy = 'rendez_vous_type' ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = term_exists( $term, $taxonomy );
+
+	restore_current_blog();
+
+	return $retval;
+}
+
+/**
+ * Get terms for the rendez-vous type taxonomy.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param array|string $args
+ * @param string|array $taxonomies Taxonomy name or list of Taxonomy names.
+ * @uses get_terms()
+ * @return array|WP_Error List of Term Objects and their children. Will return WP_Error, if any of $taxonomies
+ *                        do not exist.
+ */
+function rendez_vous_get_terms( $args = '', $taxonomies = 'rendez_vous_type' ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = get_terms( $taxonomies, $args );
+
+	restore_current_blog();
+
+	return $retval;
+}
+
+/**
+ * Get a term for the rendez-vous type taxonomy.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param int|object $term If integer, will get from database. If object will apply filters and return $term.
+ * @param string $output Constant OBJECT, ARRAY_A, or ARRAY_N
+ * @param string $filter Optional, default is raw or no WordPress defined filter will applied.
+ * @param string $taxonomy Taxonomy name that $term is part of.
+ * @return mixed|null|WP_Error Term Row from database. Will return null if $term is empty. If taxonomy does not
+ * exist then WP_Error will be returned.
+ */
+function rendez_vous_get_term( $term, $output = OBJECT, $filter = 'raw', $taxonomy = 'rendez_vous_type' ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = get_term( $term, $taxonomy, $output, $filter );
+
+	restore_current_blog();
+
+	return $retval;
+}
+
+/**
+ * Insert a term for the rendez-vous type taxonomy.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param string       $term     The term to add
+ * @param array|string $args
+ * @param string       $taxonomy The taxonomy to which to add the term.
+ * @uses wp_insert_term()
+ * @return array|WP_Error An array containing the `term_id` and `term_taxonomy_id`,
+ *                        {@see WP_Error} otherwise.
+ */
+function rendez_vous_insert_term( $term, $args = array(), $taxonomy = 'rendez_vous_type' ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = wp_insert_term( $term, $taxonomy, $args );
+
+	restore_current_blog();
+
+	return $retval;
+}
+
+/**
+ * Update a term for the rendez-vous type taxonomy.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param int $term_id The ID of the term
+ * @param array|string $args Overwrite term field values
+ * @param string       $taxonomy The taxonomy to which to update the term.
+ * @uses wp_update_term()
+ * @return array|WP_Error Returns Term ID and Taxonomy Term ID
+ */
+function rendez_vous_update_term( $term_id, $args = array(), $taxonomy = 'rendez_vous_type' ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = wp_update_term( $term_id, $taxonomy, $args );
+
+	restore_current_blog();
+
+	return $retval;
+}
+
+/**
+ * Delete a term for the rendez-vous type taxonomy.
+ *
+ * @package Rendez Vous
+ * @subpackage Functions
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @param int $term_id The ID of the term
+ * @param array|string $args Optional. Change 'default' term id and override found term ids.
+ * @param string       $taxonomy The taxonomy to which to update the term.
+ * @uses wp_update_term()
+ * @return bool|WP_Error Returns false if not term; true if completes delete action.
+ */
+function rendez_vous_delete_term( $term_id, $args = array(), $taxonomy = 'rendez_vous_type' ) {
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	$retval = wp_delete_term( $term_id, $taxonomy, $args );
+
+	restore_current_blog();
+
+	return $retval;
+}

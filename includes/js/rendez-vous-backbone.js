@@ -432,6 +432,7 @@ var rdv = rdv || {};
 		events: {
 			'blur .rdv-input-what' : 'storeWhatInput',
 			'click .rdv-check-what' : 'storeWhatInput',
+			'change .rdv-select-what' : 'storeWhatInput',
 			'blur .rdv-input-when' : 'storeWhenInput',
 			'click .trashday' : 'trashDay',
 		},
@@ -495,10 +496,11 @@ var rdv = rdv || {};
 		storeWhatInput: function( event ) {
 			var value;
 
-			if( event.target.id == 'visibility' )
+			if( event.target.type == 'checkbox' ) {
 				value = event.target.checked ? 1 : 0;
-			else
-				value = $(event.target).val()
+			} else {
+				value = $(event.target).val();
+			}
 
 			this.model.get( 'rdvfields').get( event.target.id ).set( 'value', value );
 		},

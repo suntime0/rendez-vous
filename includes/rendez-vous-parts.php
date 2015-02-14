@@ -20,7 +20,12 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_schedule_title() {
-	rendez_vous_editor( 'new-rendez-vous' );
+	?>
+	<ul id="rendez-vous-nav">
+		<li><?php rendez_vous_editor( 'new-rendez-vous' ); ?></li> 
+		<li class="last"><?php render_vous_type_filter(); ?></li>
+	</ul>
+	<?php
 }
 
 /**
@@ -44,7 +49,11 @@ function rendez_vous_schedule_content() {
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_attend_title() {
-	return;
+	?>
+	<ul id="rendez-vous-nav">
+		<li class="last"><?php render_vous_type_filter(); ?></li>
+	</ul>
+	<?php
 }
 
 /**
@@ -112,6 +121,8 @@ function rendez_vous_loop() {
 						<?php endif ; ?>
 
 						<?php do_action( "rendez_vous_{$current_action}_item" ); ?>
+
+						<?php do_action( 'rendez_vous_after_item_description' ); ?>
 
 					</div>
 
@@ -217,6 +228,18 @@ function rendez_vous_edit_content() {
 			<label for="rendez-vous-edit-venue"><?php esc_html_e( 'Venue', 'rendez-vous' ); ?></label>
 			<input type="text" name="_rendez_vous_edit[venue]" id="rendez-vous-edit-venue" value="<?php rendez_vous_single_the_venue() ;?>"/>
 		</p>
+
+		<?php if ( rendez_vous_has_types() ) : ?>
+
+			<label for="rendez-vous-single-type"><?php esc_html_e( 'Type', 'rendez-vous' ); ?></label>
+			<div id="rendez-vous-single-type">
+
+				<?php rendez_vous_single_edit_the_type() ;?>
+
+			</div>
+
+		<?php endif; ?>
+
 		<p>
 			<label for="rendez-vous-edit-duration"><?php esc_html_e( 'Duration', 'rendez-vous' ); ?></label>
 			<input type="text" placeholder="00:00" name="_rendez_vous_edit[duration]" id="rendez-vous-edit-duration" value="<?php rendez_vous_single_the_duration() ;?>" class="rdv-duree"/>
@@ -301,6 +324,13 @@ function rendez_vous_single_content() {
 
 		<label for="rendez-vous-single-venue"><?php esc_html_e( 'Venue', 'rendez-vous' ); ?></label>
 		<div id="rendez-vous-single-venue"><?php rendez_vous_single_the_venue() ;?></div>
+
+		<?php if ( rendez_vous_single_has_type() ) : ?>
+
+			<label for="rendez-vous-single-type"><?php esc_html_e( 'Type', 'rendez-vous' ); ?></label>
+			<div id="rendez-vous-single-type"><?php rendez_vous_single_the_type() ;?></div>
+
+		<?php endif; ?>
 
 		<?php if ( rendez_vous_single_date_set() ) :?>
 

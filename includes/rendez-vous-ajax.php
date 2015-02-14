@@ -25,15 +25,14 @@ function rendez_vous_ajax_get_users() {
 
 	$query_args = isset( $_REQUEST['query'] ) ? (array) $_REQUEST['query'] : array();
 
-	$args = wp_parse_args( $query_args, array(
+	$args = bp_parse_args( $query_args, array(
 			'user_id'      => false,
 			'type'         => 'alphabetical',
 			'per_page'     => 20,
 			'page'         => 1,
 			'search_terms' => false,
 			'exclude'      => array( bp_loggedin_user_id() ), // we don't want the organizer to be included in the attendees
-		)
-	);
+	), 'rendez_vous_get_users' );
 
 	if ( ! empty( $args['group_id'] ) ) {
 		// Get all type of group users
@@ -87,6 +86,7 @@ function rendez_vous_ajax_create() {
 	$args = array(
 		'title'       => '',
 		'venue'       => '',
+		'type'        => 0,
 		'description' => '',
 		'duration'    => '',
 		'days'        => array(),
@@ -200,3 +200,154 @@ function rendez_vous_ajax_create() {
 	}
 }
 add_action( 'wp_ajax_create_rendez_vous', 'rendez_vous_ajax_create' );
+
+/**
+ * Insert a new rendez-vous type
+ *
+ * @package Rendez Vous
+ * @subpackage Ajax
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @uses  rendez_vous_taxonomy_exists
+ * @uses  rendez_vous_insert_term()
+ * @uses  rendez_vous_get_term()
+ */
+function rendez_vous_ajax_insert_term() {
+	if ( ! isset( $_POST['rendez_vous_type_name'] ) ) {
+		wp_send_json_error();
+	}
+
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
+		wp_send_json_error();
+	}
+
+	$term = esc_html( $_POST['rendez_vous_type_name'] );
+
+	$inserted = rendez_vous_insert_term( $term );
+
+	if ( empty( $inserted['term_id'] ) || is_wp_error( $inserted ) ) {
+		wp_send_json_error();
+	}
+
+	$term = rendez_vous_prepare_term_for_js( rendez_vous_get_term( $inserted['term_id'] ) );
+
+	if ( empty( $term ) ) {
+		wp_send_json_error();
+	}
+
+	wp_send_json_success( $term );
+}
+add_action( 'wp_ajax_rendez_vous_insert_term', 'rendez_vous_ajax_insert_term' );
+
+/**
+ * Get all rendez-vous types
+ *
+ * @package Rendez Vous
+ * @subpackage Ajax
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @uses  rendez_vous_taxonomy_exists
+ * @uses  rendez_vous_get_terms()
+ */
+function rendez_vous_ajax_get_terms() {
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
+		wp_send_json_error();
+	}
+
+	$terms = rendez_vous_get_terms( array( 'hide_empty' => false ) );
+	$terms = array_map( 'rendez_vous_prepare_term_for_js', array_values( $terms ) );
+	$terms = array_filter( $terms );
+
+	wp_send_json_success( $terms );
+}
+add_action( 'wp_ajax_rendez_vous_get_terms', 'rendez_vous_ajax_get_terms' );
+
+/**
+ * Delete a rendez-vous types
+ *
+ * @package Rendez Vous
+ * @subpackage Ajax
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @uses  rendez_vous_taxonomy_exists
+ * @uses  rendez_vous_delete_term()
+ */
+function rendez_vous_ajax_delete_term() {
+	if ( ! isset( $_POST['rendez_vous_type_id'] ) ) {
+		wp_send_json_error();
+	}
+
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
+		wp_send_json_error();
+	}
+
+	$term_id = intval( $_POST['rendez_vous_type_id'] );
+
+	$deleted = rendez_vous_delete_term( $term_id );
+
+	if ( empty( $deleted ) || is_wp_error( $deleted ) ) {
+		wp_send_json_error();
+	}
+
+	wp_send_json_success();
+}
+add_action( 'wp_ajax_rendez_vous_delete_term', 'rendez_vous_ajax_delete_term' );
+
+/**
+ * Update a rendez-vous types
+ *
+ * @package Rendez Vous
+ * @subpackage Ajax
+ *
+ * @since Rendez Vous (1.2.0)
+ *
+ * @todo  use a wrapper function for taxonomy_exists, wp_update_term making sure current blog is BuddyPress root blog
+ */
+function rendez_vous_ajax_update_term() {
+	if ( ! isset( $_POST['rendez_vous_type_id'] ) || empty( $_POST['rendez_vous_type_name'] ) ) {
+		wp_send_json_error();
+	}
+
+	check_ajax_referer( 'rendez-vous-admin', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! rendez_vous_taxonomy_exists( 'rendez_vous_type' ) ) {
+		wp_send_json_error();
+	}
+
+	$term_id   = intval( $_POST['rendez_vous_type_id'] );
+	$term_name = esc_html( $_POST['rendez_vous_type_name'] );
+
+	$updated = rendez_vous_update_term( $term_id, array( 'name' => $term_name ) );
+
+	if ( empty( $updated ) || is_wp_error( $updated ) ) {
+		wp_send_json_error();
+	}
+
+	wp_send_json_success();
+}
+add_action( 'wp_ajax_rendez_vous_update_term', 'rendez_vous_ajax_update_term' );

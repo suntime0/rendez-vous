@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        http://imathi.eu/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.1.0
+ * Version:           1.2.0-beta
  * Author:            imath
  * Author URI:        http://imathi.eu
  * Text Domain:       rendez-vous
@@ -51,7 +51,7 @@ class Rendez_Vous {
 	 *
 	 * @var      string
 	 */
-	public static $required_bp_version = '2.1';
+	public static $required_bp_version = '2.2';
 
 	/**
 	 * BuddyPress config.
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.1.0';
+		$this->version       = '1.2.0-beta';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
@@ -163,8 +163,6 @@ class Rendez_Vous {
 		if ( ! self::bail() ) {
 			// Load the component
 			add_action( 'bp_loaded', 'rendez_vous_load_component' );
-
-			add_filter( 'map_meta_cap', 'rendez_vous_map_meta_caps', 10, 4 );
 
 			// Enqueue the needed script and css files
 			add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -375,6 +373,63 @@ class Rendez_Vous {
 			// or /wp-content/languages/plugins/
 			load_plugin_textdomain( $this->domain, false, basename( $this->plugin_dir ) . '/languages' );
 		}
+	}
+
+	/**
+	 * Get the component name of the plugin
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_component_name' to override default component name
+	 */
+	public static function get_component_name() {
+		return apply_filters( 'rendez_vous_get_component_name', __( 'Rendez-vous', 'rendez-vous' ) );
+	}
+
+	/**
+	 * Get the component slug of the plugin
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_component_slug' to override default component slug
+	 */
+	public static function get_component_slug() {
+		// Defining the slug in this way makes it possible for site admins to override it
+		if ( ! defined( 'RENDEZ_VOUS_SLUG' ) ) {
+			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
+		}
+
+		return sanitize_title( apply_filters( 'rendez_vous_get_component_slug', RENDEZ_VOUS_SLUG ) );
+	}
+
+	/**
+	 * Get the schedule slug of the component
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_schedule_slug' to override default schedule slug
+	 */
+	public static function get_schedule_slug() {
+		return sanitize_title( apply_filters( 'rendez_vous_get_schedule_slug', 'schedule' ) );
+	}
+
+	/**
+	 * Get the attend slug of the component
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_attend_slug' to override default attend slug
+	 */
+	public static function get_attend_slug() {
+		return sanitize_title( apply_filters( 'rendez_vous_get_attend_slug', 'attend' ) );
 	}
 }
 

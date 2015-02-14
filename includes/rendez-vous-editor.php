@@ -144,6 +144,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		'what' => array(
 			array(
 				'id'          => 'title',
+				'order'       => 0,
 				'type'        => 'text',
 				'placeholder' => esc_html__( 'What is this about ?', 'rendez-vous' ),
 				'label'       => esc_html__( 'Title', 'rendez-vous' ),
@@ -153,6 +154,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			),
 			array(
 				'id'          => 'venue',
+				'order'       => 10,
 				'type'        => 'text',
 				'placeholder' => esc_html__( 'Where ?', 'rendez-vous' ),
 				'label'       => esc_html__( 'Venue', 'rendez-vous' ),
@@ -162,6 +164,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			),
 			array(
 				'id'          => 'description',
+				'order'       => 20,
 				'type'        => 'textarea',
 				'placeholder' => esc_html__( 'Some details about this rendez-vous ?', 'rendez-vous' ),
 				'label'       => esc_html__( 'Description', 'rendez-vous' ),
@@ -171,6 +174,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			),
 			array(
 				'id'          => 'duration',
+				'order'       => 30,
 				'type'        => 'duree',
 				'placeholder' => '00:00',
 				'label'       => esc_html__( 'Duration', 'rendez-vous' ),
@@ -180,15 +184,17 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			),
 			array(
 				'id'          => 'privacy',
+				'order'       => 40,
 				'type'        => 'checkbox',
 				'placeholder' => esc_html__( 'Restrict to the selected members of the Who? tab', 'rendez-vous' ),
 				'label'       => esc_html__( 'Access', 'rendez-vous' ),
-				'value'       => '',
+				'value'       => '0',
 				'tab'         => 'what',
 				'class'       => ''
 			),
 			array(
 				'id'          => 'utcoffset',
+				'order'       => 50,
 				'type'        => 'timezone',
 				'placeholder' => '',
 				'label'       => '',
@@ -198,6 +204,79 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 			),
 		)
 	);
+
+	// Do we have rendez-vous types ?
+	if ( rendez_vous_has_types() ) {
+		$rendez_vous_types_choices     = array();
+		$rendez_vous_types_placeholder = array();
+
+		foreach ( rendez_vous()->types as $rendez_vous_type ) {
+			$rendez_vous_types_choices[]     = $rendez_vous_type->term_id;
+			$rendez_vous_types_placeholder[] = $rendez_vous_type->name;
+		}
+
+		// Set the rendez-voys types field arg
+		$rendez_vous_types_args = array(
+			'id'          => 'type',
+			'order'       => 15,
+			'type'        => 'selectbox',
+			'placeholder' => $rendez_vous_types_placeholder,
+			'label'       => esc_html__( 'Type', 'rendez-vous' ),
+			'value'       => '',
+			'tab'         => 'what',
+			'class'       => '',
+			'choices'     => $rendez_vous_types_choices
+		);
+
+		// Merge with other rendez-vous fields
+		$rendez_vous_fields['what'] = array_merge( $rendez_vous_fields['what'], array( $rendez_vous_types_args ) );
+	}
+
+	/**
+	 * Use 'rendez_vous_editor_extra_fields' to add custom fields, you should be able
+	 * to save them using the 'rendez_vous_after_saved' action.
+	 */
+	$rendez_vous_extra_fields = apply_filters( 'rendez_vous_editor_extra_fields', array() );
+	$rendez_vous_add_fields = array();
+ 
+	if ( ! empty( $rendez_vous_extra_fields ) && is_array( $rendez_vous_extra_fields ) ) {
+		// Some id are restricted to the plugin usage
+		$restricted = array(
+			'title'       => true,
+			'venue'       => true,
+			'type'        => true,
+			'description' => true,
+			'duration'    => true,
+			'privacy'     => true,
+			'utcoffset'   => true,
+		);
+
+		foreach ( $rendez_vous_extra_fields as $rendez_vous_extra_field ) {
+			// The id is required and some ids are restricted.
+			if ( empty( $rendez_vous_extra_field['id'] ) || ! empty( $restricted[ $rendez_vous_extra_field['id'] ] ) ) {
+				continue;
+			}
+
+			// Make sure all needed arguments have default values
+			$rendez_vous_add_fields[] = wp_parse_args( $rendez_vous_extra_field, array(
+				'id'          => '',
+				'order'       => 60,
+				'type'        => 'text',
+				'placeholder' => '',
+				'label'       => '',
+				'value'       => '',
+				'tab'         => 'what',
+				'class'       => ''
+			) );
+		}
+	}
+
+	if ( ! empty( $rendez_vous_add_fields ) ) {
+		$rendez_vous_fields['what'] = array_merge( $rendez_vous_fields['what'], $rendez_vous_add_fields );
+	}
+
+	// Sort by the order key
+	$rendez_vous_fields['what'] = bp_sort_by_key( $rendez_vous_fields['what'], 'order', 'num' );
 
 	$rendez_vous_date_strings = array(
 		'daynames'    => array(
@@ -323,7 +402,7 @@ function rendezvous_media_templates() {
 		<# } else if ( 'checkbox' === data.type ) { #>
 			<p>
 				<label for="{{data.id}}">{{data.label}} </label>
-				<input type="checkbox" id="{{data.id}}" value="1" class="rdv-check-what {{data.class}}"/> {{data.placeholder}}
+				<input type="checkbox" id="{{data.id}}" value="1" class="rdv-check-what {{data.class}}" <# if ( data.value == 1 ) { #>checked<# } #>/> {{data.placeholder}}
 			</p>
 		<# } else if ( 'timezone' === data.type ) { #>
 				<input type="hidden" id="{{data.id}}" value="{{data.value}}" class="rdv-hidden-what"/>
@@ -332,6 +411,23 @@ function rendezvous_media_templates() {
 				<label for="{{data.id}}">{{data.label}}</label>
 				<textarea id="{{data.id}}" placeholder="{{data.placeholder}}" class="rdv-input-what {{data.class}}">{{data.value}}</textarea>
 			</p>
+
+		<# } else if ( 'selectbox' === data.type ) { #>
+
+			<# if ( typeof data.placeholder == 'object' && typeof data.choices == 'object' ) { #>
+
+				<p>
+					<label for="{{data.id}}">{{data.label}} </label>
+					<select id="{{data.id}}" class="rdv-select-what">
+						<option value="">---</option>
+						<# for ( i in data.placeholder ) { #>
+							<option value="{{data.choices[i]}}" <# if ( data.value == data.choices[i] ) { #>selected<# } #>>{{data.placeholder[i]}}</option>
+						<# } #>
+					</select>
+				</p>
+
+			<# } #>
+
 		<# } else { #>
 			<strong>Oops</strong>
 		<# } #>

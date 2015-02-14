@@ -62,8 +62,8 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 		$bp = buddypress();
 
 		$args = array(
-			'slug'              => $bp->rendez_vous->slug,
-			'name'              => $bp->rendez_vous->name,
+			'slug'              => rendez_vous()->get_component_slug(),
+			'name'              => rendez_vous()->get_component_name(),
 			'visibility'        => 'public',
 			'nav_item_position' => 80,
 			'enable_nav_item'   => $this->enable_nav_item(),
@@ -404,7 +404,7 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 	 * @uses   rendez_vous_loop()           to output the rendez-vous for the group
 	 * @return string                       html output
 	 */
-	public function display() {
+	public function display( $group_id = null ) {
 		if ( ! empty( $this->screen ) )  {
 			if ( 'edit' == $this->screen ) {
 				?>
@@ -416,8 +416,16 @@ class Rendez_Vous_Group extends BP_Group_Extension {
 				<?php rendez_vous_single_content();
 			}
 		} else {
+			if ( empty( $group_id ) ) {
+				$group_id = bp_get_current_group_id();
+			}
 			?>
-			<h1><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => bp_get_current_group_id() ) ); ?></h1>
+			<h3>
+				<ul id="rendez-vous-nav">
+					<li><?php rendez_vous_editor( 'new-rendez-vous', array( 'group_id' => $group_id ) ); ?></li> 
+					<li class="last"><?php render_vous_type_filter(); ?></li>
+				</ul>
+			</h3>
 			<?php rendez_vous_loop();
 		}
 	}

@@ -100,6 +100,7 @@ class Rendez_Vous_Item {
 	public $organizer;
 	public $title;
 	public $venue;
+	public $type;
 	public $description;
 	public $duration;
 	public $privacy;
@@ -137,6 +138,7 @@ class Rendez_Vous_Item {
 			$this->organizer   = $rendez_vous->post_author;
 			$this->title       = $rendez_vous->post_title;
 			$this->venue       = get_post_meta( $rendez_vous->ID, '_rendez_vous_venue', true );
+			$this->type        = rendez_vous_get_type( $rendez_vous->ID );
 			$this->description = $rendez_vous->post_excerpt;
 			$this->duration    = get_post_meta( $rendez_vous->ID, '_rendez_vous_duration', true );
 			$this->privacy     = 'draft' == $rendez_vous->post_status ? get_post_meta( $rendez_vous->ID, '_rendez_vous_status', true ) : $rendez_vous->post_status;
@@ -168,6 +170,7 @@ class Rendez_Vous_Item {
 		$this->organizer   = apply_filters_ref_array( 'rendez_vous_organizer_before_save',   array( $this->organizer,   &$this ) );
 		$this->title       = apply_filters_ref_array( 'rendez_vous_title_before_save',       array( $this->title,       &$this ) );
 		$this->venue       = apply_filters_ref_array( 'rendez_vous_venue_before_save',       array( $this->venue,       &$this ) );
+		$this->type        = apply_filters_ref_array( 'rendez_vous_type_before_save',        array( $this->type,        &$this ) );
 		$this->description = apply_filters_ref_array( 'rendez_vous_description_before_save', array( $this->description, &$this ) );
 		$this->duration    = apply_filters_ref_array( 'rendez_vous_duration_before_save',    array( $this->duration,    &$this ) );
 		$this->privacy     = apply_filters_ref_array( 'rendez_vous_privacy_before_save',     array( $this->privacy,     &$this ) );
@@ -303,6 +306,9 @@ class Rendez_Vous_Item {
 				delete_post_meta( $result, '_rendez_vous_attendees' );
 			}
 
+			// Set rendez-vous type
+			rendez_vous_set_type( $result, $this->type );
+
 			do_action_ref_array( 'rendez_vous_after_meta_update', array( &$this ) );
 
 		}
@@ -433,6 +439,14 @@ class Rendez_Vous_Item {
 			} else {
 				$query_args['meta_query'][] = $group_query;
 			}
+		}
+
+		if ( ! empty( $r['type'] ) ) {
+			$query_args['tax_query'] = array( array(
+				'field'    => 'slug',
+				'taxonomy' => 'rendez_vous_type',
+				'terms'    => $r['type'],
+			) );
 		}
 
 		$rendez_vous_items = new WP_Query( $query_args );
