@@ -6,6 +6,10 @@
 	margin:1em;
 }
 
+.rendez-vous-frame ul {
+	list-style: none;
+}
+
 .rendez-vous-frame .list-rdv-fields .required{
 	color:inherit;
 	border:solid 1px #21759b;
@@ -44,6 +48,11 @@
 
 .list-rdv-days fieldset legend.dayth {
 	padding: 5px;
+}
+
+.list-rdv-days fieldset input[type=time] {
+	font-size: inherit;
+	width:30%;
 }
 
 .list-rdv-days a.trashday {
