@@ -31,6 +31,7 @@ function rendez_vous_ajax_get_users() {
 			'per_page'     => 20,
 			'page'         => 1,
 			'search_terms' => false,
+			'member_type'  => false,
 			'exclude'      => array( bp_loggedin_user_id() ), // we don't want the organizer to be included in the attendees
 	), 'rendez_vous_get_users' );
 

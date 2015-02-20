@@ -78,6 +78,20 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		$settings['callback'] = esc_url( $args['callback'] );
 	}
 
+	// Do we have member types ?
+	$rendez_vous_member_types = array();
+	$member_types = bp_get_member_types( array(), 'objects' );
+	if ( ! empty( $member_types ) && is_array( $member_types ) ) {
+		$rendez_vous_member_types['rdvMemberTypesAll'] = esc_html__( 'All member types', 'rendez-vous' );
+		foreach ( $member_types as $type_key => $type ) {
+			$rendez_vous_member_types['rdvMemberTypes'][] = array( 'type' => $type_key, 'text' => esc_html( $type->labels['singular_name'] ) );
+		}
+	}
+
+	if ( ! empty( $rendez_vous_member_types ) ) {
+		$settings = array_merge( $settings, $rendez_vous_member_types );
+	}
+
 	$strings = array(
 		// Generic
 		'url'         => __( 'URL', 'rendez-vous' ),
