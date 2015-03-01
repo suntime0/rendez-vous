@@ -8,7 +8,7 @@ Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
+Schedule appointments in your BuddyPress powered community
 
 == Description ==
 
