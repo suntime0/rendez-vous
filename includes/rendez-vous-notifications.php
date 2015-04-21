@@ -128,7 +128,7 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 		__( "%s is scheduling a new rendez-vous: %s\n\nTo help him fix the date, please log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
 		$organizer_name,
 		$rendez_vous_content,
-		$rendez_vous_link
+		esc_url( $rendez_vous_link )
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s invited you to a new rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
@@ -168,7 +168,7 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 		// Only show the disable notifications line if the settings component is enabled
 		if ( bp_is_active( 'settings' ) ) {
 			$user_settings = trailingslashit( $user_profile . bp_get_settings_slug() . '/notifications' );
-			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), $user_settings );
+			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $user_settings ) );
 		}
 
 		/* Send the message */
@@ -299,7 +299,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		$organizer_name,
 		$rdv_updated_action,
 		$rendez_vous_content,
-		$rendez_vous_link
+		esc_url( $rendez_vous_link )
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s updated a rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
@@ -341,7 +341,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		// Only show the disable notifications line if the settings component is enabled
 		if ( bp_is_active( 'settings' ) ) {
 			$user_settings = trailingslashit( $user_profile . bp_get_settings_slug() . '/notifications' );
-			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), $user_settings );
+			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $user_settings ) );
 		}
 
 		/* Send the message */
@@ -400,7 +400,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 		__( "%s set their preferences for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
 		$attendee_name,
 		$rendez_vous_content,
-		$rendez_vous_link
+		esc_url( $rendez_vous_link )
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected date(s) for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
@@ -411,7 +411,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	// Only show the disable notifications line if the settings component is enabled
 	if ( bp_is_active( 'settings' ) ) {
 		$organizer_settings = trailingslashit( $organizer_profile . bp_get_settings_slug() . '/notifications' );
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), $organizer_settings );
+		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $organizer_settings ) );
 	}
 
 	/* Send the message */
@@ -618,7 +618,7 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 	} else {
 		$return = apply_filters( $filter, array(
 			'text' => $text,
-			'link' => $rendez_vous_link
+			'link' => esc_url( $rendez_vous_link )
 		), $rendez_vous_link, (int) $total_items, $item_id, $secondary_item_id );
 	}
 

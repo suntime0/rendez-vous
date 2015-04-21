@@ -197,7 +197,7 @@ function rendez_vous_ajax_create() {
 		wp_send_json_error( __( 'The rendez-vous was not created due to an error.', 'rendez-vous' ) );
 	} else {
 		// url to edit rendez-vous screen
-		wp_send_json_success( rendez_vous_get_edit_link( $rendez_vous_id, bp_loggedin_user_id() ) );
+		wp_send_json_success( esc_url_raw( rendez_vous_get_edit_link( $rendez_vous_id, bp_loggedin_user_id() ) ) );
 	}
 }
 add_action( 'wp_ajax_create_rendez_vous', 'rendez_vous_ajax_create' );

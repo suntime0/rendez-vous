@@ -138,7 +138,7 @@ function rendez_vous_make_nofollow_filter( $text = '' ) {
  *
  * @since Rendez Vous (1.3.0)
  * @uses BP_Embed
- */ 
+ */
 function rendez_vous_allow_oembed( $bp_oembed_class = null ) {
 	add_filter( 'rendez_vous_single_get_the_report', array( &$bp_oembed_class, 'autoembed' ), 8 );
 	add_filter( 'rendez_vous_single_get_the_report', array( &$bp_oembed_class, 'run_shortcode' ), 7 );

@@ -56,7 +56,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 
 	$settings = array(
 		'tabs'      => $tabs,
-		'tabUrl'    => add_query_arg( array( 'chromeless' => true ), admin_url('admin-ajax.php') ),
+		'tabUrl'    => esc_url( add_query_arg( array( 'chromeless' => true ), admin_url('admin-ajax.php') ) ),
 		'mimeTypes' => false,
 		'captions'  => ! apply_filters( 'disable_captions', '' ),
 		'nonce'     => array(
