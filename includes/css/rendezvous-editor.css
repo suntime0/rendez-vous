@@ -358,19 +358,6 @@
 	color: #800;
 }
 
-/**
- * Hide Sidebar
- */
-.no-sidebar .attachments-browser .media-toolbar,
-.no-sidebar .attachments-browser .attachments,
-.no-sidebar .attachments-browser .uploader-inline {
-	right: 0;
-}
-
-.no-sidebar .media-sidebar {
-	display: none;
-}
-
 .media-modal span.screen-reader-text {
 	display:none;
 }
