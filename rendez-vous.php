@@ -403,7 +403,7 @@ class Rendez_Vous {
 			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
 		}
 
-		return sanitize_title( apply_filters( 'rendez_vous_get_component_slug', RENDEZ_VOUS_SLUG ) );
+		return RENDEZ_VOUS_SLUG;
 	}
 
 	/**
@@ -416,7 +416,7 @@ class Rendez_Vous {
 	 * @uses apply_filters() call 'rendez_vous_get_schedule_slug' to override default schedule slug
 	 */
 	public static function get_schedule_slug() {
-		return sanitize_title( apply_filters( 'rendez_vous_get_schedule_slug', 'schedule' ) );
+		return 'schedule';
 	}
 
 	/**
@@ -429,7 +429,7 @@ class Rendez_Vous {
 	 * @uses apply_filters() call 'rendez_vous_get_attend_slug' to override default attend slug
 	 */
 	public static function get_attend_slug() {
-		return sanitize_title( apply_filters( 'rendez_vous_get_attend_slug', 'attend' ) );
+		return 'attend';
 	}
 }
 
