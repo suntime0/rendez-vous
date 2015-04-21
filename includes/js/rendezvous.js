@@ -28,6 +28,14 @@
 		}
 	} );
 
+	$( '#rendez-vous-edit-notify' ).on( 'click', function(){
+		if ( $( this ).prop( 'checked' ) ) {
+			$( '#rendez-vous-custom-message' ).prop( 'disabled', false );
+		} else {
+			$( '#rendez-vous-custom-message' ).prop( 'disabled', true );
+		}
+	} );
+
 	$( '#rendez-vous-list li.private a').on( 'click', function(e){
 		if ( $( this ).prop( 'href' ).indexOf( '#noaccess' ) != -1 ) {
 			e.preventDefault();

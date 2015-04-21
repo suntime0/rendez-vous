@@ -96,14 +96,16 @@ add_action( 'bp_notification_settings', 'rendez_vous_screen_notification_setting
 function rendez_vous_published_notification( $id = 0, $args = array(), $notify = 0 ) {
 	$bp = buddypress();
 
-	if ( empty( $id ) || empty( $notify ) )
+	if ( empty( $id ) || empty( $notify ) ) {
 		return;
+	}
 
 	$rendez_vous = rendez_vous_get_item( $id );
 	$attendees = $rendez_vous->attendees;
 
-	if ( empty( $attendees ) )
+	if ( empty( $attendees ) ) {
 		return;
+	}
 
 	// Remove the organizer
 	if ( in_array( $rendez_vous->organizer, $attendees ) ) {
@@ -114,6 +116,12 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 	$rendez_vous_content = stripslashes( $rendez_vous->title ) . "\n\n" . stripslashes( $rendez_vous->description );
 	$organizer_name = stripslashes( $organizer_name );
+
+	// Append the custom message, if any
+	if ( ! empty( $args['message'] ) ) {
+		$rendez_vous_content .= "\n\n" . $args['message'];
+	}
+
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
 	$message = sprintf(
@@ -219,13 +227,18 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 	$bp = buddypress();
 	$rdv = rendez_vous();
 
-	if ( empty( $id ) || empty( $notify ) || empty( $rdv->item ) || $id != $rdv->item->id ) {
+	if ( empty( $id ) || empty( $notify ) || empty( $rdv->item ) || $id != $rdv->item->id || empty( $args['message'] ) ) {
 		return;
 	}
 
 	$has_updated = ! empty( $rdv->item->date_fixed ) || ! empty( $rdv->item->report_created ) ? true : false ;
 
-	if ( empty( $has_updated ) ) {
+	if ( empty( $has_updated ) && empty( $args['message'] ) ) {
+		return;
+	}
+
+	// Only allow 1 message per day.
+	if ( empty( $has_updated )  && 1 == get_transient( 'rendez_vous_last_message_' . $id ) ) {
 		return;
 	}
 
@@ -260,14 +273,25 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 				esc_html( $rdv->item->date_fixed )
 			);
 		}
+
 		$rdv_updated_action = __( 'fixed the date', 'rendez-vous' );
 		$component_action = 'rendez_vous_fixed';
-	} else {
+	} else if ( ! empty( $rdv->item->report_created ) ) {
 		$rdv_updated_action = __( 'created the report', 'rendez-vous' );
 		$component_action = 'rendez_vous_report';
+	} else if ( ! empty( $args['message'] ) ) {
+		$rdv_updated_action = __( 'sent a message', 'rendez-vous' );
+		$component_action = 'rendez_vous_message';
+		set_transient( 'rendez_vous_last_message_' . $id, 1, 24 * HOUR_IN_SECONDS );
 	}
 
 	$organizer_name = stripslashes( $organizer_name );
+
+	// Append the custom message, if any
+	if ( ! empty( $args['message'] ) ) {
+		$rendez_vous_content .= "\n\n" . $args['message'];
+	}
+
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
 	$message = sprintf(
@@ -290,14 +314,16 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 
 		$mail_content = $message;
 
-		// Screen Notification
-		bp_notifications_add_notification( array(
-			'user_id'           => $attendee->ID,
-			'item_id'           => $id,
-			'secondary_item_id' => $rendez_vous->organizer,
-			'component_name'    => $bp->rendez_vous->id,
-			'component_action'  => $component_action,
-		) );
+		if ( 'rendez_vous_message' != $component_action ) {
+			// Screen Notification
+			bp_notifications_add_notification( array(
+				'user_id'           => $attendee->ID,
+				'item_id'           => $id,
+				'secondary_item_id' => $rendez_vous->organizer,
+				'component_name'    => $bp->rendez_vous->id,
+				'component_action'  => $component_action,
+			) );
+		}
 
 		// Sending Emails
 		if ( 'no' == get_user_meta( $attendee->ID, 'notification_rendez_vous_attend', true ) ) {

@@ -271,6 +271,13 @@ function rendez_vous_edit_content() {
 
 		<?php endif ;?>
 
+		<hr/>
+		
+		<p>
+			<label for="rendez-vous-custom-message"><?php esc_html_e( 'Send a custom message to attendees (restricted to once per day).', 'rendez-vous');?></label>
+			<textarea name="_rendez_vous_edit[message]" id="rendez-vous-custom-message"></textarea>
+		</p>
+
 		<input type="hidden" value="<?php rendez_vous_single_the_id();?>" name="_rendez_vous_edit[id]"/>
 		<input type="hidden" value="<?php rendez_vous_single_the_action( 'edit' ) ;?>" name="_rendez_vous_edit[action]"/>
 		<?php wp_nonce_field( 'rendez_vous_update' ); ?>
