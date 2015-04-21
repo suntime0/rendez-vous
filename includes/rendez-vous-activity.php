@@ -100,7 +100,7 @@ function rendez_vous_format_activity_action( $action, $activity ) {
 
 	}
 
-	$rendez_vous_link  = '<a href="' . $rendez_vous_url . '">' . $rendez_vous_title . '</a>';
+	$rendez_vous_link  = '<a href="' . esc_url( $rendez_vous_url ) . '">' . esc_html( $rendez_vous_title ) . '</a>';
 
 	$user_link = bp_core_get_userlink( $activity->user_id );
 
@@ -130,7 +130,7 @@ function rendez_vous_published_activity( $id = 0 , $args = array(), $notify = fa
 	$rendez_vous = rendez_vous_get_item( $id );
 	$rendez_vous_url = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 
-	$rendez_vous_link  = '<a href="' . $rendez_vous_url . '">' . $rendez_vous->title . '</a>';
+	$rendez_vous_link  = '<a href="' . esc_url( $rendez_vous_url ) . '">' . esc_html( $rendez_vous->title ) . '</a>';
 
 	$user_link = bp_core_get_userlink( $rendez_vous->organizer );
 
@@ -185,7 +185,7 @@ function rendez_vous_updated_activity( $id = 0 , $args = array(), $notify = fals
 
 	$rendez_vous_url = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 
-	$rendez_vous_link  = '<a href="' . $rendez_vous_url . '">' . $rendez_vous->title . '</a>';
+	$rendez_vous_link  = '<a href="' . esc_url( $rendez_vous_url ) . '">' . esc_html( $rendez_vous->title ) . '</a>';
 
 	$user_link = bp_core_get_userlink( $rendez_vous->organizer );
 

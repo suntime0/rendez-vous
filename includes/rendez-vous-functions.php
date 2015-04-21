@@ -610,7 +610,11 @@ function rendez_vous_download_ical() {
 	$date_start = date_i18n( 'Y-m-d H:i:s', $rendez_vous->def_date, true );
 	$date_end   = date_i18n( 'Y-m-d H:i:s', $end_date, true );
 
-	date_default_timezone_set( get_option( 'timezone_string' ) );
+	$tz_string = get_option( 'timezone_string' );
+
+	if ( ! empty( $tz_string ) ) {
+		date_default_timezone_set( $tz_string );
+	}
 
 	status_header( 200 );
 	header( 'Cache-Control: cache, must-revalidate' );

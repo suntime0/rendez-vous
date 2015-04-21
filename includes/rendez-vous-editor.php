@@ -56,7 +56,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 
 	$settings = array(
 		'tabs'      => $tabs,
-		'tabUrl'    => add_query_arg( array( 'chromeless' => true ), admin_url('admin-ajax.php') ),
+		'tabUrl'    => esc_url( add_query_arg( array( 'chromeless' => true ), admin_url('admin-ajax.php') ) ),
 		'mimeTypes' => false,
 		'captions'  => ! apply_filters( 'disable_captions', '' ),
 		'nonce'     => array(
@@ -76,6 +76,20 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 
 	if ( ! empty( $args['callback'] ) ) {
 		$settings['callback'] = esc_url( $args['callback'] );
+	}
+
+	// Do we have member types ?
+	$rendez_vous_member_types = array();
+	$member_types = bp_get_member_types( array(), 'objects' );
+	if ( ! empty( $member_types ) && is_array( $member_types ) ) {
+		$rendez_vous_member_types['rdvMemberTypesAll'] = esc_html__( 'All member types', 'rendez-vous' );
+		foreach ( $member_types as $type_key => $type ) {
+			$rendez_vous_member_types['rdvMemberTypes'][] = array( 'type' => $type_key, 'text' => esc_html( $type->labels['singular_name'] ) );
+		}
+	}
+
+	if ( ! empty( $rendez_vous_member_types ) ) {
+		$settings = array_merge( $settings, $rendez_vous_member_types );
 	}
 
 	$strings = array(
@@ -140,8 +154,9 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		'saveButton'        => __( 'Save Rendez-Vous', 'rendez-vous' ),
 	) );
 
+	// Use the filter at your own risks!
 	$rendez_vous_fields = array(
-		'what' => array(
+		'what' => apply_filters( 'rendez_vous_editor_core_fields', array(
 			array(
 				'id'          => 'title',
 				'order'       => 0,
@@ -202,7 +217,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 				'tab'         => 'what',
 				'class'       => ''
 			),
-		)
+		) )
 	);
 
 	// Do we have rendez-vous types ?
@@ -404,7 +419,7 @@ function rendezvous_media_templates() {
 				<label for="{{data.id}}">{{data.label}} </label>
 				<input type="checkbox" id="{{data.id}}" value="1" class="rdv-check-what {{data.class}}" <# if ( data.value == 1 ) { #>checked<# } #>/> {{data.placeholder}}
 			</p>
-		<# } else if ( 'timezone' === data.type ) { #>
+		<# } else if ( 'timezone' === data.type || 'hidden' === data.type ) { #>
 				<input type="hidden" id="{{data.id}}" value="{{data.value}}" class="rdv-hidden-what"/>
 		<# } else if ( 'textarea' === data.type ) { #>
 			<p>

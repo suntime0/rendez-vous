@@ -96,31 +96,39 @@ add_action( 'bp_notification_settings', 'rendez_vous_screen_notification_setting
 function rendez_vous_published_notification( $id = 0, $args = array(), $notify = 0 ) {
 	$bp = buddypress();
 
-	if ( empty( $id ) || empty( $notify ) )
+	if ( empty( $id ) || empty( $notify ) ) {
 		return;
+	}
 
 	$rendez_vous = rendez_vous_get_item( $id );
 	$attendees = $rendez_vous->attendees;
 
-	if ( empty( $attendees ) )
+	if ( empty( $attendees ) ) {
 		return;
+	}
 
 	// Remove the organizer
 	if ( in_array( $rendez_vous->organizer, $attendees ) ) {
 		$attendees = array_diff( $attendees, array( $rendez_vous->organizer ) );
 	}
 
-	$organizer_name = bp_core_get_username( $rendez_vous->organizer );
+	$organizer_name = bp_core_get_user_displayname( $rendez_vous->organizer );
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 	$rendez_vous_content = stripslashes( $rendez_vous->title ) . "\n\n" . stripslashes( $rendez_vous->description );
 	$organizer_name = stripslashes( $organizer_name );
+
+	// Append the custom message, if any
+	if ( ! empty( $args['message'] ) ) {
+		$rendez_vous_content .= "\n\n" . $args['message'];
+	}
+
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
 	$message = sprintf(
 		__( "%s is scheduling a new rendez-vous: %s\n\nTo help him fix the date, please log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
 		$organizer_name,
 		$rendez_vous_content,
-		$rendez_vous_link
+		esc_url( $rendez_vous_link )
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s invited you to a new rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
@@ -160,7 +168,7 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 		// Only show the disable notifications line if the settings component is enabled
 		if ( bp_is_active( 'settings' ) ) {
 			$user_settings = trailingslashit( $user_profile . bp_get_settings_slug() . '/notifications' );
-			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), $user_settings );
+			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $user_settings ) );
 		}
 
 		/* Send the message */
@@ -219,13 +227,18 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 	$bp = buddypress();
 	$rdv = rendez_vous();
 
-	if ( empty( $id ) || empty( $notify ) || empty( $rdv->item ) || $id != $rdv->item->id ) {
+	if ( empty( $id ) || empty( $notify ) || empty( $rdv->item ) || $id != $rdv->item->id || empty( $args['message'] ) ) {
 		return;
 	}
 
 	$has_updated = ! empty( $rdv->item->date_fixed ) || ! empty( $rdv->item->report_created ) ? true : false ;
 
-	if ( empty( $has_updated ) ) {
+	if ( empty( $has_updated ) && empty( $args['message'] ) ) {
+		return;
+	}
+
+	// Only allow 1 message per day.
+	if ( empty( $has_updated )  && 1 == get_transient( 'rendez_vous_last_message_' . $id ) ) {
 		return;
 	}
 
@@ -241,7 +254,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		$attendees = array_diff( $attendees, array( $rendez_vous->organizer ) );
 	}
 
-	$organizer_name = bp_core_get_username( $rendez_vous->organizer );
+	$organizer_name = bp_core_get_user_displayname( $rendez_vous->organizer );
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 
 	$rendez_vous_content = stripslashes( $rendez_vous->title );
@@ -260,14 +273,25 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 				esc_html( $rdv->item->date_fixed )
 			);
 		}
+
 		$rdv_updated_action = __( 'fixed the date', 'rendez-vous' );
 		$component_action = 'rendez_vous_fixed';
-	} else {
+	} else if ( ! empty( $rdv->item->report_created ) ) {
 		$rdv_updated_action = __( 'created the report', 'rendez-vous' );
 		$component_action = 'rendez_vous_report';
+	} else if ( ! empty( $args['message'] ) ) {
+		$rdv_updated_action = __( 'sent a message', 'rendez-vous' );
+		$component_action = 'rendez_vous_message';
+		set_transient( 'rendez_vous_last_message_' . $id, 1, 24 * HOUR_IN_SECONDS );
 	}
 
 	$organizer_name = stripslashes( $organizer_name );
+
+	// Append the custom message, if any
+	if ( ! empty( $args['message'] ) ) {
+		$rendez_vous_content .= "\n\n" . $args['message'];
+	}
+
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
 	$message = sprintf(
@@ -275,7 +299,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		$organizer_name,
 		$rdv_updated_action,
 		$rendez_vous_content,
-		$rendez_vous_link
+		esc_url( $rendez_vous_link )
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s updated a rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
@@ -290,14 +314,16 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 
 		$mail_content = $message;
 
-		// Screen Notification
-		bp_notifications_add_notification( array(
-			'user_id'           => $attendee->ID,
-			'item_id'           => $id,
-			'secondary_item_id' => $rendez_vous->organizer,
-			'component_name'    => $bp->rendez_vous->id,
-			'component_action'  => $component_action,
-		) );
+		if ( 'rendez_vous_message' != $component_action ) {
+			// Screen Notification
+			bp_notifications_add_notification( array(
+				'user_id'           => $attendee->ID,
+				'item_id'           => $id,
+				'secondary_item_id' => $rendez_vous->organizer,
+				'component_name'    => $bp->rendez_vous->id,
+				'component_action'  => $component_action,
+			) );
+		}
 
 		// Sending Emails
 		if ( 'no' == get_user_meta( $attendee->ID, 'notification_rendez_vous_attend', true ) ) {
@@ -315,7 +341,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		// Only show the disable notifications line if the settings component is enabled
 		if ( bp_is_active( 'settings' ) ) {
 			$user_settings = trailingslashit( $user_profile . bp_get_settings_slug() . '/notifications' );
-			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), $user_settings );
+			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $user_settings ) );
 		}
 
 		/* Send the message */
@@ -363,7 +389,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	$rendez_vous_title = stripslashes( $rendez_vous->title );
 	$rendez_vous_content = wp_kses( $rendez_vous_title, array() );
 
-	$attendee_name = bp_core_get_username( $attendee_id );
+	$attendee_name = bp_core_get_user_displayname( $attendee_id );
 	$attendee_name = stripslashes( $attendee_name );
 
 	$organizer_settings = false;
@@ -374,7 +400,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 		__( "%s set their preferences for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
 		$attendee_name,
 		$rendez_vous_content,
-		$rendez_vous_link
+		esc_url( $rendez_vous_link )
 	);
 
 	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected date(s) for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
@@ -385,7 +411,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	// Only show the disable notifications line if the settings component is enabled
 	if ( bp_is_active( 'settings' ) ) {
 		$organizer_settings = trailingslashit( $organizer_profile . bp_get_settings_slug() . '/notifications' );
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), $organizer_settings );
+		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $organizer_settings ) );
 	}
 
 	/* Send the message */
@@ -592,7 +618,7 @@ function rendez_vous_format_notifications( $action, $item_id, $secondary_item_id
 	} else {
 		$return = apply_filters( $filter, array(
 			'text' => $text,
-			'link' => $rendez_vous_link
+			'link' => esc_url( $rendez_vous_link )
 		), $rendez_vous_link, (int) $total_items, $item_id, $secondary_item_id );
 	}
 

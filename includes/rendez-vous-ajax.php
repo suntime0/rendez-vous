@@ -31,6 +31,7 @@ function rendez_vous_ajax_get_users() {
 			'per_page'     => 20,
 			'page'         => 1,
 			'search_terms' => false,
+			'member_type'  => false,
 			'exclude'      => array( bp_loggedin_user_id() ), // we don't want the organizer to be included in the attendees
 	), 'rendez_vous_get_users' );
 
@@ -196,7 +197,7 @@ function rendez_vous_ajax_create() {
 		wp_send_json_error( __( 'The rendez-vous was not created due to an error.', 'rendez-vous' ) );
 	} else {
 		// url to edit rendez-vous screen
-		wp_send_json_success( rendez_vous_get_edit_link( $rendez_vous_id, bp_loggedin_user_id() ) );
+		wp_send_json_success( esc_url_raw( rendez_vous_get_edit_link( $rendez_vous_id, bp_loggedin_user_id() ) ) );
 	}
 }
 add_action( 'wp_ajax_create_rendez_vous', 'rendez_vous_ajax_create' );

@@ -278,7 +278,7 @@ class Rendez_Vous_Template {
 			}
 
 			$this->pag_links = paginate_links( array(
-				'base'      => add_query_arg( $this->page_arg, '%#%' ),
+				'base'      => esc_url( add_query_arg( $this->page_arg, '%#%' ) ),
 				'format'    => '',
 				'total'     => ceil( (int) $this->total_rendez_vous_count / (int) $this->pag_num ),
 				'current'   => $this->pag_page,
@@ -597,7 +597,7 @@ function rendez_vous_the_title() {
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_the_link() {
-	echo rendez_vous_get_the_link();
+	echo esc_url( rendez_vous_get_the_link() );
 }
 
 	/**
@@ -1105,7 +1105,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 				}
 			}
 
-			$output .= '<a href="' . $user_link . '" title="' . $user_name . '">' . bp_core_fetch_avatar(
+			$output .= '<a href="' . esc_url( $user_link ) . '" title="' . esc_attr( $user_name ) . '">' . bp_core_fetch_avatar(
 				array(
 					'object'  => 'user',
 					'item_id' => $attendee,
@@ -1131,7 +1131,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 		);
 
 		if ( 'edit' != $view ) {
-			$ending_rows['editable_row'] = '<td><a href="' . bp_loggedin_user_domain() . '" title="' . bp_get_loggedin_user_username() . '">' . bp_core_fetch_avatar(
+			$ending_rows['editable_row'] = '<td><a href="' . esc_url( bp_loggedin_user_domain() ) . '" title="' . esc_attr( bp_get_loggedin_user_username() ) . '">' . bp_core_fetch_avatar(
 				array(
 					'object'  => 'user',
 					'item_id' => bp_loggedin_user_id(),
@@ -1140,7 +1140,7 @@ function rendez_vous_single_the_dates( $view = 'single' ) {
 					'width'   => 20,
 					'height'  => 20
 				)
-			) . ' ' . bp_get_loggedin_user_fullname() . '</a></td>';
+			) . ' ' . esc_html( bp_get_loggedin_user_fullname() ) . '</a></td>';
 		// Set definitive date
 		} else {
 			$ending_rows['editable_row'] = '<td id="rendez-vous-set">' . esc_html__( 'Set date', 'rendez-vous' ) . '</td>';

@@ -3,12 +3,12 @@ Contributors: imath
 Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
 Requires at least: 4.1
-Tested up to: 4.1
-Stable tag: 1.2.0
+Tested up to: 4.2
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
+Schedule appointments in your BuddyPress powered community
 
 == Description ==
 
@@ -39,6 +39,9 @@ Yes!! Since 1.1 :)
 
 == Upgrade Notice ==
 
+= 1.3.0 =
+Make sure to use at least WordPress 4.1 & BuddyPress 2.2
+
 = 1.2.0 =
 Make sure to use WordPress 4.1 & BuddyPress 2.2
 
@@ -55,6 +58,13 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.3.0 =
+
+* Use BuddyPress member types if registered to display a dropdown to filter users in the rendez-vous editor
+* Add support for oembed in rendez-vous contents (description and report)
+* Allow an organizer to send an email once per day to attendees
+* Make sure add_query_arg() urls are escaped
 
 = 1.2.0 =
 

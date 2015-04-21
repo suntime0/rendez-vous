@@ -271,6 +271,13 @@ function rendez_vous_edit_content() {
 
 		<?php endif ;?>
 
+		<hr/>
+
+		<p>
+			<label for="rendez-vous-custom-message"><?php esc_html_e( 'Send a custom message to attendees (restricted to once per day).', 'rendez-vous');?></label>
+			<textarea name="_rendez_vous_edit[message]" id="rendez-vous-custom-message"></textarea>
+		</p>
+
 		<input type="hidden" value="<?php rendez_vous_single_the_id();?>" name="_rendez_vous_edit[id]"/>
 		<input type="hidden" value="<?php rendez_vous_single_the_action( 'edit' ) ;?>" name="_rendez_vous_edit[action]"/>
 		<?php wp_nonce_field( 'rendez_vous_update' ); ?>
@@ -316,6 +323,9 @@ function rendez_vous_single_title() {
  * @since Rendez Vous (1.0.0)
  */
 function rendez_vous_single_content() {
+	// Make sure embed url are processed
+	add_filter( 'embed_post_id', 'rendez_vous_single_get_the_id' );
+
 	?>
 	<form action="<?php echo esc_url( rendez_vous_single_the_form_action() );?>" method="post" id="rendez-vous-single-form" class="standard-form">
 
@@ -364,4 +374,7 @@ function rendez_vous_single_content() {
 		<?php if ( ! rendez_vous_single_date_set() ) rendez_vous_single_the_submit( 'single' ) ;?>
 	</form>
 	<?php
+
+	// Stop processing embeds
+	remove_filter( 'embed_post_id', 'rendez_vous_single_get_the_id' );
 }

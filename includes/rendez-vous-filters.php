@@ -131,6 +131,24 @@ function rendez_vous_make_nofollow_filter( $text = '' ) {
 	}
 
 /**
+ * Add oembed support to rendez-vous description and report.
+ *
+ * @package Rendez Vous
+ * @subpackage Filters
+ *
+ * @since Rendez Vous (1.3.0)
+ * @uses BP_Embed
+ */
+function rendez_vous_allow_oembed( $bp_oembed_class = null ) {
+	add_filter( 'rendez_vous_single_get_the_report', array( &$bp_oembed_class, 'autoembed' ), 8 );
+	add_filter( 'rendez_vous_single_get_the_report', array( &$bp_oembed_class, 'run_shortcode' ), 7 );
+
+	add_filter( 'rendez_vous_single_get_the_description', array( &$bp_oembed_class, 'autoembed' ), 8 );
+	add_filter( 'rendez_vous_single_get_the_description', array( &$bp_oembed_class, 'run_shortcode' ), 7 );
+}
+add_action( 'bp_core_setup_oembed', 'rendez_vous_allow_oembed', 10, 1 );
+
+/**
  * Map capabilities
  *
  * @package Rendez Vous
