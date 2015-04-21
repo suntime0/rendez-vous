@@ -110,7 +110,7 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 		$attendees = array_diff( $attendees, array( $rendez_vous->organizer ) );
 	}
 
-	$organizer_name = bp_core_get_username( $rendez_vous->organizer );
+	$organizer_name = bp_core_get_user_displayname( $rendez_vous->organizer );
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 	$rendez_vous_content = stripslashes( $rendez_vous->title ) . "\n\n" . stripslashes( $rendez_vous->description );
 	$organizer_name = stripslashes( $organizer_name );
@@ -241,7 +241,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 		$attendees = array_diff( $attendees, array( $rendez_vous->organizer ) );
 	}
 
-	$organizer_name = bp_core_get_username( $rendez_vous->organizer );
+	$organizer_name = bp_core_get_user_displayname( $rendez_vous->organizer );
 	$rendez_vous_link = rendez_vous_get_single_link( $id, $rendez_vous->organizer );
 
 	$rendez_vous_content = stripslashes( $rendez_vous->title );
@@ -363,7 +363,7 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	$rendez_vous_title = stripslashes( $rendez_vous->title );
 	$rendez_vous_content = wp_kses( $rendez_vous_title, array() );
 
-	$attendee_name = bp_core_get_username( $attendee_id );
+	$attendee_name = bp_core_get_user_displayname( $attendee_id );
 	$attendee_name = stripslashes( $attendee_name );
 
 	$organizer_settings = false;
