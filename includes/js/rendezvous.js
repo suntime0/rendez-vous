@@ -44,4 +44,14 @@
 		}
 	});
 
+	$( document ).ready( function() {
+		var setDate = $( location ).attr('hash');
+		
+		if ( 'undefined' != typeof setDate && setDate ) {
+			$( setDate ).parent( 'tr' ).css( {
+				border : "solid 2px #298cba"
+			} );
+		}
+	} );
+
 } )( jQuery );

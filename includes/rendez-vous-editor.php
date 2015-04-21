@@ -154,8 +154,9 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 		'saveButton'        => __( 'Save Rendez-Vous', 'rendez-vous' ),
 	) );
 
+	// Use the filter at your own risks!
 	$rendez_vous_fields = array(
-		'what' => array(
+		'what' => apply_filters( 'rendez_vous_editor_core_fields', array(
 			array(
 				'id'          => 'title',
 				'order'       => 0,
@@ -216,7 +217,7 @@ function rendez_vous_enqueue_editor( $args = array() ) {
 				'tab'         => 'what',
 				'class'       => ''
 			),
-		)
+		) )
 	);
 
 	// Do we have rendez-vous types ?
@@ -418,7 +419,7 @@ function rendezvous_media_templates() {
 				<label for="{{data.id}}">{{data.label}} </label>
 				<input type="checkbox" id="{{data.id}}" value="1" class="rdv-check-what {{data.class}}" <# if ( data.value == 1 ) { #>checked<# } #>/> {{data.placeholder}}
 			</p>
-		<# } else if ( 'timezone' === data.type ) { #>
+		<# } else if ( 'timezone' === data.type || 'hidden' === data.type ) { #>
 				<input type="hidden" id="{{data.id}}" value="{{data.value}}" class="rdv-hidden-what"/>
 		<# } else if ( 'textarea' === data.type ) { #>
 			<p>
