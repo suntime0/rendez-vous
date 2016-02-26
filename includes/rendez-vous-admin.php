@@ -186,6 +186,8 @@ class Rendez_Vous_Admin {
 		?>
 		<div class="wrap">
 
+			<h1><?php _e( 'BuddyPress Settings', 'rendez-vous' ); ?></h1>
+
 			<h2 class="nav-tab-wrapper"><?php bp_core_admin_tabs( esc_html__( 'Rendez-vous', 'rendez-vous' ) ); ?></h2>
 
 			<h3><?php esc_html_e( 'Types', 'rendez-vous' ) ;?></h3>
@@ -240,7 +242,7 @@ class Rendez_Vous_Admin {
 			$class = "nav-tab-active";
 		}
 		?>
-		<a href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'rendez-vous' ), 'admin.php' ) ) );?>" class="nav-tab <?php echo $class;?>" style="margin-left:-6px"><?php esc_html_e( 'Rendez-vous', 'rendez-vous' );?></a>
+		<a href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'rendez-vous' ), 'admin.php' ) ) );?>" class="nav-tab <?php echo $class;?>"><?php esc_html_e( 'Rendez-vous', 'rendez-vous' );?></a>
 		<?php
 	}
 }
