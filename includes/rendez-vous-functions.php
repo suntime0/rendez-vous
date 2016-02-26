@@ -319,29 +319,6 @@ function rendez_vous_get_ical_link( $id = 0, $organizer_id = 0 ) {
 }
 
 /**
- * Maybe run upgrate routines
- *
- * @package Rendez Vous
- * @subpackage Functions
- *
- * @since Rendez Vous (1.0.0)
- */
-function rendez_vous_maybe_upgrade() {
-	if ( get_current_blog_id() == bp_get_root_blog_id() ) {
-
-		$db_version = bp_get_option( 'rendez-vous-version', 0 );
-
-		if ( version_compare( rendez_vous()->version, $db_version, '>' ) ) {
-			// run some routines..
-			do_action( 'rendez_vous_upgrade' );
-
-			// Update db version
-			bp_update_option( 'rendez-vous-version', rendez_vous()->version );
-		}
-	}
-}
-
-/**
  * Handle rendez-vous actions (group/member contexts)
  *
  * @package Rendez Vous

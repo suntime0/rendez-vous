@@ -170,9 +170,6 @@ class Rendez_Vous {
 			// loads the languages..
 			add_action( 'bp_init', array( $this, 'load_textdomain' ), 5 );
 
-			// Saves the plugin version in db
-			add_action( bp_core_admin_hook(), 'rendez_vous_maybe_upgrade' );
-
 		} else {
 			// Display a warning message in network admin or admin
 			add_action( self::$bp_config['network_active'] ? 'network_admin_notices' : 'admin_notices', array( $this, 'warning' ) );

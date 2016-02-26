@@ -96,8 +96,21 @@ class Rendez_Vous_Admin {
 	 * @since Rendez Vous (1.2.0)
 	 */
 	public function maybe_update() {
-		if ( version_compare( bp_get_option( 'rendez-vous-version', 0 ), rendez_vous()->version, '<' ) ) {
-			//might be useful one of these days..
+		if ( (int) get_current_blog_id() !== (int) bp_get_root_blog_id() ) {
+			return;
+		}
+
+		$db_version = bp_get_option( 'rendez-vous-version', 0 );
+
+		if ( version_compare( $db_version, rendez_vous()->version, '<' ) ) {
+
+			if ( (float) $db_version < 1.4 ) {
+				rendez_vous_install_emails();
+			}
+
+			do_action( 'rendez_vous_upgrade' );
+
+			// Update the db version
 			bp_update_option( 'rendez-vous-version', rendez_vous()->version );
 		}
 	}
