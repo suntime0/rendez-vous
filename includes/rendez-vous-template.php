@@ -220,6 +220,7 @@ class Rendez_Vous_Template {
 			'page_arg'  => 'rpage',
 			'group_id'  => false,
 			'type'      => '',
+			'no_cache'  => false,
 		);
 
 		// Parse arguments
@@ -244,6 +245,7 @@ class Rendez_Vous_Template {
 		$this->sort_order   = $r['order'];
 		$this->group_id     = $r['group_id'];
 		$this->type         = $r['type'];
+		$this->no_cache     = $r['no_cache'];
 
 		// Get the Rendez Vous
 		$rendez_vouss      = rendez_vous_get_items( array(
@@ -257,6 +259,7 @@ class Rendez_Vous_Template {
 			'order'     => $this->sort_order,
 			'group_id'  => $this->group_id,
 			'type'      => $this->type,
+			'no_cache'  => $this->no_cache,
 		) );
 
 		// Setup the Rendez Vous to loop through
@@ -644,6 +647,39 @@ function rendez_vous_last_modified() {
 	function rendez_vous_get_last_modified() {
 		$last_modified = bp_core_time_since( rendez_vous()->query_loop->rendez_vous->post_modified_gmt );
 		return apply_filters( 'rendez_vous_get_last_modified', sprintf( __( 'Modified %s', 'rendez-vous' ), $last_modified ) );
+	}
+
+/**
+ * Output the time till rendez-vous happens.
+ *
+ * @since 1.4.0
+ */
+function rendez_vous_time_to() {
+	echo rendez_vous_get_time_to();
+}
+
+	/**
+	 * Return the time till rendez-vous happens.
+	 *
+	 * @since 1.4.0
+ 	 */
+	function rendez_vous_get_time_to() {
+		add_filter( 'bp_core_time_since_ago_text', 'rendez_vous_set_time_to_text', 10, 1 );
+
+		$time_to = bp_core_time_since( bp_core_current_time( false ), get_post_meta( rendez_vous()->query_loop->rendez_vous->ID, '_rendez_vous_defdate', true ) );
+
+		remove_filter( 'bp_core_time_since_ago_text', 'rendez_vous_set_time_to_text', 10, 1 );
+
+		return apply_filters( 'rendez_vous_get_time_to', sprintf( __( 'starts in %s', 'rendez-vous' ), $time_to ) );
+	}
+
+	/**
+	 * Remove the 'ago' part of the BuddyPress human time diff function
+	 *
+	 * @since 1.4.0
+ 	 */
+	function rendez_vous_set_time_to_text( $time_since_text = '' ) {
+		return _x( '%s', 'Used to output the time to wait till the rendez-vous', 'rendez-vous' );
 	}
 
 /**

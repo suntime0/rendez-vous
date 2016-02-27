@@ -48,11 +48,14 @@ function rendez_vous_get_items( $args = array() ) {
 		'order'           => 'DESC',
 		'group_id'        => false,
 		'type'            => '',
+		'no_cache'        => false,
 	);
 
 	$r = bp_parse_args( $args, $defaults, 'rendez_vous_get_items_args' );
 
-	$rendez_vouss = wp_cache_get( 'rendez_vous_rendez_vouss', 'bp' );
+	if ( ! $r['no_cache'] ) {
+		$rendez_vouss = wp_cache_get( 'rendez_vous_rendez_vouss', 'bp' );
+	}
 
 	if ( empty( $rendez_vouss ) ) {
 		$rendez_vouss = Rendez_Vous_Item::get( array(
@@ -68,7 +71,9 @@ function rendez_vous_get_items( $args = array() ) {
 			'type'            => $r['type'],
 		) );
 
-		wp_cache_set( 'rendez_vous_rendez_vouss', $rendez_vouss, 'bp' );
+		if ( ! $r['no_cache'] ) {
+			wp_cache_set( 'rendez_vous_rendez_vouss', $rendez_vouss, 'bp' );
+		}
 	}
 
 	return apply_filters_ref_array( 'rendez_vous_get_items', array( &$rendez_vouss, &$r ) );

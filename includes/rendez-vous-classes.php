@@ -449,7 +449,7 @@ class Rendez_Vous_Item {
 			) );
 		}
 
-		$rendez_vous_items = new WP_Query( $query_args );
+		$rendez_vous_items = new WP_Query( apply_filters( 'rendez_vous_query_args', $query_args ) );
 
 		return array( 'rendez_vous_items' => $rendez_vous_items->posts, 'total' => $rendez_vous_items->found_posts );
 	}
@@ -469,3 +469,175 @@ class Rendez_Vous_Item {
 		return $deleted;
 	}
 }
+
+
+if ( ! class_exists( 'Rendez_Vous_Upcoming_Widget' ) ) :
+/**
+ * List the upcoming rendez-vous for the loggedin user
+ *
+ * @since 1.4.0
+ */
+ class Rendez_Vous_Upcoming_Widget extends WP_Widget {
+
+ 	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		$widget_ops = array( 'description' => __( 'List the upcoming rendez-vous for the loggedin user.', 'rendez-vous' ) );
+		parent::__construct( false, $name = __( 'Upcoming Rendez-Vous', 'rendez-vous' ), $widget_ops );
+	}
+
+	/**
+	 * Register the widget
+	 */
+	public static function register_widget() {
+		register_widget( 'Rendez_Vous_Upcoming_Widget' );
+	}
+
+	/**
+	 * Filter the query for this specific widget use
+	 */
+	public function filter_rendez_vous_query( $query_args = array() ) {
+		$upcoming_args = array_merge(
+			$query_args,
+			array(
+				'post_status' => array( 'private', 'publish' ),
+				'meta_query'  => array(
+					'relation' => 'AND',
+					array(
+						'key'     => '_rendez_vous_attendees',
+						'value'   => array( bp_loggedin_user_id() ),
+						'compare' => 'IN',
+					),
+					'rendez_vous_date' => array(
+						'key'     => '_rendez_vous_defdate',
+						'value'   => bp_core_current_time( true, 'timestamp' ),
+						'compare' => '>=',
+					)
+				),
+				'orderby' => 'rendez_vous_date',
+				'order'   => 'ASC',
+			)
+		);
+
+		$allowed_keys = array(
+			'post_status'    => true,
+			'post_type'      => true,
+			'posts_per_page' => true,
+			'paged'          => true,
+			'orderby'        => true,
+			'order'          => true,
+			'meta_query'     => true
+		);
+
+		return array_intersect_key( $upcoming_args, $allowed_keys );
+	}
+
+	/**
+	 * Display the widget on front end
+	 */
+	public function widget( $args = array(), $instance = array() ) {
+		// Display nothing if the current user is not set
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		// Default per_page is 5
+		$number = 5;
+
+		// No rendez-vous items to show !? Stop!
+		if ( ! empty( $instance['number'] ) ) {
+			$number = (int) $instance['number'];
+		}
+
+		add_filter( 'rendez_vous_query_args', array( $this, 'filter_rendez_vous_query' ), 10, 1 );
+
+		$has_rendez_vous = rendez_vous_has_rendez_vouss( array( 'per_page' => $number, 'no_cache' => true ) );
+
+		remove_filter( 'rendez_vous_query_args', array( $this, 'filter_rendez_vous_query' ), 10, 1 );
+
+		// Display nothing if there are no upcoming rendez-vous
+		if ( ! $has_rendez_vous ) {
+			return;
+		}
+
+
+		// Default title is nothing
+		$title = '';
+
+		if ( ! empty( $instance['title'] ) ) {
+			$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
+		}
+
+		echo $args['before_widget'];
+
+		if ( ! empty( $title ) ) {
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
+
+		?>
+		<ul>
+
+			<?php while ( rendez_vous_the_rendez_vouss() ) : rendez_vous_the_rendez_vous(); ?>
+
+				<li>
+					<a href="<?php rendez_vous_the_link(); ?>" title="<?php echo esc_attr( rendez_vous_get_the_title() );?>"><?php rendez_vous_the_title(); ?></a>
+					<small class="time-to"><?php rendez_vous_time_to(); ?></small>
+				</li>
+
+			<?php endwhile ; ?>
+
+		</ul>
+		<?php
+
+		echo $args['after_widget'];
+	}
+
+	/**
+	 * Update widget preferences
+	 */
+	public function update( $new_instance, $old_instance ) {
+		$instance = array();
+
+		if ( ! empty( $new_instance['title'] ) ) {
+			$instance['title'] = strip_tags( wp_unslash( $new_instance['title'] ) );
+		}
+
+		$instance['number'] = (int) $new_instance['number'];
+
+		return $instance;
+	}
+
+	/**
+	 * Display the form in Widgets Administration
+	 */
+	public function form( $instance = array() ) {
+		// Default to nothing
+		$title = '';
+
+		if ( isset( $instance['title'] ) ) {
+			$title = $instance['title'];
+		}
+
+		// Number default to 5
+		$number = 5;
+
+		if ( ! empty( $instance['number'] ) ) {
+			$number = absint( $instance['number'] );
+		}
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'rendez-vous' ) ?></label>
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $title ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of upcoming rendez-vous to show:', 'rendez-vous' ); ?></label>
+			<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>" size="3" />
+		</p>
+		<?php
+	}
+}
+
+endif;
+
+add_action( 'bp_widgets_init', array( 'Rendez_Vous_Upcoming_Widget', 'register_widget' ), 10 );
