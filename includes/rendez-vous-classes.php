@@ -561,7 +561,6 @@ if ( ! class_exists( 'Rendez_Vous_Upcoming_Widget' ) ) :
 			return;
 		}
 
-
 		// Default title is nothing
 		$title = '';
 
