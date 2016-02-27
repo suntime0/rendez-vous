@@ -1,14 +1,14 @@
-# Copyright (C) 2015 Rendez Vous
+# Copyright (C) 2016 Rendez Vous
 # This file is distributed under the same license as the Rendez Vous package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rendez Vous 1.3.0\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/rendez-vous\n"
-"POT-Creation-Date: 2015-04-21 17:27:50+00:00\n"
+"Project-Id-Version: Rendez Vous 1.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rendez-vous\n"
+"POT-Creation-Date: 2016-02-27 16:59:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -39,57 +39,61 @@ msgstr ""
 msgid "%1$s %2$s rendez-vous, %3$s"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:128
+#: includes/rendez-vous-admin.php:145
 msgid "Name of your rendez-vous type."
 msgstr ""
 
-#: includes/rendez-vous-admin.php:129
+#: includes/rendez-vous-admin.php:146
 msgid "Saving the rendez-vous type..."
 msgstr ""
 
-#: includes/rendez-vous-admin.php:130
+#: includes/rendez-vous-admin.php:147
 msgid "Success: type saved."
 msgstr ""
 
-#: includes/rendez-vous-admin.php:131
+#: includes/rendez-vous-admin.php:148
 msgid "Error: type not saved"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:132
+#: includes/rendez-vous-admin.php:149
 msgid "Error: type not deleted"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:133
+#: includes/rendez-vous-admin.php:150
 msgid "Editing: %s"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:150 includes/rendez-vous-admin.php:151
+#: includes/rendez-vous-admin.php:167 includes/rendez-vous-admin.php:168
 msgid "Rendez-vous Settings"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:189 includes/rendez-vous-admin.php:243
+#: includes/rendez-vous-admin.php:206
+msgid "BuddyPress Settings"
+msgstr ""
+
+#: includes/rendez-vous-admin.php:208 includes/rendez-vous-admin.php:262
 #: includes/rendez-vous-loader.php:211 includes/rendez-vous-loader.php:249
-#: rendez-vous.php:388
+#: rendez-vous.php:385
 msgid "Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:191
+#: includes/rendez-vous-admin.php:210
 msgid "Types"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:194
+#: includes/rendez-vous-admin.php:213
 msgid "Add your type in the field below and hit the return key to save it."
 msgstr ""
 
-#: includes/rendez-vous-admin.php:195
+#: includes/rendez-vous-admin.php:214
 msgid "To update a type, select it in the list, edit the name and hit the return key to save it."
 msgstr ""
 
-#: includes/rendez-vous-admin.php:204
+#: includes/rendez-vous-admin.php:223
 msgid "Edit type"
 msgstr ""
 
-#: includes/rendez-vous-admin.php:204
+#: includes/rendez-vous-admin.php:223
 msgid "Delete type"
 msgstr ""
 
@@ -123,6 +127,22 @@ msgstr ""
 
 #: includes/rendez-vous-classes.php:37
 msgid "New Rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-classes.php:486
+msgid "List the upcoming rendez-vous for the loggedin user."
+msgstr ""
+
+#: includes/rendez-vous-classes.php:487
+msgid "Upcoming Rendez-Vous"
+msgstr ""
+
+#: includes/rendez-vous-classes.php:629
+msgid "Title:"
+msgstr ""
+
+#: includes/rendez-vous-classes.php:633
+msgid "Number of upcoming rendez-vous to show:"
 msgstr ""
 
 #: includes/rendez-vous-editor.php:85
@@ -317,7 +337,7 @@ msgid "Where ?"
 msgstr ""
 
 #: includes/rendez-vous-editor.php:175 includes/rendez-vous-parts.php:228
-#: includes/rendez-vous-parts.php:332
+#: includes/rendez-vous-parts.php:335
 msgid "Venue"
 msgstr ""
 
@@ -326,7 +346,7 @@ msgid "Some details about this rendez-vous ?"
 msgstr ""
 
 #: includes/rendez-vous-editor.php:185 includes/rendez-vous-parts.php:224
-#: includes/rendez-vous-parts.php:329
+#: includes/rendez-vous-parts.php:332
 msgid "Description"
 msgstr ""
 
@@ -343,7 +363,7 @@ msgid "Access"
 msgstr ""
 
 #: includes/rendez-vous-editor.php:239 includes/rendez-vous-parts.php:234
-#: includes/rendez-vous-parts.php:337
+#: includes/rendez-vous-parts.php:340
 msgid "Type"
 msgstr ""
 
@@ -488,63 +508,63 @@ msgstr ""
 msgid "You must log in to download the calendar file."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:368
-#: includes/rendez-vous-functions.php:520
+#: includes/rendez-vous-functions.php:350
+#: includes/rendez-vous-functions.php:502
 msgid "Rendez-vous could not be found"
 msgstr ""
 
-#: includes/rendez-vous-functions.php:373
+#: includes/rendez-vous-functions.php:355
 msgid "Your rendez-vous is in draft mode, check informations and publish!"
 msgstr ""
 
-#: includes/rendez-vous-functions.php:393
-#: includes/rendez-vous-functions.php:565
-#: includes/rendez-vous-functions.php:582
+#: includes/rendez-vous-functions.php:375
+#: includes/rendez-vous-functions.php:547
+#: includes/rendez-vous-functions.php:564
 msgid "The rendez-vous was not found."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:405
-#: includes/rendez-vous-functions.php:483
+#: includes/rendez-vous-functions.php:387
+#: includes/rendez-vous-functions.php:465
 msgid "You do not have access to this rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-functions.php:424
+#: includes/rendez-vous-functions.php:406
 msgid "Editing this rendez-vous is not allowed."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:452
+#: includes/rendez-vous-functions.php:434
 msgid "Editing this rendez-vous failed."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:454
+#: includes/rendez-vous-functions.php:436
 msgid "Rendez-vous successfully edited."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:498
+#: includes/rendez-vous-functions.php:480
 msgid "Saving your preferences failed."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:500
+#: includes/rendez-vous-functions.php:482
 msgid "Preferences successfully saved."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:527
+#: includes/rendez-vous-functions.php:509
 msgid "Rendez-vous successfully cancelled."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:529
+#: includes/rendez-vous-functions.php:511
 msgid "Rendez-vous could not be cancelled"
 msgstr ""
 
-#: includes/rendez-vous-functions.php:588
+#: includes/rendez-vous-functions.php:570
 msgid "You are not attending this rendez-vous."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:594
+#: includes/rendez-vous-functions.php:576
 msgid "the Rendez-vous is not set yet."
 msgstr ""
 
-#: includes/rendez-vous-functions.php:602
+#: includes/rendez-vous-functions.php:584
 msgid "the duration is not set the right way."
 msgstr ""
 
@@ -684,128 +704,155 @@ msgstr ""
 msgid "You are invited to participate to a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:128
-msgid ""
-"%s is scheduling a new rendez-vous: %s\n"
-"\n"
-"To help him fix the date, please log in and visit: %s\n"
-"\n"
-"---------------------\n"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:134
-msgid "%s invited you to a new rendez-vous"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:171
-#: includes/rendez-vous-notifications.php:344
-#: includes/rendez-vous-notifications.php:414
-msgid "To disable these notifications please log in and go to: %s"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:266
+#: includes/rendez-vous-notifications.php:249
 msgid "Date fixed to %1$s at %2$s"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:270
-msgid "Download the Calendar file %s"
+#: includes/rendez-vous-notifications.php:253
+msgid "Download the <a href=\"%s\">Calendar file</a>"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:272
+#: includes/rendez-vous-notifications.php:255
 msgid "Date fixed to %s"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:277
+#: includes/rendez-vous-notifications.php:260
 msgid "fixed the date"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:280
+#: includes/rendez-vous-notifications.php:263
 msgid "created the report"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:283
+#: includes/rendez-vous-notifications.php:266
 msgid "sent a message"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:298
-msgid ""
-"%s %s for the rendez-vous: %s\n"
-"\n"
-"To view details, log in and visit: %s\n"
-"\n"
-"---------------------\n"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:305
-msgid "%s updated a rendez-vous"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:400
-msgid ""
-"%s set their preferences for the rendez-vous: %s\n"
-"\n"
-"To view details, log in and visit: %s\n"
-"\n"
-"---------------------\n"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:406
-msgid "%s selected date(s) for a rendez-vous"
-msgstr ""
-
-#: includes/rendez-vous-notifications.php:521
+#: includes/rendez-vous-notifications.php:468
 msgid "rendez-vous preferences updated"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:522
+#: includes/rendez-vous-notifications.php:469
 msgid "%d rendez-vous preferences updated"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:530
-#: includes/rendez-vous-notifications.php:553
-#: includes/rendez-vous-notifications.php:576
-#: includes/rendez-vous-notifications.php:599
+#: includes/rendez-vous-notifications.php:477
+#: includes/rendez-vous-notifications.php:500
+#: includes/rendez-vous-notifications.php:523
+#: includes/rendez-vous-notifications.php:546
 msgid "View the rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:531
+#: includes/rendez-vous-notifications.php:478
 msgid "%s set his preferences about a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:544
+#: includes/rendez-vous-notifications.php:491
 msgid "rendez-vous sheduled"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:545
+#: includes/rendez-vous-notifications.php:492
 msgid "%d rendez-vous sheduled"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:554
+#: includes/rendez-vous-notifications.php:501
 msgid "%s scheduled a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:567
+#: includes/rendez-vous-notifications.php:514
 msgid "rendez-vous fixed"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:568
+#: includes/rendez-vous-notifications.php:515
 msgid "%d rendez-vous fixed"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:577
+#: includes/rendez-vous-notifications.php:524
 msgid "%s fixed a rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:590
+#: includes/rendez-vous-notifications.php:537
 msgid "rendez-vous report created"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:591
+#: includes/rendez-vous-notifications.php:538
 msgid "%d rendez-vous reports created"
 msgstr ""
 
-#: includes/rendez-vous-notifications.php:600
+#: includes/rendez-vous-notifications.php:547
 msgid "%s created a report for a rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:636
+msgid "A member invited members to a new rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:638
+msgid "[{{{site.name}}}] {{organizer.name}} invited you to a new rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:639
+msgid ""
+"{{organizer.name}} is scheduling a new rendez-vous: {{{rendezvous.content}}}\n"
+"\n"
+"To help him fix the date, please log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>."
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:640
+msgid ""
+"{{organizer.name}} is scheduling a new rendez-vous: {{rendezvous.content}}\n"
+"\n"
+"To help him fix the date, please log in and visit: \n"
+"\n"
+"{{{rendezvous.url}}}."
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:643
+msgid "A member updated a rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:645
+msgid "[{{{site.name}}}] {{organizer.name}} updated a rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:646
+msgid ""
+"{{organizer.name}} {{rendezvous.action}} for the rendez-vous: {{{rendezvous.content}}}\n"
+"\n"
+"To view details, log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>."
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:647
+msgid ""
+"{{organizer.name}} {{rendezvous.action}} for the rendez-vous: {{rendezvous.content}}\n"
+"\n"
+"To view details, log in and visit: \n"
+"\n"
+"{{{rendezvous.url}}}."
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:650
+msgid "A member selected date(s) for a rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:652
+msgid "[{{{site.name}}}] {{attendee.name}} selected date(s) for a rendez-vous"
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:653
+msgid ""
+"{{attendee.name}} set their preferences for the rendez-vous: {{{rendezvous.content}}}\n"
+"\n"
+"To view details, log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>."
+msgstr ""
+
+#: includes/rendez-vous-notifications.php:654
+msgid ""
+"{{attendee.name}} set their preferences for the rendez-vous: {{rendezvous.content}}\n"
+"\n"
+"To view details, log in and visit: \n"
+"\n"
+"{{{rendezvous.url}}}."
 msgstr ""
 
 #: includes/rendez-vous-parts.php:169
@@ -824,7 +871,7 @@ msgstr ""
 msgid "Restrict this rendez-vous to the selected attendees"
 msgstr ""
 
-#: includes/rendez-vous-parts.php:257 includes/rendez-vous-parts.php:354
+#: includes/rendez-vous-parts.php:257 includes/rendez-vous-parts.php:357
 msgid "Attendees"
 msgstr ""
 
@@ -840,15 +887,15 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: includes/rendez-vous-parts.php:344
+#: includes/rendez-vous-parts.php:347
 msgid "Fixed to:"
 msgstr ""
 
-#: includes/rendez-vous-parts.php:349
+#: includes/rendez-vous-parts.php:352
 msgid "Duration (hours)"
 msgstr ""
 
-#: includes/rendez-vous-parts.php:362
+#: includes/rendez-vous-parts.php:365
 msgid "Notes/Report"
 msgstr ""
 
@@ -856,109 +903,118 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: includes/rendez-vous-template.php:285
+#: includes/rendez-vous-template.php:288
 msgctxt "rendez-vous pagination previous text"
 msgid "&larr;"
 msgstr ""
 
-#: includes/rendez-vous-template.php:286
+#: includes/rendez-vous-template.php:289
 msgctxt "rendez-vous pagination next text"
 msgid "&rarr;"
 msgstr ""
 
-#: includes/rendez-vous-template.php:485
+#: includes/rendez-vous-template.php:488
 msgid "Viewing %1$s to %2$s (of %3$s rendez-vous)"
 msgid_plural "Viewing %1$s to %2$s (of %3$s rendez-vous)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/rendez-vous-template.php:646
+#: includes/rendez-vous-template.php:649
 msgid "Modified %s"
 msgstr ""
 
-#: includes/rendez-vous-template.php:694
+#: includes/rendez-vous-template.php:673
+msgid "starts in %s"
+msgstr ""
+
+#: includes/rendez-vous-template.php:682
+msgctxt "Used to output the time to wait till the rendez-vous"
+msgid "%s"
+msgstr ""
+
+#: includes/rendez-vous-template.php:730
 msgid "Filter rendez-vous having this type"
 msgstr ""
 
-#: includes/rendez-vous-template.php:736
+#: includes/rendez-vous-template.php:772
 msgid "All members"
 msgstr ""
 
-#: includes/rendez-vous-template.php:740
+#: includes/rendez-vous-template.php:776
 msgid "Restricted"
 msgstr ""
 
-#: includes/rendez-vous-template.php:742
+#: includes/rendez-vous-template.php:778
 msgid "Draft"
 msgstr ""
 
-#: includes/rendez-vous-template.php:778
+#: includes/rendez-vous-template.php:814
 msgctxt "rendez-vous view link"
 msgid "View"
 msgstr ""
 
-#: includes/rendez-vous-template.php:786
+#: includes/rendez-vous-template.php:822
 msgctxt "rendez-vous edit link"
 msgid "Edit"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1082
+#: includes/rendez-vous-template.php:1118
 msgid "None"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1130
+#: includes/rendez-vous-template.php:1166
 msgid "Total"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1146
+#: includes/rendez-vous-template.php:1182
 msgid "Set date"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1202
+#: includes/rendez-vous-template.php:1238
 msgid "If you want to set your preferences about this rendez-vous, please log in."
 msgstr ""
 
-#: includes/rendez-vous-template.php:1305
+#: includes/rendez-vous-template.php:1341
 msgid "%s at %s"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1343
+#: includes/rendez-vous-template.php:1379
 msgid "Publish Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1343
+#: includes/rendez-vous-template.php:1379
 msgid "Edit Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1350
+#: includes/rendez-vous-template.php:1386
 msgid "Cancel Rendez-vous"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1366
+#: includes/rendez-vous-template.php:1402
 msgid "Save preferences"
 msgstr ""
 
-#: includes/rendez-vous-template.php:1371
+#: includes/rendez-vous-template.php:1407
 msgid "Set the date"
 msgstr ""
 
-#: rendez-vous.php:194
+#: rendez-vous.php:191
 msgid "Rendez Vous requires at least version %s of BuddyPress."
 msgstr ""
 
-#: rendez-vous.php:204
+#: rendez-vous.php:201
 msgid "Rendez Vous requires to be activated on the blog where BuddyPress is activated."
 msgstr ""
 
-#: rendez-vous.php:208
+#: rendez-vous.php:205
 msgid "Rendez Vous and BuddyPress need to share the same network configuration."
 msgstr ""
 
-#: rendez-vous.php:261
+#: rendez-vous.php:258
 msgid "Are you sure you want to cancel this rendez-vous ?"
 msgstr ""
 
-#: rendez-vous.php:262
+#: rendez-vous.php:259
 msgid "This rendez-vous is restricted and you have not been invited to it."
 msgstr ""
 #. Plugin Name of the plugin/theme

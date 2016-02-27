@@ -168,7 +168,7 @@ class Rendez_Vous {
 			add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 			// loads the languages..
-			add_action( 'bp_init', array( $this, 'load_textdomain' ), 5 );
+			add_action( 'bp_loaded', array( $this, 'load_textdomain' ) );
 
 		} else {
 			// Display a warning message in network admin or admin

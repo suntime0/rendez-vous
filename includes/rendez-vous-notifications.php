@@ -651,7 +651,7 @@ function rendez_vous_get_emails() {
 			'term_id'     => 0,
 			'post_title'   => __( '[{{{site.name}}}] {{attendee.name}} selected date(s) for a rendez-vous', 'rendez-vous' ),
 			'post_content' => __( "{{attendee.name}} set their preferences for the rendez-vous: {{{rendezvous.content}}}\n\nTo view details, log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>.", 'rendez-vous' ),
-			'post_excerpt' => __( "{{attendee.name}} set their preferences for the rendez-vous: {{rendezvous.content}}\n\nTo view details, log in and visit:: \n\n{{{rendezvous.url}}}.", 'rendez-vous' ),
+			'post_excerpt' => __( "{{attendee.name}} set their preferences for the rendez-vous: {{rendezvous.content}}\n\nTo view details, log in and visit: \n\n{{{rendezvous.url}}}.", 'rendez-vous' ),
 		),
 	) );
 }
