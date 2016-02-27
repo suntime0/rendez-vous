@@ -105,6 +105,10 @@ class Rendez_Vous_Admin {
 		if ( version_compare( $db_version, rendez_vous()->version, '<' ) ) {
 
 			if ( (float) $db_version < 1.4 ) {
+				// Make sure to install emails only once!
+				remove_action( 'bp_core_install_emails', 'rendez_vous_install_emails' );
+
+				// Install emails
 				rendez_vous_install_emails();
 			}
 
