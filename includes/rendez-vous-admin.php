@@ -96,8 +96,25 @@ class Rendez_Vous_Admin {
 	 * @since Rendez Vous (1.2.0)
 	 */
 	public function maybe_update() {
-		if ( version_compare( bp_get_option( 'rendez-vous-version', 0 ), rendez_vous()->version, '<' ) ) {
-			//might be useful one of these days..
+		if ( (int) get_current_blog_id() !== (int) bp_get_root_blog_id() ) {
+			return;
+		}
+
+		$db_version = bp_get_option( 'rendez-vous-version', 0 );
+
+		if ( version_compare( $db_version, rendez_vous()->version, '<' ) ) {
+
+			if ( (float) $db_version < 1.4 ) {
+				// Make sure to install emails only once!
+				remove_action( 'bp_core_install_emails', 'rendez_vous_install_emails' );
+
+				// Install emails
+				rendez_vous_install_emails();
+			}
+
+			do_action( 'rendez_vous_upgrade' );
+
+			// Update the db version
 			bp_update_option( 'rendez-vous-version', rendez_vous()->version );
 		}
 	}
@@ -186,6 +203,8 @@ class Rendez_Vous_Admin {
 		?>
 		<div class="wrap">
 
+			<h1><?php _e( 'BuddyPress Settings', 'rendez-vous' ); ?></h1>
+
 			<h2 class="nav-tab-wrapper"><?php bp_core_admin_tabs( esc_html__( 'Rendez-vous', 'rendez-vous' ) ); ?></h2>
 
 			<h3><?php esc_html_e( 'Types', 'rendez-vous' ) ;?></h3>
@@ -240,7 +259,7 @@ class Rendez_Vous_Admin {
 			$class = "nav-tab-active";
 		}
 		?>
-		<a href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'rendez-vous' ), 'admin.php' ) ) );?>" class="nav-tab <?php echo $class;?>" style="margin-left:-6px"><?php esc_html_e( 'Rendez-vous', 'rendez-vous' );?></a>
+		<a href="<?php echo esc_url( bp_get_admin_url( add_query_arg( array( 'page' => 'rendez-vous' ), 'admin.php' ) ) );?>" class="nav-tab <?php echo $class;?>"><?php esc_html_e( 'Rendez-vous', 'rendez-vous' );?></a>
 		<?php
 	}
 }

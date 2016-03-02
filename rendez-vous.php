@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        http://imathi.eu/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.3.0
+ * Version:           1.4.0
  * Author:            imath
  * Author URI:        http://imathi.eu
  * Text Domain:       rendez-vous
@@ -51,7 +51,7 @@ class Rendez_Vous {
 	 *
 	 * @var      string
 	 */
-	public static $required_bp_version = '2.2';
+	public static $required_bp_version = '2.5.0';
 
 	/**
 	 * BuddyPress config.
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.3.0';
+		$this->version       = '1.4.0';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
@@ -168,10 +168,7 @@ class Rendez_Vous {
 			add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 			// loads the languages..
-			add_action( 'bp_init', array( $this, 'load_textdomain' ), 5 );
-
-			// Saves the plugin version in db
-			add_action( bp_core_admin_hook(), 'rendez_vous_maybe_upgrade' );
+			add_action( 'bp_loaded', array( $this, 'load_textdomain' ) );
 
 		} else {
 			// Display a warning message in network admin or admin

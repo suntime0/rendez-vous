@@ -48,11 +48,14 @@ function rendez_vous_get_items( $args = array() ) {
 		'order'           => 'DESC',
 		'group_id'        => false,
 		'type'            => '',
+		'no_cache'        => false,
 	);
 
 	$r = bp_parse_args( $args, $defaults, 'rendez_vous_get_items_args' );
 
-	$rendez_vouss = wp_cache_get( 'rendez_vous_rendez_vouss', 'bp' );
+	if ( ! $r['no_cache'] ) {
+		$rendez_vouss = wp_cache_get( 'rendez_vous_rendez_vouss', 'bp' );
+	}
 
 	if ( empty( $rendez_vouss ) ) {
 		$rendez_vouss = Rendez_Vous_Item::get( array(
@@ -68,7 +71,9 @@ function rendez_vous_get_items( $args = array() ) {
 			'type'            => $r['type'],
 		) );
 
-		wp_cache_set( 'rendez_vous_rendez_vouss', $rendez_vouss, 'bp' );
+		if ( ! $r['no_cache'] ) {
+			wp_cache_set( 'rendez_vous_rendez_vouss', $rendez_vouss, 'bp' );
+		}
 	}
 
 	return apply_filters_ref_array( 'rendez_vous_get_items', array( &$rendez_vouss, &$r ) );
@@ -316,29 +321,6 @@ function rendez_vous_get_ical_link( $id = 0, $organizer_id = 0 ) {
 	$link = trailingslashit( bp_core_get_user_domain( $organizer_id ) . buddypress()->rendez_vous->slug . '/schedule/ical/' . $id );
 
 	return apply_filters( 'rendez_vous_get_ical_link', $link, $id, $organizer_id );
-}
-
-/**
- * Maybe run upgrate routines
- *
- * @package Rendez Vous
- * @subpackage Functions
- *
- * @since Rendez Vous (1.0.0)
- */
-function rendez_vous_maybe_upgrade() {
-	if ( get_current_blog_id() == bp_get_root_blog_id() ) {
-
-		$db_version = bp_get_option( 'rendez-vous-version', 0 );
-
-		if ( version_compare( rendez_vous()->version, $db_version, '>' ) ) {
-			// run some routines..
-			do_action( 'rendez_vous_upgrade' );
-
-			// Update db version
-			bp_update_option( 'rendez-vous-version', rendez_vous()->version );
-		}
-	}
 }
 
 /**

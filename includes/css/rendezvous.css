@@ -64,6 +64,17 @@ body.rendez-vous .item-list .item-desc a.rendez-vous-type {
 	font-size: 110%;
 }
 
+body.rendez-vous #buddypress ul.item-list li div.action {
+	text-align:center;
+}
+
+body.rendez-vous #buddypress ul.item-list li div.action div.meta {
+	float: none;
+	display: block;
+	margin-top: 5px;
+	font-size: 70%;
+}
+
 body.rendez-vous #rendez-vous-view-btn.right,
 body.rendez-vous #rendez-vous-edit-btn.right{
 	float:right;

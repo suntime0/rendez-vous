@@ -91,7 +91,8 @@ add_action( 'bp_notification_settings', 'rendez_vous_screen_notification_setting
  * @package Rendez Vous
  * @subpackage Notifications
  *
- * @since Rendez Vous (1.0.0)
+ * @since 1.0.0
+ * @since 1.4.0 Use the BP Emails
  */
 function rendez_vous_published_notification( $id = 0, $args = array(), $notify = 0 ) {
 	$bp = buddypress();
@@ -119,19 +120,20 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 
 	// Append the custom message, if any
 	if ( ! empty( $args['message'] ) ) {
-		$rendez_vous_content .= "\n\n" . $args['message'];
+		$rendez_vous_content .= "\n\n" . stripslashes( $args['message'] );
 	}
 
 	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
 
-	$message = sprintf(
-		__( "%s is scheduling a new rendez-vous: %s\n\nTo help him fix the date, please log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
-		$organizer_name,
-		$rendez_vous_content,
-		esc_url( $rendez_vous_link )
+	// Set the BP Email tokens
+	$bp_email_args = array(
+		'tokens' => array(
+			'organizer.name'     => $organizer_name,
+			'rendezvous.content' => $rendez_vous_content,
+			'rendezvous.url'     => esc_url( $rendez_vous_link ),
+			'rendezvous.title'   => $rendez_vous->title,
+		),
 	);
-
-	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s invited you to a new rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
 
 	// This way we'll have all needed users data at one and we will avoid spam users
 	$users = bp_core_get_users( array(
@@ -140,8 +142,6 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 	) );
 
 	foreach ( $users['users'] as $attendee ) {
-
-		$mail_content = $message;
 
 		// Screen Notification
 		bp_notifications_add_notification( array(
@@ -157,26 +157,8 @@ function rendez_vous_published_notification( $id = 0, $args = array(), $notify =
 			continue;
 		}
 
-		$user_settings = false;
-		$user_fullname = ! empty( $attendee->fullname ) ? $attendee->fullname : $attendee->display_name;
-		$user_profile = bp_core_get_user_domain( $attendee->ID, $attendee->user_nicename, $attendee->user_login );
-		$user_email = $attendee->user_email;
-
-		// Set up and send the message
-		$to = $attendee->user_email;
-
-		// Only show the disable notifications line if the settings component is enabled
-		if ( bp_is_active( 'settings' ) ) {
-			$user_settings = trailingslashit( $user_profile . bp_get_settings_slug() . '/notifications' );
-			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $user_settings ) );
-		}
-
-		/* Send the message */
-		$to           = apply_filters( 'rendez_vous_published_notify_attendee', $to );
-		$subject      = apply_filters( 'rendez_vous_published_notify_subject', $subject, $organizer_name );
-		$mail_content = apply_filters( 'rendez_vous_published_notify_message', $mail_content, $rendez_vous, $organizer_name, $rendez_vous_content, $rendez_vous_link, $user_settings );
-
-		wp_mail( $to, $subject, $mail_content );
+		// Send the Email
+		bp_send_email( 'rendez-vous-new-item', (int) $attendee->ID, $bp_email_args );
 	}
 
 }
@@ -221,7 +203,8 @@ add_action( 'rendez_vous_before_update', 'rendez_vous_maybe_notify_updates', 10,
  * @package Rendez Vous
  * @subpackage Notifications
  *
- * @since Rendez Vous (1.0.0)
+ * @since 1.0.0
+ * @since 1.4.0 Use the BP Emails
  */
 function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0 ) {
 	$bp = buddypress();
@@ -267,7 +250,7 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 				date_i18n( get_option('date_format'), $rdv->item->date_fixed ),
 				date_i18n( get_option('time_format'), $rdv->item->date_fixed )
 			);
-			$rendez_vous_content .= "\n\n" . sprintf( __( 'Download the Calendar file %s', 'rendez-vous' ), rendez_vous_get_ical_link( $id, $rendez_vous->organizer ) );
+			$rendez_vous_content .= "\n\n" . sprintf( __( 'Download the <a href="%s">Calendar file</a>', 'rendez-vous' ), rendez_vous_get_ical_link( $id, $rendez_vous->organizer ) );
 		} else {
 			$rendez_vous_content .= "\n\n" . sprintf( __( 'Date fixed to %s', 'rendez-vous' ),
 				esc_html( $rdv->item->date_fixed )
@@ -289,20 +272,22 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 
 	// Append the custom message, if any
 	if ( ! empty( $args['message'] ) ) {
-		$rendez_vous_content .= "\n\n" . $args['message'];
+		$rendez_vous_content .= "\n\n" . stripslashes( $args['message'] );
 	}
 
-	$rendez_vous_content = wp_kses( $rendez_vous_content, array() );
+	// allow the link tag so that the calendar link can be inserted into the email content
+	$rendez_vous_content = wp_kses( $rendez_vous_content, array( 'a' => array( 'href' => true ) ) );
 
-	$message = sprintf(
-		__( "%s %s for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
-		$organizer_name,
-		$rdv_updated_action,
-		$rendez_vous_content,
-		esc_url( $rendez_vous_link )
+	// Set the BP Email tokens
+	$bp_email_args = array(
+		'tokens' => array(
+			'organizer.name'     => $organizer_name,
+			'rendezvous.action'  => $rdv_updated_action,
+			'rendezvous.content' => $rendez_vous_content,
+			'rendezvous.url'     => esc_url( $rendez_vous_link ),
+			'rendezvous.title'   => $rendez_vous->title,
+		),
 	);
-
-	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s updated a rendez-vous', 'rendez-vous' ), $organizer_name ) ) );
 
 	// This way we'll have all needed users data at one and we will avoid spam users
 	$users = bp_core_get_users( array(
@@ -311,8 +296,6 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 	) );
 
 	foreach ( $users['users'] as $attendee ) {
-
-		$mail_content = $message;
 
 		if ( 'rendez_vous_message' != $component_action ) {
 			// Screen Notification
@@ -330,26 +313,8 @@ function rendez_vous_updated_notification( $id = 0, $args = array(), $notify = 0
 			continue;
 		}
 
-		$user_settings = false;
-		$user_fullname = ! empty( $attendee->fullname ) ? $attendee->fullname : $attendee->display_name;
-		$user_profile = bp_core_get_user_domain( $attendee->ID, $attendee->user_nicename, $attendee->user_login );
-		$user_email = $attendee->user_email;
-
-		// Set up and send the message
-		$to = $attendee->user_email;
-
-		// Only show the disable notifications line if the settings component is enabled
-		if ( bp_is_active( 'settings' ) ) {
-			$user_settings = trailingslashit( $user_profile . bp_get_settings_slug() . '/notifications' );
-			$mail_content .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $user_settings ) );
-		}
-
-		/* Send the message */
-		$to           = apply_filters( 'rendez_vous_updated_notify_attendee', $to );
-		$subject      = apply_filters( 'rendez_vous_updated_notify_subject', $subject, $organizer_name );
-		$mail_content = apply_filters( 'rendez_vous_updated_notify_message', $mail_content, $rendez_vous, $organizer_name, $rendez_vous_content, $rendez_vous_link, $user_settings );
-
-		wp_mail( $to, $subject, $mail_content );
+		// Send the Email
+		bp_send_email( 'rendez-vous-item-edited', (int) $attendee->ID, $bp_email_args );
 	}
 
 }
@@ -362,7 +327,8 @@ add_action( 'rendez_vous_after_update', 'rendez_vous_updated_notification', 10, 
  * @package Rendez Vous
  * @subpackage Notifications
  *
- * @since Rendez Vous (1.0.0)
+ * @since 1.0.0
+ * @since 1.4.0 Use the BP Emails
  */
 function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rendez_vous = null ) {
 	$bp = buddypress();
@@ -392,34 +358,15 @@ function rendez_vous_notify_organizer( $args = array(), $attendee_id = 0, $rende
 	$attendee_name = bp_core_get_user_displayname( $attendee_id );
 	$attendee_name = stripslashes( $attendee_name );
 
-	$organizer_settings = false;
-	$organizer_profile = bp_core_get_user_domain( $rendez_vous->organizer );
-	$organizer_email = bp_core_get_user_email( $rendez_vous->organizer );
-
-	$message = sprintf(
-		__( "%s set their preferences for the rendez-vous: %s\n\nTo view details, log in and visit: %s\n\n---------------------\n", 'rendez-vous' ),
-		$attendee_name,
-		$rendez_vous_content,
-		esc_url( $rendez_vous_link )
-	);
-
-	$subject = bp_get_email_subject( array( 'text' => sprintf( __( '%s selected date(s) for a rendez-vous', 'rendez-vous' ), $attendee_name ) ) );
-
-	// Set up and send the message
-	$to = $organizer_email;
-
-	// Only show the disable notifications line if the settings component is enabled
-	if ( bp_is_active( 'settings' ) ) {
-		$organizer_settings = trailingslashit( $organizer_profile . bp_get_settings_slug() . '/notifications' );
-		$message .= sprintf( __( 'To disable these notifications please log in and go to: %s', 'rendez-vous' ), esc_url( $organizer_settings ) );
-	}
-
-	/* Send the message */
-	$to           = apply_filters( 'rendez_vous_userset_notify_organizer', $to );
-	$subject      = apply_filters( 'rendez_vous_userset_notify_subject', $subject, $attendee_name );
-	$mail_content = apply_filters( 'rendez_vous_userset_notify_message', $message, $rendez_vous, $attendee_name, $rendez_vous_content, $rendez_vous_link, $organizer_settings );
-
-	wp_mail( $to, $subject, $mail_content );
+	// Send the Email
+	bp_send_email( 'rendez-vous-preference-set', (int) $rendez_vous->organizer, array(
+		'tokens' => array(
+			'attendee.name'     => $attendee_name,
+			'rendezvous.content' => $rendez_vous_content,
+			'rendezvous.url'     => esc_url( $rendez_vous_link ),
+			'rendezvous.title'   => $rendez_vous_title,
+		),
+	) );
 }
 add_action( 'rendez_vous_after_attendee_prefs', 'rendez_vous_notify_organizer', 10, 3 );
 
@@ -675,3 +622,88 @@ function rendez_vous_remove_all_user_notifications( $user_id = 0 ) {
 }
 add_action( 'wpmu_delete_user',  'rendez_vous_remove_all_user_notifications', 10, 1 );
 add_action( 'delete_user',       'rendez_vous_remove_all_user_notifications', 10, 1 );
+
+/**
+ * Get email templates
+ *
+ * @since 1.4.0
+ *
+ * @return array An associative array containing the email type and the email template data.
+ */
+function rendez_vous_get_emails() {
+	return apply_filters( 'rendez_vous_get_emails', array(
+		'rendez-vous-new-item'       => array(
+			'description' => __( 'A member invited members to a new rendez-vous', 'rendez-vous' ),
+			'term_id'     => 0,
+			'post_title'   => __( '[{{{site.name}}}] {{organizer.name}} invited you to a new rendez-vous', 'rendez-vous' ),
+			'post_content' => __( "{{organizer.name}} is scheduling a new rendez-vous: {{{rendezvous.content}}}\n\nTo help him fix the date, please log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>.", 'rendez-vous' ),
+			'post_excerpt' => __( "{{organizer.name}} is scheduling a new rendez-vous: {{rendezvous.content}}\n\nTo help him fix the date, please log in and visit: \n\n{{{rendezvous.url}}}.", 'rendez-vous' ),
+		),
+		'rendez-vous-item-edited'    => array(
+			'description' => __( 'A member updated a rendez-vous', 'rendez-vous' ),
+			'term_id'     => 0,
+			'post_title'   => __( '[{{{site.name}}}] {{organizer.name}} updated a rendez-vous', 'rendez-vous' ),
+			'post_content' => __( "{{organizer.name}} {{rendezvous.action}} for the rendez-vous: {{{rendezvous.content}}}\n\nTo view details, log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>.", 'rendez-vous' ),
+			'post_excerpt' => __( "{{organizer.name}} {{rendezvous.action}} for the rendez-vous: {{rendezvous.content}}\n\nTo view details, log in and visit: \n\n{{{rendezvous.url}}}.", 'rendez-vous' ),
+		),
+		'rendez-vous-preference-set' => array(
+			'description' => __( 'A member selected date(s) for a rendez-vous', 'rendez-vous' ),
+			'term_id'     => 0,
+			'post_title'   => __( '[{{{site.name}}}] {{attendee.name}} selected date(s) for a rendez-vous', 'rendez-vous' ),
+			'post_content' => __( "{{attendee.name}} set their preferences for the rendez-vous: {{{rendezvous.content}}}\n\nTo view details, log in and visit: <a href=\"{{{rendezvous.url}}}\">{{rendezvous.title}}</a>.", 'rendez-vous' ),
+			'post_excerpt' => __( "{{attendee.name}} set their preferences for the rendez-vous: {{rendezvous.content}}\n\nTo view details, log in and visit: \n\n{{{rendezvous.url}}}.", 'rendez-vous' ),
+		),
+	) );
+}
+
+/**
+ * Install/Reinstall email templates for the plugin's notifications
+ *
+ * @since 1.4.0
+ */
+function rendez_vous_install_emails() {
+	$switched = false;
+
+	// Switch to the root blog, where the email posts live.
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		$switched = true;
+	}
+
+	// Get Emails
+	$email_types = rendez_vous_get_emails();
+
+	// Set email types
+	foreach( $email_types as $email_term => $term_args ) {
+		if ( term_exists( $email_term, bp_get_email_tax_type() ) ) {
+			$email_type = get_term_by( 'slug', $email_term, bp_get_email_tax_type() );
+
+			$email_types[ $email_term ]['term_id'] = $email_type->term_id;
+		} else {
+			$term = wp_insert_term( $email_term, bp_get_email_tax_type(), array(
+				'description' => $term_args['description'],
+			) );
+
+			$email_types[ $email_term ]['term_id'] = $term['term_id'];
+		}
+
+		// Insert Email templates if needed
+		if ( ! empty( $email_types[ $email_term ]['term_id'] ) && ! is_a( bp_get_email( $email_term ), 'BP_Email' ) ) {
+			wp_insert_post( array(
+				'post_status'  => 'publish',
+				'post_type'    => bp_get_email_post_type(),
+				'post_title'   => $email_types[ $email_term ]['post_title'],
+				'post_content' => $email_types[ $email_term ]['post_content'],
+				'post_excerpt' => $email_types[ $email_term ]['post_excerpt'],
+				'tax_input'    => array(
+					bp_get_email_tax_type() => array( $email_types[ $email_term ]['term_id'] )
+				),
+			) );
+		}
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
+	}
+}
+add_action( 'bp_core_install_emails', 'rendez_vous_install_emails' );

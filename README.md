@@ -11,7 +11,7 @@ Available in french and english.
 Configuration needed
 --------------------
 
-+ WordPress 4.1 & BuddyPress 2.2
++ WordPress 4.4 & BuddyPress 2.5
 
 Installation
 ------------
