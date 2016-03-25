@@ -1405,7 +1405,7 @@ function rendez_vous_single_the_submit( $view = 'single' ) {
 		if ( 'edit' != $view && current_user_can( 'edit_rendez_vous', rendez_vous()->item->id ) && empty( rendez_vous()->item->def_date ) ) {
 			?>
 			<a href="<?php echo esc_url( rendez_vous_get_edit_link( rendez_vous()->item->id ,rendez_vous()->item->organizer ) ) ;?>#rendez-vous-set" class="button bp-secondary-action last"><?php esc_html_e( 'Set the date', 'rendez-vous' ) ;?></a>
-			<div class="clear"/>
+			<div class="clear"></div>
 			<?php
 		}
 	}
