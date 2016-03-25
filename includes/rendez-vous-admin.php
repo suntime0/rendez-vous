@@ -108,6 +108,14 @@ class Rendez_Vous_Admin {
 				// Make sure to install emails only once!
 				remove_action( 'bp_core_install_emails', 'rendez_vous_install_emails' );
 
+				/**
+				 * Make sure the function to install emails is reachable
+				 * even if the Notifications component is not active.
+				 */
+				if ( ! bp_is_active( 'notifications' ) ) {
+					require_once( rendez_vous()->includes_dir . 'rendez-vous-notifications.php' );
+				}
+
 				// Install emails
 				rendez_vous_install_emails();
 			}
