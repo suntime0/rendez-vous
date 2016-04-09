@@ -311,11 +311,13 @@ var rdv = rdv || {};
 		},
 
 		removeContent: function() {
-	      	_.each( this.users, function( key ) {
-	      		key.remove();
-		    }, this );
+			_.each( this.users, function( key ) {
+				if ( ! _.isUndefined( key ) ) {
+					key.remove();
+				}
+			}, this );
 
-	      	this.users = [];
+			this.users = [];
 	    },
 
 		displayUsers:function( model ) {

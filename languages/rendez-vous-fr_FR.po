@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rendez-Vous\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rendez-vous\n"
-"POT-Creation-Date: 2016-02-27 16:59:06+00:00\n"
+"POT-Creation-Date: 2016-04-09 14:11:21+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
@@ -40,55 +40,55 @@ msgstr "a mis à jour un"
 msgid "%1$s %2$s rendez-vous, %3$s"
 msgstr "%1$s %2$s rendez-vous, %3$s"
 
-#: includes/rendez-vous-admin.php:145
+#: includes/rendez-vous-admin.php:153
 msgid "Name of your rendez-vous type."
 msgstr "Nom de votre type de rendez-vous"
 
-#: includes/rendez-vous-admin.php:146
+#: includes/rendez-vous-admin.php:154
 msgid "Saving the rendez-vous type..."
 msgstr "Enregistrement du type de rendez-vous..."
 
-#: includes/rendez-vous-admin.php:147
+#: includes/rendez-vous-admin.php:155
 msgid "Success: type saved."
 msgstr "Succès: type enregistré."
 
-#: includes/rendez-vous-admin.php:148
+#: includes/rendez-vous-admin.php:156
 msgid "Error: type not saved"
 msgstr "Erreur: l’enregistrement du type a échoué"
 
-#: includes/rendez-vous-admin.php:149
+#: includes/rendez-vous-admin.php:157
 msgid "Error: type not deleted"
 msgstr "Erreur: la suppression du type a échoué"
 
-#: includes/rendez-vous-admin.php:150
+#: includes/rendez-vous-admin.php:158
 msgid "Editing: %s"
 msgstr "Edition de : %s"
 
-#: includes/rendez-vous-admin.php:167 includes/rendez-vous-admin.php:168
+#: includes/rendez-vous-admin.php:175 includes/rendez-vous-admin.php:176
 msgid "Rendez-vous Settings"
 msgstr "Réglages de Rendez-vous"
 
-#: includes/rendez-vous-admin.php:206
+#: includes/rendez-vous-admin.php:214
 msgid "BuddyPress Settings"
 msgstr "Paramètres de BuddyPress"
 
-#: includes/rendez-vous-admin.php:208 includes/rendez-vous-admin.php:262
+#: includes/rendez-vous-admin.php:216 includes/rendez-vous-admin.php:270
 #: includes/rendez-vous-loader.php:211 includes/rendez-vous-loader.php:249
 #: rendez-vous.php:385
 msgid "Rendez-vous"
 msgstr "Rendez-vous"
 
-#: includes/rendez-vous-admin.php:210
+#: includes/rendez-vous-admin.php:218
 msgid "Types"
 msgstr "Types"
 
-#: includes/rendez-vous-admin.php:213
+#: includes/rendez-vous-admin.php:221
 msgid "Add your type in the field below and hit the return key to save it."
 msgstr ""
 "Ajoutez votre type dans le champ ci-dessous et appuyez sur la touche entrée "
 "pour l’enregistrer."
 
-#: includes/rendez-vous-admin.php:214
+#: includes/rendez-vous-admin.php:222
 msgid ""
 "To update a type, select it in the list, edit the name and hit the return "
 "key to save it."
@@ -96,11 +96,11 @@ msgstr ""
 "Pour mettre à jour un type, sélectionner le dans la liste, modifier son nom "
 "et appuyer sur la touche entrée pour l’enregistrer."
 
-#: includes/rendez-vous-admin.php:223
+#: includes/rendez-vous-admin.php:231
 msgid "Edit type"
 msgstr "Modifier le type"
 
-#: includes/rendez-vous-admin.php:223
+#: includes/rendez-vous-admin.php:231
 msgid "Delete type"
 msgstr "Supprimer le type"
 

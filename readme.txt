@@ -3,8 +3,8 @@ Contributors: imath
 Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
 Requires at least: 4.4
-Tested up to: 4.4.2
-Stable tag: 1.4.0
+Tested up to: 4.5
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ Yes!! Since 1.1 :)
 
 == Upgrade Notice ==
 
+= 1.4.1 =
+Make sure to use at least WordPress 4.4 & BuddyPress 2.5
+
 = 1.4.0 =
 Make sure to use at least WordPress 4.4 & BuddyPress 2.5
 
@@ -61,6 +64,11 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.4.1 =
+* Fixes an error that appeared in 1.4.0 when the plugin is activated while the BuddyPress notifications component is not active.
+* Explicitely close a div to prevent layout trouble with some themes. Props @christianwach.
+* Get Ready for WordPress 4.5 by fixing a bug in the rendez-vous Editor that appeared since Underscore and Backbone upgrades.
 
 = 1.4.0 =
 
