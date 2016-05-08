@@ -3,8 +3,8 @@ Contributors: imath
 Donate link: http://imathi.eu/donations/
 Tags: buddypress, rendezvous, schedule, meet
 Requires at least: 4.4
-Tested up to: 4.5
-Stable tag: 1.4.1
+Tested up to: 4.5.2
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ Yes!! Since 1.1 :)
 
 == Upgrade Notice ==
 
+= 1.4.2 =
+Make sure to use at least WordPress 4.4 & BuddyPress 2.5
+
 = 1.4.1 =
 Make sure to use at least WordPress 4.4 & BuddyPress 2.5
 
@@ -64,6 +67,9 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.4.2 =
+* Fixes an issue when using BuddyPress member types to filter the who tab.
 
 = 1.4.1 =
 * Fixes an error that appeared in 1.4.0 when the plugin is activated while the BuddyPress notifications component is not active.

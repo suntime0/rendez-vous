@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rendez-Vous\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rendez-vous\n"
-"POT-Creation-Date: 2016-04-09 14:11:21+00:00\n"
+"POT-Creation-Date: 2016-05-08 13:41:10+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
@@ -104,33 +104,33 @@ msgstr "Modifier le type"
 msgid "Delete type"
 msgstr "Supprimer le type"
 
-#: includes/rendez-vous-ajax.php:83
+#: includes/rendez-vous-ajax.php:87
 msgid "You cannot create a rendez-vous."
 msgstr "Vous ne pouvez pas créer de rendez-vous"
 
-#: includes/rendez-vous-ajax.php:101
+#: includes/rendez-vous-ajax.php:105
 msgid "No users were selected."
 msgstr "Aucun utilisateur sélectionné"
 
-#: includes/rendez-vous-ajax.php:109
+#: includes/rendez-vous-ajax.php:113
 msgid "Please describe your rendez-vous using the What tab."
 msgstr "Merci de décrire votre rendez-vous en utilisant l’onglet Quoi."
 
-#: includes/rendez-vous-ajax.php:127
+#: includes/rendez-vous-ajax.php:131
 msgid "Please make sure to fill all required fields."
 msgstr "Veuillez vous assurer que vous avez bien rempli tous les champs"
 
-#: includes/rendez-vous-ajax.php:132
+#: includes/rendez-vous-ajax.php:136
 msgid "Please define dates for your rendez-vous using the When tab."
 msgstr ""
 "Merci de définir des dates pour votre rendez-vous en utilisant l’onglet "
 "Quand."
 
-#: includes/rendez-vous-ajax.php:183
+#: includes/rendez-vous-ajax.php:187
 msgid "Please make sure to respect the format HH:MM when defining time."
 msgstr "Merci de respecter le format HH:MM pour les heures."
 
-#: includes/rendez-vous-ajax.php:197
+#: includes/rendez-vous-ajax.php:201
 msgid "The rendez-vous was not created due to an error."
 msgstr "Le rendez-vous n’a pas été créé en raison d’une erreur."
 
