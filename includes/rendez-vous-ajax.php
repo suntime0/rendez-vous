@@ -35,6 +35,10 @@ function rendez_vous_ajax_get_users() {
 			'exclude'      => array( bp_loggedin_user_id() ), // we don't want the organizer to be included in the attendees
 	), 'rendez_vous_get_users' );
 
+	if ( ! empty( $args['member_type'] ) && 'false' === $args['member_type'] ) {
+		$args['member_type'] = false;
+	}
+
 	if ( ! empty( $args['group_id'] ) ) {
 		// Get all type of group users
 		$args['group_role'] = array( 'admin', 'mod', 'member' );
