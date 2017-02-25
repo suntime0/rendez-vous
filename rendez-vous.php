@@ -1,23 +1,23 @@
 <?php
 /**
  * @package   RendezVous
- * @author    imath https://twitter.com/imath
+ * @author    G3ronim0 https://twitter.com/G3r0nimo
  * @license   GPL-2.0+
- * @link      http://imathi.eu
- * @copyright 2014 imath
+ * @link      https://sadler-jerome.fr
+ * @copyright 2014 G3ronim0
  *
  * @wordpress-plugin
  * Plugin Name:       Rendez Vous
- * Plugin URI:        http://imathi.eu/tag/rendez-vous
+ * Plugin URI:        https://sadler-jerome.fr/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.4.2
- * Author:            imath
- * Author URI:        http://imathi.eu
+ * Version:           1.4.3
+ * Author:            G3ronim0
+ * Author URI:        https://sadler-jerome.fr
  * Text Domain:       rendez-vous
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:       /languages/
- * GitHub Plugin URI: https://github.com/imath/rendez-vous
+ * GitHub Plugin URI: https://github.com/G3ronim0/rendez-vous
  */
 
 // Exit if accessed directly

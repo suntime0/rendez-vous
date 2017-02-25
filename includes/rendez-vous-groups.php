@@ -1154,22 +1154,30 @@ function rendez_vous_groups_activity_actions() {
 		return false;
 	}
 
-	bp_activity_set_action(
-		$bp->groups->id,
-		'new_rendez_vous',
-		__( 'New rendez-vous in a group', 'rendez-vous' ),
-		'rendez_vous_format_activity_action',
-		__( 'New rendez-vous', 'rendez-vous' ),
-		array( 'group', 'member_groups' )
-	);
+	$register = true;
 
-	bp_activity_set_action(
-		$bp->groups->id,
-		'updated_rendez_vous',
-		__( 'Updated a rendez-vous in a group', 'rendez-vous' ),
-		'rendez_vous_format_activity_action',
-		__( 'Updated a rendez-vous', 'rendez-vous' ),
-		array( 'group', 'member_groups' )
-	);
+	if ( bp_is_group() && ! Rendez_Vous_Group::group_get_option( bp_get_current_group_id(), '_rendez_vous_group_activate', false ) ) {
+		$register = false;
+	}
+
+	if ( $register ) {
+		bp_activity_set_action(
+			$bp->groups->id,
+			'new_rendez_vous',
+			__( 'New rendez-vous in a group', 'rendez-vous' ),
+			'rendez_vous_format_activity_action',
+			__( 'New rendez-vous', 'rendez-vous' ),
+			array( 'group', 'member_groups' )
+		);
+
+		bp_activity_set_action(
+			$bp->groups->id,
+			'updated_rendez_vous',
+			__( 'Updated a rendez-vous in a group', 'rendez-vous' ),
+			'rendez_vous_format_activity_action',
+			__( 'Updated a rendez-vous', 'rendez-vous' ),
+			array( 'group', 'member_groups' )
+		);
+	}
 }
 add_action( 'rendez_vous_register_activity_actions', 'rendez_vous_groups_activity_actions', 20 );
