@@ -10,7 +10,7 @@
  * Plugin Name:       Rendez Vous
  * Plugin URI:        https://sadler-jerome.fr/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.4.3
+ * Version: 					1.4.3
  * Author:            G3ronim0
  * Author URI:        https://sadler-jerome.fr
  * Text Domain:       rendez-vous
