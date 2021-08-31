@@ -1,14 +1,14 @@
 === Rendez Vous ===
-Contributors: imath
-Donate link: http://imathi.eu/donations/
+Contributors: G3ronim0, imath
+Donate link: https://www.paypal.me/JeromeSadler
 Tags: buddypress, rendezvous, schedule, meet
-Requires at least: 3.8.1
-Tested up to: 3.9
-Stable tag: 1.0.2
+Requires at least: 4.4
+Tested up to: 4.7.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
+Schedule appointments in your BuddyPress powered community
 
 == Description ==
 
@@ -16,7 +16,7 @@ This is a BuddyPress plugin to let your community members schedule appointments.
 It's a "doodle" like feature plugin where the organizer defines some dates and hours to meet, and the potential attendees will select the ones that match their agenda.
 The organizer can then define the definitive date and once this date is past, he will also be able to add some notes or a report to inform about what happened during this meeting.
 
-Available in french and english. 
+Available in french and english.
 
 http://vimeo.com/91172041
 
@@ -29,7 +29,7 @@ Activate Rendez Vous in the "Plugins" admin panel using the "Activate" link. If 
 == Frequently Asked Questions ==
 
 = Is there a way to use it in groups component ? =
-Not for now, maybe soon :)
+Yes!! Since 1.1 :)
 
 == Screenshots ==
 
@@ -38,6 +38,27 @@ Not for now, maybe soon :)
 3. Member's schedule page
 
 == Upgrade Notice ==
+
+= 1.4.3 =
+Make sure to use at least WordPress 4.4 & BuddyPress 2.5
+
+= 1.4.2 =
+Make sure to use at least WordPress 4.4 & BuddyPress 2.5
+
+= 1.4.1 =
+Make sure to use at least WordPress 4.4 & BuddyPress 2.5
+
+= 1.4.0 =
+Make sure to use at least WordPress 4.4 & BuddyPress 2.5
+
+= 1.3.0 =
+Make sure to use at least WordPress 4.1 & BuddyPress 2.2
+
+= 1.2.0 =
+Make sure to use WordPress 4.1 & BuddyPress 2.2
+
+= 1.1.0 =
+Make sure to use WordPress 4.0 & BuddyPress 2.1
 
 = 1.0.2 =
 nothing particular
@@ -49,6 +70,41 @@ nothing particular
 nothing particular
 
 == Changelog ==
+
+= 1.4.3 =
+* Bump WP version tested up to 4.7.2.
+
+= 1.4.2 =
+* Fixes an issue when using BuddyPress member types to filter the who tab.
+
+= 1.4.1 =
+* Fixes an error that appeared in 1.4.0 when the plugin is activated while the BuddyPress notifications component is not active.
+* Explicitely close a div to prevent layout trouble with some themes. Props @christianwach.
+* Get Ready for WordPress 4.5 by fixing a bug in the rendez-vous Editor that appeared since Underscore and Backbone upgrades.
+
+= 1.4.0 =
+
+* Use BuddyPress emails so that admins can edit the content of the notifications sent.
+* New widget to inform the current user of upcoming rendez-vous.
+* Make sure the extra tab added to the BuddyPress settings is nicely displayed.
+
+= 1.3.0 =
+
+* Use BuddyPress member types if registered to display a dropdown to filter users in the rendez-vous editor
+* Add support for oembed in rendez-vous contents (description and report)
+* Allow an organizer to send an email once per day to attendees
+* Make sure add_query_arg() urls are escaped
+
+= 1.2.0 =
+
+* Rendez-vous Types : it's now possible to add a type to a rendez-vous and filter the loops by type
+* Fix some other bugs, in particular a localization one for the BuddyPress Groups component.
+
+= 1.1.0 =
+
+* Schedule rendez-vous within BuddyPress Groups
+* Download a calendar file to save the rendez-vous in your Calendar software
+* Fix rendez-vous editor css to adapt to WordPress 4.0 changes in the media editor
 
 = 1.0.2 =
 

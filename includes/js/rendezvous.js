@@ -28,6 +28,14 @@
 		}
 	} );
 
+	$( '#rendez-vous-edit-notify' ).on( 'click', function(){
+		if ( $( this ).prop( 'checked' ) ) {
+			$( '#rendez-vous-custom-message' ).prop( 'disabled', false );
+		} else {
+			$( '#rendez-vous-custom-message' ).prop( 'disabled', true );
+		}
+	} );
+
 	$( '#rendez-vous-list li.private a').on( 'click', function(e){
 		if ( $( this ).prop( 'href' ).indexOf( '#noaccess' ) != -1 ) {
 			e.preventDefault();
@@ -43,5 +51,15 @@
 			return;
 		}
 	});
+
+	$( document ).ready( function() {
+		var setDate = $( location ).attr('hash');
+		
+		if ( 'undefined' != typeof setDate && setDate ) {
+			$( setDate ).parent( 'tr' ).css( {
+				border : "solid 2px #298cba"
+			} );
+		}
+	} );
 
 } )( jQuery );

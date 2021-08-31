@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package Rendez_Vous
  * @subpackage Component
- * 
+ *
  * @since Rendez Vous (1.0.0)
  */
 class Rendez_Vous_Component extends BP_Component {
@@ -26,7 +26,7 @@ class Rendez_Vous_Component extends BP_Component {
 	 *
 	 * @package Rendez_Vous
 	 * @subpackage Component
-	 * 
+	 *
 	 * @since Rendez Vous (1.0.0)
 	 */
 	function __construct() {
@@ -34,12 +34,12 @@ class Rendez_Vous_Component extends BP_Component {
 
 		parent::start(
 			'rendez_vous',
-			__( 'Rendez-vous', 'rendez-vous' ),
+			rendez_vous()->get_component_name(),
 			rendez_vous()->includes_dir
 		);
 
 		$this->includes();
-		
+
 		$bp->active_components[$this->id] = '1';
 
 		/**
@@ -72,11 +72,21 @@ class Rendez_Vous_Component extends BP_Component {
 			'rendez-vous-functions.php',
 		);
 
-		if ( bp_is_active( 'notifications' ) )
+		if ( bp_is_active( 'notifications' ) ) {
 			$includes[] = 'rendez-vous-notifications.php';
+		}
 
-		if ( bp_is_active( 'activity' ) )
+		if ( bp_is_active( 'activity' ) ) {
 			$includes[] = 'rendez-vous-activity.php';
+		}
+
+		if ( bp_is_active( 'groups' ) ) {
+			$includes[] = 'rendez-vous-groups.php';
+		}
+
+		if ( is_admin() ) {
+			$includes[] = 'rendez-vous-admin.php';
+		}
 
 		parent::includes( $includes );
 	}
@@ -91,19 +101,33 @@ class Rendez_Vous_Component extends BP_Component {
 	 */
 	function setup_globals( $args = array() ) {
 
-		// Defining the slug in this way makes it possible for site admins to override it
-		if ( !defined( 'RENDEZ_VOUS_SLUG' ) )
-			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
-
 		// Set up the $globals array to be passed along to parent::setup_globals()
 		$args = array(
-			'slug'                  => RENDEZ_VOUS_SLUG,
+			'slug'                  => rendez_vous()->get_component_slug(),
 			'notification_callback' => 'rendez_vous_format_notifications',
 			'search_string'         => __( 'Search Rendez-vous...', 'rendez-vous' ),
 		);
 
 		// Let BP_Component::setup_globals() do its work.
 		parent::setup_globals( $args );
+
+		/**
+		 * Filter to change user's default subnav
+		 *
+		 * @since Rendez Vous (1.1.0)
+		 *
+		 * @param string default subnav to use (shedule or attend)
+		 */
+		$this->default_subnav = apply_filters( 'rendez_vous_member_default_subnav', rendez_vous()->get_schedule_slug() );
+
+		$this->subnav_position = array(
+			'schedule' => 10,
+			'attend'   => 20,
+		);
+
+		if ( rendez_vous()->get_attend_slug() == $this->default_subnav ) {
+			$this->subnav_position['attend'] = 5;
+		}
 	}
 
 	/**
@@ -115,17 +139,17 @@ class Rendez_Vous_Component extends BP_Component {
 	 * @since Rendez Vous (1.0.0)
 	 */
 	function setup_nav( $main_nav = array(), $sub_nav = array() ) {
-		// Add 'Example' to the main navigation
+		// Add 'Rendez-vous' to the main navigation
 		$main_nav = array(
-			'name' 		          => __( 'Rendez-vous', 'rendez-vous' ),
+			'name' 		          => rendez_vous()->get_component_name(),
 			'slug' 		          => $this->slug,
 			'position' 	          => 80,
 			'screen_function'     => array( 'Rendez_Vous_Screens', 'public_screen' ),
-			'default_subnav_slug' => 'schedule'
+			'default_subnav_slug' => $this->default_subnav
 		);
 
 		// Stop if there is no user displayed or logged in
-		if ( !is_user_logged_in() && !bp_displayed_user_id() )
+		if ( ! is_user_logged_in() && ! bp_displayed_user_id() )
 			return;
 
 		// Determine user to use
@@ -142,21 +166,21 @@ class Rendez_Vous_Component extends BP_Component {
 		// Add a subnav item under the main Rendez-vous tab
 		$sub_nav[] = array(
 			'name'            =>  __( 'Schedule', 'rendez-vous' ),
-			'slug'            => 'schedule',
+			'slug'            => rendez_vous()->get_schedule_slug(),
 			'parent_url'      => $rendez_vous_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => array( 'Rendez_Vous_Screens', 'schedule_screen' ),
-			'position'        => 10
+			'position'        => $this->subnav_position['schedule']
 		);
 
 		// Add a subnav item under the main Rendez-vous tab
 		$sub_nav[] = array(
 			'name'            =>  __( 'Attend', 'rendez-vous' ),
-			'slug'            => 'attend',
+			'slug'            => rendez_vous()->get_attend_slug(),
 			'parent_url'      => $rendez_vous_link,
 			'parent_slug'     => $this->slug,
 			'screen_function' => array( 'Rendez_Vous_Screens', 'attend_screen' ),
-			'position'        => 20
+			'position'        => $this->subnav_position['attend']
 		);
 
 		parent::setup_nav( $main_nav, $sub_nav );
@@ -181,7 +205,7 @@ class Rendez_Vous_Component extends BP_Component {
 			$rendez_vous_link = trailingslashit( $user_domain . $this->slug );
 
 			// Add the "Example" sub menu
-			$wp_admin_nav[] = array(
+			$wp_admin_nav[0] = array(
 				'parent' => $bp->my_account_menu_id,
 				'id'     => 'my-account-' . $this->id,
 				'title'  => __( 'Rendez-vous', 'rendez-vous' ),
@@ -189,21 +213,23 @@ class Rendez_Vous_Component extends BP_Component {
 			);
 
 			// Personal
-			$wp_admin_nav[] = array(
+			$wp_admin_nav[ $this->subnav_position['schedule'] ] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-schedule',
 				'title'  => __( 'Schedule', 'rendez-vous' ),
-				'href'   => trailingslashit( $rendez_vous_link . 'schedule' )
+				'href'   => trailingslashit( $rendez_vous_link . rendez_vous()->get_schedule_slug() )
 			);
 
 			// Screen two
-			$wp_admin_nav[] = array(
+			$wp_admin_nav[ $this->subnav_position['attend'] ] = array(
 				'parent' => 'my-account-' . $this->id,
 				'id'     => 'my-account-' . $this->id . '-attend',
 				'title'  => __( 'Attend', 'rendez-vous' ),
-				'href'   => trailingslashit( $rendez_vous_link . 'attend' )
+				'href'   => trailingslashit( $rendez_vous_link . rendez_vous()->get_attend_slug() )
 			);
 
+			// Sort WP Admin Nav
+			ksort( $wp_admin_nav );
 		}
 
 		parent::setup_admin_bar( $wp_admin_nav );
@@ -233,7 +259,7 @@ class Rendez_Vous_Component extends BP_Component {
 			'not_found'          => _x( 'No Rendez-vous Found',          'rendez-vous not found',          'rendez-vous' ),
 			'not_found_in_trash' => _x( 'No Rendez-vous Found in Trash', 'rendez-vous not found in trash', 'rendez-vous' )
 		);
-		
+
 		$rdv_args = array(
 			'label'	            => _x( 'Rendez-vous',                    'rendez-vous label',              'rendez-vous' ),
 			'labels'            => $rdv_labels,
@@ -254,6 +280,20 @@ class Rendez_Vous_Component extends BP_Component {
 		parent::register_post_types();
 	}
 
+	/**
+	 * Register the rendez_vous types taxonomy
+	 *
+	 * @package Rendez_Vous
+	 * @subpackage Component
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 */
+	public function register_taxonomies() {
+		// Register the taxonomy
+		register_taxonomy( 'rendez_vous_type', 'rendez_vous', array(
+			'public' => false,
+		) );
+	}
 }
 
 /**

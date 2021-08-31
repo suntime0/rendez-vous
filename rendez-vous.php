@@ -1,23 +1,23 @@
 <?php
 /**
  * @package   RendezVous
- * @author    imath https://twitter.com/imath
+ * @author    G3ronim0 https://twitter.com/G3r0nimo
  * @license   GPL-2.0+
- * @link      http://imathi.eu
- * @copyright 2013 imath
+ * @link      https://sadler-jerome.fr
+ * @copyright 2014 G3ronim0
  *
  * @wordpress-plugin
  * Plugin Name:       Rendez Vous
- * Plugin URI:        http://imathi.eu/tag/rendez-vous
+ * Plugin URI:        https://sadler-jerome.fr/tag/rendez-vous
  * Description:       Rendez Vous is a BuddyPress plugin to schedule appointments with your buddies
- * Version:           1.0.2
- * Author:            imath
- * Author URI:        http://imathi.eu
+ * Version: 					1.4.3
+ * Author:            G3ronim0
+ * Author URI:        https://sadler-jerome.fr
  * Text Domain:       rendez-vous
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:       /languages/
- * GitHub Plugin URI: https://github.com/imath/rendez-vous
+ * GitHub Plugin URI: https://github.com/G3ronim0/rendez-vous
  */
 
 // Exit if accessed directly
@@ -51,7 +51,7 @@ class Rendez_Vous {
 	 *
 	 * @var      string
 	 */
-	public static $required_bp_version = '1.9';
+	public static $required_bp_version = '2.5.0';
 
 	/**
 	 * BuddyPress config.
@@ -66,7 +66,7 @@ class Rendez_Vous {
 
 	/**
 	 * Initialize the plugin
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -101,7 +101,7 @@ class Rendez_Vous {
 
 	/**
 	 * Sets some globals for the plugin
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -109,7 +109,7 @@ class Rendez_Vous {
 	private function setup_globals() {
 
 		// Define a global that will hold the current version number
-		$this->version       = '1.0.2';
+		$this->version       = '1.4.2';
 
 		// Define a global to get the textdomain of your plugin.
 		$this->domain        = 'rendez-vous';
@@ -153,7 +153,7 @@ class Rendez_Vous {
 
 	/**
 	 * Sets the key hooks to add an action or a filter to
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -164,27 +164,22 @@ class Rendez_Vous {
 			// Load the component
 			add_action( 'bp_loaded', 'rendez_vous_load_component' );
 
-			add_filter( 'map_meta_cap', 'rendez_vous_map_meta_caps', 10, 4 );
-
 			// Enqueue the needed script and css files
 			add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 			// loads the languages..
-			add_action( 'bp_init', array( $this, 'load_textdomain' ), 5 );
-
-			// Saves the plugin version in db
-			add_action( bp_core_admin_hook(), 'rendez_vous_maybe_upgrade' );
+			add_action( 'bp_loaded', array( $this, 'load_textdomain' ) );
 
 		} else {
 			// Display a warning message in network admin or admin
 			add_action( self::$bp_config['network_active'] ? 'network_admin_notices' : 'admin_notices', array( $this, 'warning' ) );
 		}
-		
+
 	}
 
 	/**
 	 * Display a warning message to admin
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -201,7 +196,7 @@ class Rendez_Vous {
 		} else {
 			$config = self::config_check();
 		}
-		
+
 		if ( ! bp_core_do_network_admin() && ! $config['blog_status'] ) {
 			$warnings[] = __( 'Rendez Vous requires to be activated on the blog where BuddyPress is activated.', 'rendez-vous' );
 		}
@@ -223,18 +218,20 @@ class Rendez_Vous {
 
 	/**
 	 * Enqueue scripts if your component is loaded
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
 	 */
 	public function enqueue_scripts() {
-		if ( ! bp_is_current_component( 'rendez_vous' ) )
-			return;
+		$load_scripts = apply_filters( 'rendez_vous_load_scripts', bp_is_current_component( 'rendez_vous' ) );
 
+		if ( empty( $load_scripts )  ) {
+			return;
+		}
 
 		$suffix = SCRIPT_DEBUG ? '' : '.min';
-			
+
 		wp_register_script( 'rendez-vous-plupload', includes_url( "js/plupload/wp-plupload$suffix.js" ), array(), $this->version, 1 );
 		wp_localize_script( 'rendez-vous-plupload', 'pluploadL10n', array() );
 		wp_register_script( 'rendez-vous-media-views', includes_url( "js/media-views$suffix.js" ), array( 'utils', 'media-models', 'rendez-vous-plupload', 'jquery-ui-sortable' ), $this->version, 1 );
@@ -246,20 +243,20 @@ class Rendez_Vous {
 		wp_register_style ( 'rendez-vous-modal-style', $modal_style, array( 'media-views' ), $this->version );
 
 		// Allow themes to override global style
-		$global_style = apply_filters( 
-			'rendez_vous_global_css', 
-			array( 
+		$global_style = apply_filters(
+			'rendez_vous_global_css',
+			array(
 				'style' => $this->plugin_css . "rendezvous$suffix.css",
 				'deps'  =>  array( 'dashicons' ),
 			),
-			$suffix 
+			$suffix
 		);
-		
+
 		wp_enqueue_style  ( 'rendez-vous-style', $global_style['style'], (array) $global_style['deps'], $this->version );
 		wp_enqueue_script ( 'rendez-vous-script', $this->plugin_js . "rendezvous$suffix.js", array( 'jquery' ), $this->version, 1 );
 		wp_localize_script( 'rendez-vous-script', 'rendez_vous_vars', array(
 			'confirm'  => esc_html__( 'Are you sure you want to cancel this rendez-vous ?', 'rendez-vous' ),
-			'noaccess' => esc_html__( 'This rendez-vous is private and you have not been invited to it.', 'rendez-vous' ),
+			'noaccess' => esc_html__( 'This rendez-vous is restricted and you have not been invited to it.', 'rendez-vous' ),
 		) );
 	}
 
@@ -267,7 +264,7 @@ class Rendez_Vous {
 
 	/**
 	 * Checks BuddyPress version
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -282,7 +279,7 @@ class Rendez_Vous {
 
 	/**
 	 * Checks if your plugin's config is similar to BuddyPress
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
@@ -294,15 +291,15 @@ class Rendez_Vous {
 		 * network_status : BuddyPress & your plugin share the same network status
 		 */
 		self::$bp_config = array(
-			'blog_status'    => false, 
-			'network_active' => false, 
-			'network_status' => true 
+			'blog_status'    => false,
+			'network_active' => false,
+			'network_status' => true
 		);
 
 		if ( get_current_blog_id() == bp_get_root_blog_id() ) {
 			self::$bp_config['blog_status'] = true;
 		}
-		
+
 		$network_plugins = get_site_option( 'active_sitewide_plugins', array() );
 
 		// No Network plugins
@@ -316,12 +313,12 @@ class Rendez_Vous {
 
 		// Are they active on the network ?
 		$network_active = array_diff( $check, array_keys( $network_plugins ) );
-		
+
 		// If result is 1, your plugin is network activated
 		// and not BuddyPress or vice & versa. Config is not ok
 		if ( count( $network_active ) == 1 )
 			self::$bp_config['network_status'] = false;
-		
+
 		// We need to know if the plugin is network activated to choose the right
 		// notice ( admin or network_admin ) to display the warning message.
 		self::$bp_config['network_active'] = isset( $network_plugins[ $rendez_vous_basename ] );
@@ -349,28 +346,87 @@ class Rendez_Vous {
 
 	/**
 	 * Loads the translation files
-	 * 
+	 *
 	 * @package Rendez Vous
 	 *
 	 * @since Rendez Vous (1.0.0)
-	 * 
+	 *
 	 * @uses get_locale() to get the language of WordPress config
 	 * @uses load_texdomain() to load the translation if any is available for the language
+	 * @uses load_plugin_textdomain() to load the translation if any is available for the language
 	 */
 	public function load_textdomain() {
 		// Traditional WordPress plugin locale filter
 		$locale        = apply_filters( 'plugin_locale', get_locale(), $this->domain );
 		$mofile        = sprintf( '%1$s-%2$s.mo', $this->domain, $locale );
 
-		// Setup paths to current locale file
-		$mofile_local  = $this->lang_dir . $mofile;
+		// Setup paths to a rendez-vous subfolder in WP LANG DIR
 		$mofile_global = WP_LANG_DIR . '/rendez-vous/' . $mofile;
 
-		// Look in global /wp-content/languages/buddyplug folder
-		load_textdomain( $this->domain, $mofile_global );
+		// Look in global /wp-content/languages/rendez-vous folder
+		if ( ! load_textdomain( $this->domain, $mofile_global ) ) {
 
-		// Look in local /wp-content/plugins/buddyplug/languages/ folder
-		load_textdomain( $this->domain, $mofile_local );
+			// Look in local /wp-content/plugins/rendez-vous/languages/ folder
+			// or /wp-content/languages/plugins/
+			load_plugin_textdomain( $this->domain, false, basename( $this->plugin_dir ) . '/languages' );
+		}
+	}
+
+	/**
+	 * Get the component name of the plugin
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_component_name' to override default component name
+	 */
+	public static function get_component_name() {
+		return apply_filters( 'rendez_vous_get_component_name', __( 'Rendez-vous', 'rendez-vous' ) );
+	}
+
+	/**
+	 * Get the component slug of the plugin
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_component_slug' to override default component slug
+	 */
+	public static function get_component_slug() {
+		// Defining the slug in this way makes it possible for site admins to override it
+		if ( ! defined( 'RENDEZ_VOUS_SLUG' ) ) {
+			define( 'RENDEZ_VOUS_SLUG', 'rendez-vous' );
+		}
+
+		return RENDEZ_VOUS_SLUG;
+	}
+
+	/**
+	 * Get the schedule slug of the component
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_schedule_slug' to override default schedule slug
+	 */
+	public static function get_schedule_slug() {
+		return 'schedule';
+	}
+
+	/**
+	 * Get the attend slug of the component
+	 *
+	 * @package Rendez Vous
+	 *
+	 * @since Rendez Vous (1.2.0)
+	 *
+	 * @uses apply_filters() call 'rendez_vous_get_attend_slug' to override default attend slug
+	 */
+	public static function get_attend_slug() {
+		return 'attend';
 	}
 }
 
